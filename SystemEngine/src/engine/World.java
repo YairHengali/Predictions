@@ -1,9 +1,8 @@
 package engine;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import org.omg.CORBA.Environment;
+
+import java.util.*;
 
 public class World {
 
@@ -13,7 +12,9 @@ public class World {
     int maxNumberOfTicks;
     // TODO: max Seconds of the simulation
 
-    private Collection<Entity> entities = new ArrayList<>();
+    private Map<String, Entity> name2entity = new HashMap<>();
     private Collection<Rule> rules = new ArrayList<>();
-    private Collection<Property> EnvironmentVariables = new ArrayList<>();
+    private Collection<Property<?>> EnvironmentVariables = new ArrayList<>();
+
+
 }

@@ -1,13 +1,16 @@
 package engine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Entity {
     private String name;
     private int population;
-    private List<Property> properties = new ArrayList<>();
+    private Map<String, Property<?>> name2property = new HashMap<>(); //MAYBE MAP (NAME : PROPERTY)
+
+    public Property<?> getPropertyByName(String propertyName)
+    {
+        return name2property.get(propertyName);
+    }
 
     @Override
     public boolean equals(Object o) {

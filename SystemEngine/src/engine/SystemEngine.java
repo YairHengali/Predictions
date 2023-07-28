@@ -7,6 +7,7 @@ public class SystemEngine {
     }
 
     public String showSimulation() {
+        return simulation.toString();
     }
 
     public void runSimulation() {
