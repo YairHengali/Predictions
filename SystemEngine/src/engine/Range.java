@@ -20,9 +20,6 @@ public class Range {
 
     @Override
     public String toString() {
-        return "Range{" +
-                "from=" + from +
-                ", to=" + to +
-                '}';
+        return "(" + from + " to " + to + ")";
     }
 }

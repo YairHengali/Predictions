@@ -67,16 +67,19 @@ package engine;
 //}
 
 public class Property <T> {
-    private String name = "";
-    //private eType type = null;
+    private final String name;
+    private final PropertyType type;
     private T value;
-    private Range valueRange = null;
+    private final Range valueRange;
+    private final boolean isInitializedRandomly;
 
 
-    public Property(String name, T value, Range valueRange) {
+    public Property(String name, PropertyType type, T value, Range valueRange, boolean isInitializedRandomly) {
         this.name = name;
-        this.value = value;
+        this.type = type;
+        this.value = value;//TODO: Exception if out of range / invalid format
         this.valueRange = valueRange;
+        this.isInitializedRandomly = isInitializedRandomly;
     }
 
     public T getValue() {
@@ -85,15 +88,19 @@ public class Property <T> {
 
     public void setValue(T value) {
         this.value = value;
-    }
+    } //TODO: Exception if out of range / invalid format
 
     @Override
     public String toString() {
-        return "Property{" +
-                "value=" + value +
-                ", name='" + name + '\'' +
-                ", valueRange=" + valueRange +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Property:\n");
+        stringBuilder.append("name='").append(name).append("'\n");
+        stringBuilder.append("type=").append(type).append("\n");
+        stringBuilder.append("value=").append(value).append("\n");
+        if (valueRange != null){
+            stringBuilder.append("valueRange=").append(valueRange).append("\n");}
+        stringBuilder.append("is initialized randomly=").append(isInitializedRandomly).append("\n");
+        return stringBuilder.toString();
     }
 }
 

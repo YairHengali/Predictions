@@ -12,9 +12,9 @@ public class Entity {
         this.population = population;
     }
 
-    public <T> void addProperty(String name, T value, Range valueRange)
+    public <T> void addProperty(String name, PropertyType type, T value, Range valueRange, boolean isInitializedRandomly)
     {
-        Property<T> newProperty = new Property<>(name, value, valueRange);
+        Property<T> newProperty = new Property<>(name,type, value, valueRange, isInitializedRandomly);
         name2property.put(name, newProperty);
     }
 
@@ -38,10 +38,18 @@ public class Entity {
 
     @Override
     public String toString() {
-        return "Entity{" +
-                "name='" + name + '\'' +
-                ", population=" + population +
-                ", name2property=" + name2property +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Entity:\n");
+        stringBuilder.append("name='").append(name).append("'\n");
+        stringBuilder.append("population=").append(population).append("\n");
+        if (!name2property.isEmpty())
+        {
+            stringBuilder.append("Properties:\n");
+            for (Map.Entry<String, Property<?>> entry : name2property.entrySet()) {
+                stringBuilder.append(entry.getValue()).append("\n");
+            }
+        }
+
+        return stringBuilder.toString();
     }
 }
