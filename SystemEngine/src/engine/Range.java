@@ -17,4 +17,12 @@ public class Range {
     public int getTo() {
         return to;
     }
+
+    @Override
+    public String toString() {
+        return "Range{" +
+                "from=" + from +
+                ", to=" + to +
+                '}';
+    }
 }

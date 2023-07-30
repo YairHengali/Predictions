@@ -2,14 +2,14 @@ package engine;
 
 public enum eType {
     BOOLEAN{
-        bool value;
+        boolean value;
         // <bool> bool getValue() {return value; }
     },
-    INTEGER{
+    DECIMAL{
         int value;
        // <int> int getValue() {return value; }
     },
-    DECIMAL,
+    FLOAT,
     STRING
 
    // abstract <T> T getValue();

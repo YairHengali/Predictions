@@ -1,7 +1,11 @@
 package engine;
 
 public class SystemEngine {
-    private World simulation;
+    private World simulation = new World();
+
+    public World getSimulation() {
+        return simulation;
+    }
 
     public void loadSimulation() {
     }
@@ -13,5 +17,5 @@ public class SystemEngine {
     public void runSimulation() {
     }
 
-    public String showPastSimulation(){}
+    public String showPastSimulation(){return "";}
 }

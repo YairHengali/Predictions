@@ -67,11 +67,17 @@ package engine;
 //}
 
 public class Property <T> {
+    private String name = "";
     //private eType type = null;
     private T value;
-    private String name = "";
     private Range valueRange = null;
 
+
+    public Property(String name, T value, Range valueRange) {
+        this.name = name;
+        this.value = value;
+        this.valueRange = valueRange;
+    }
 
     public T getValue() {
         return value;
@@ -84,11 +90,10 @@ public class Property <T> {
     @Override
     public String toString() {
         return "Property{" +
-                "type=" + type +
-                ", name=" + name +
+                "value=" + value +
+                ", name='" + name + '\'' +
                 ", valueRange=" + valueRange +
                 '}';
     }
-
 }
 
