@@ -18,6 +18,11 @@ public class Entity {
         name2property.put(name, newProperty);
     }
 
+    public <T> void addProperty2(Property<T> propertyToAdd) //TODO: DECIDE WHICH OF THEM BETTER
+    {
+        name2property.put(propertyToAdd.getName(), propertyToAdd);
+    }
+
     public Property<?> getPropertyByName(String propertyName)
     {
         return name2property.get(propertyName);

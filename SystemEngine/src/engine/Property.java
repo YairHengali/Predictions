@@ -82,6 +82,10 @@ public class Property <T> {
         this.isInitializedRandomly = isInitializedRandomly;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public T getValue() {
         return value;
     }
