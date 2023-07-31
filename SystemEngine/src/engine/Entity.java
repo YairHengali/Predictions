@@ -11,6 +11,9 @@ public class Entity {
         this.name = name;
         this.population = population;
     }
+    public Entity(String name) {
+        this.name = name;
+    }
 
     public <T> void addProperty(String name, PropertyType type, T value, Range valueRange, boolean isInitializedRandomly)
     {
