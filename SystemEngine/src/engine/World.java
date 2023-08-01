@@ -4,16 +4,25 @@ import java.util.*;
 
 public class World {
 
-    int currentNumberOfTicks = 0;
-    // TODO: current Seconds of the simulation
+    private int currentNumberOfTicks = 0;
+    private long startTime;
 
-    /////////Termination conditions:
-    int maxNumberOfTicks;
-    // TODO: max Seconds of the simulation(Termination conditions)
+    ///////// Termination conditions:
+    private int maxNumberOfTicks;
+    private long SecondsToTerminate;
 
     private final Map<String, List<Entity>> name2Entities = new HashMap<>();
     private final Map<String, Rule> name2Rule = new HashMap<>();
     private final Map<String, Property<?>> name2EnvironmentVariables = new HashMap<>();
+
+    public World() {
+        this.startTime = System.currentTimeMillis();
+    }
+
+    public World(int maxNumberOfTicks, long maxNumOfSeconds) {
+        this.SecondsToTerminate = maxNumOfSeconds;
+        this.startTime = System.currentTimeMillis();
+    }
 
     public <T> void addEnvironmentVariable(String name, PropertyType type, T value, Range valueRange)
     {
@@ -76,6 +85,27 @@ public class World {
             }
         }
         return stringBuilder.toString();
+    }
+    public boolean isTermination(){
+        return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
+                (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+    }
+    public Object environment(String varName) throws Exception {
+        if(this.name2EnvironmentVariables.containsKey(varName)) {
+            return this.name2EnvironmentVariables.get(varName);
+        }
+        throw new Exception("Environment Variable Not Found!");
+    }
+
+    public int random(String argValue) throws NumberFormatException{
+        try {
+            int val = Integer.parseInt(argValue);
+            Random random = new Random();
+            return random.nextInt(val+1);
+        }
+        catch (NumberFormatException e){
+            throw e;
+        }
     }
 
 
