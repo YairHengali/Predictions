@@ -1,4 +1,4 @@
-package engine;
+package engine.property;
 
 //public class integerProperty extends Property {
 //    int value;
@@ -65,6 +65,8 @@ package engine;
 //        this.value = value;
 //    }
 //}
+
+import engine.Range;
 
 public class Property <T> {
     private final String name;

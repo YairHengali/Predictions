@@ -1,17 +1,20 @@
 package engine;
 
+import engine.property.Property;
+import engine.property.PropertyType;
+
 import java.util.*;
 
-public class Entity {
+public class EntityDef {
     private final String name;
     private int population;
     private final Map<String, Property<?>> name2property = new HashMap<>(); //MAYBE MAP (NAME : PROPERTY)
 
-    public Entity(String name, int population) {
+    public EntityDef(String name, int population) {
         this.name = name;
         this.population = population;
     }
-    public Entity(String name) {
+    public EntityDef(String name) {
         this.name = name;
     }
 
@@ -35,7 +38,7 @@ public class Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Entity entity = (Entity) o;
+        EntityDef entity = (EntityDef) o;
         return Objects.equals(name, entity.name);
     }
 

@@ -2,6 +2,7 @@ package engine;
 
 import engine.action.api.Action;
 import engine.action.impl.Increase;
+import engine.property.Property;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +20,7 @@ public class Rule {
         this.probabilityForActivation = probabilityForActivation;
     }
 
-    public void addIncreaseAction(Entity mainEntity, Property<Number> property, Number amountToIncrease)
+    public void addIncreaseAction(EntityDef mainEntity, Property<Number> property, Number amountToIncrease)
     {
         Action action = new Increase(mainEntity, property, amountToIncrease);
         Actions.add(action);

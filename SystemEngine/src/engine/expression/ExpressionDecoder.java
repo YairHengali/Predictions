@@ -1,9 +1,7 @@
 package engine.expression;
 import java.lang.reflect.*;
-import java.util.Arrays;
 
-import engine.Entity;
-import engine.World;
+import engine.EntityDef;
 
 public class ExpressionDecoder {
     private String expression;
@@ -13,7 +11,7 @@ public class ExpressionDecoder {
         this.expression = expression;
     }
 
-    public String decode(Entity mainEntity) throws Exception {
+    public String decode(EntityDef mainEntity) throws Exception {
         
         String[] words = this.expression.split("\\s+");
         if (words.length > 0) {

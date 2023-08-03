@@ -1,10 +1,14 @@
 import engine.*;
+import engine.property.Property;
+import engine.property.PropertyType;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngine();
+        systemEngine.loadSimulation("/SystemEngine/src/resources/ex1-cigarets.xml");
+        /*
         //CREATE WORLD:
         World testSimulation = systemEngine.getSimulation();
         testSimulation.addEntity("person", 100);
@@ -27,5 +31,10 @@ public class Main {
 
         //PRINT WORLD:
         System.out.println(systemEngine.showSimulation());
+
+         */
+
+
+
         }
     }

@@ -1,4 +1,4 @@
-package engine;
+package engine.property;
 
 public enum PropertyType {
     BOOLEAN, //{

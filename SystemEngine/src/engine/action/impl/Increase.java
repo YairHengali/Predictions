@@ -1,11 +1,11 @@
 package engine.action.impl;
 
-import engine.Entity;
-import engine.Property;
+import engine.EntityDef;
+import engine.property.Property;
 import engine.action.api.Action;
 
 public class Increase implements Action {
-    Entity mainEntity;
+    EntityDef mainEntity;
     Property<Number> property;
     Number amountToIncrease;
 
@@ -17,7 +17,7 @@ public class Increase implements Action {
 //        }
 //        this.amountToIncrease = amountToIncrease; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT
 //    }
-    public Increase(Entity mainEntity, Property<Number> property, Number amountToIncrease){ //TODO: EXCEPTION IF property from non-Number type
+    public Increase(EntityDef mainEntity, Property<Number> property, Number amountToIncrease){ //TODO: EXCEPTION IF property from non-Number type
         this.mainEntity = mainEntity;
         this.property = property;
         this.amountToIncrease = amountToIncrease; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT

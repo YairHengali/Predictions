@@ -1,5 +1,11 @@
 package engine;
 
+import engine.entity.EntityDefinition;
+import engine.entity.EntityInstance;
+import engine.property.Property;
+import engine.property.PropertyType;
+import engine.property.api.PropertyAPI;
+
 import java.util.*;
 
 public class World {
@@ -10,10 +16,10 @@ public class World {
     ///////// Termination conditions:
     private int maxNumberOfTicks;
     private long SecondsToTerminate;
-
-    private final Map<String, List<Entity>> name2Entities = new HashMap<>();
+    private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
+    private final Map<String, List<EntityInstance>> name2EntitiesIns = new HashMap<>();
     private final Map<String, Rule> name2Rule = new HashMap<>();
-    private final Map<String, Property<?>> name2EnvironmentVariables = new HashMap<>();
+    private final Map<String, PropertyAPI> name2EnvironmentVariables = new HashMap<>();
     private Set<String> methodsNames;
 
     public World() {
@@ -23,22 +29,22 @@ public class World {
         methodsNames.add("random"); //TODO: MAYBE ENUM
     }
 
-    public World(int maxNumberOfTicks, long maxNumOfSeconds) {
-        this.SecondsToTerminate = maxNumOfSeconds;
-        this.startTime = System.currentTimeMillis();
-        methodsNames = new hashSet<>();
-    }
-
-    public <T> void addEnvironmentVariable(String name, PropertyType type, T value, Range valueRange)
-    {
-        Property<T> newEnvVar = new Property<>(name, type, value, valueRange, false);
-        name2EnvironmentVariables.put(name, newEnvVar);
-    }
-
-    public Property<?> getEnvironmentVariableByName(String EnvironmentVariableName)
-    {
-        return name2EnvironmentVariables.get(EnvironmentVariableName);
-    }
+//    public World(int maxNumberOfTicks, long maxNumOfSeconds) {
+//        this.SecondsToTerminate = maxNumOfSeconds;
+//        this.startTime = System.currentTimeMillis();
+//        methodsNames = new HashSet<>();
+//    }
+//
+//    public <T> void addEnvironmentVariable(String name, PropertyType type, T value, Range valueRange)
+//    {
+//        Property<T> newEnvVar = new Property<>(name, type, value, valueRange, false);
+//        name2EnvironmentVariables.put(name, newEnvVar);
+//    }
+//
+//    public Property<?> getEnvironmentVariableByName(String EnvironmentVariableName)
+//    {
+//        return name2EnvironmentVariables.get(EnvironmentVariableName);
+//    }
 
     public void addRule(String name, int howManyTicksForActivation, float probabilityForActivation)
     {
@@ -51,46 +57,49 @@ public class World {
         return name2Rule.get(ruleName);
     }
 
-    public void addEntity(String name, int population)
+
+    public void createEntityInstances()
     {
-        name2Entities.computeIfAbsent(name, k -> new ArrayList<>(population)); // creates only if noe exists
-
-        for (int i = 0; i < population; i++) {
-            name2Entities.get(name).set(i, new Entity(name));
-        }
-    }
-
-    public Entity getEntityByName(String entityName, int entityNum)
-    {
-        return name2Entities.get(entityName).get(entityNum);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("World:\n");
-        stringBuilder.append("maxNumberOfTicks=").append(maxNumberOfTicks).append("\n");
-        if (!name2Entities.isEmpty())
-        {
-            stringBuilder.append("Entities:\n");
-            for (Map.Entry<String, List<Entity>> entry : name2Entities.entrySet()) {
-                String EntityName = entry.getKey();
-                List<Entity> entities = entry.getValue();
-
-                for (Entity entity : entities) {
-                    stringBuilder.append(entity).append("\n");
-                }
+        for(EntityDefinition entityDefinition : name2EntitiesDef.values()) {
+            List<EntityInstance> newList = new ArrayList<>(entityDefinition.getPopulation());
+            for (int i = 0; i < entityDefinition.getPopulation(); i++) {
+                newList.set(i, new EntityInstance(entityDefinition));
             }
+            this.name2EntitiesIns.put(entityDefinition.getName(), newList );
         }
-        if (!name2Rule.isEmpty())
-        {
-            stringBuilder.append("Rules:\n");
-            for (Map.Entry<String, Rule> entry : name2Rule.entrySet()) {
-                stringBuilder.append(entry.getValue()).append("\n");
-            }
-        }
-        return stringBuilder.toString();
     }
+
+//    public EntityDef getEntityByName(String entityName, int entityNum)
+//    {
+//        return name2Entities.get(entityName).get(entityNum);
+//    }
+
+    //@Override
+//    public String toString() {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append("World:\n");
+//        stringBuilder.append("maxNumberOfTicks=").append(maxNumberOfTicks).append("\n");
+//        if (!name2Entities.isEmpty())
+//        {
+//            stringBuilder.append("Entities:\n");
+//            for (Map.Entry<String, List<EntityDef>> entry : name2Entities.entrySet()) {
+//                String EntityName = entry.getKey();
+//                List<EntityDef> entities = entry.getValue();
+//
+//                for (EntityDef entity : entities) {
+//                    stringBuilder.append(entity).append("\n");
+//                }
+//            }
+//        }
+//        if (!name2Rule.isEmpty())
+//        {
+//            stringBuilder.append("Rules:\n");
+//            for (Map.Entry<String, Rule> entry : name2Rule.entrySet()) {
+//                stringBuilder.append(entry.getValue()).append("\n");
+//            }
+//        }
+//        return stringBuilder.toString();
+//    }
     public boolean isTermination(){
         return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
                 (this.currentNumberOfTicks >= this.maxNumberOfTicks);
