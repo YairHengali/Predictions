@@ -1,9 +1,10 @@
-package engine.action;
+package engine.action.impl;
 
 import engine.Entity;
 import engine.Property;
+import engine.action.api.Action;
 
-public class Increase implements Action{
+public class Increase implements Action {
     Entity mainEntity;
     Property<Number> property;
     Number amountToIncrease;

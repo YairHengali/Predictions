@@ -1,7 +1,7 @@
 package engine;
 
-import engine.action.Action;
-import engine.action.Increase;
+import engine.action.api.Action;
+import engine.action.impl.Increase;
 
 import java.util.ArrayList;
 import java.util.Collection;

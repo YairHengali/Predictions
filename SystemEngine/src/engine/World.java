@@ -14,14 +14,19 @@ public class World {
     private final Map<String, List<Entity>> name2Entities = new HashMap<>();
     private final Map<String, Rule> name2Rule = new HashMap<>();
     private final Map<String, Property<?>> name2EnvironmentVariables = new HashMap<>();
+    private Set<String> methodsNames;
 
     public World() {
         this.startTime = System.currentTimeMillis();
+        methodsNames = new HashSet<>();
+        methodsNames.add("environment"); //TODO: MAYBE ENUM
+        methodsNames.add("random"); //TODO: MAYBE ENUM
     }
 
     public World(int maxNumberOfTicks, long maxNumOfSeconds) {
         this.SecondsToTerminate = maxNumOfSeconds;
         this.startTime = System.currentTimeMillis();
+        methodsNames = new hashSet<>();
     }
 
     public <T> void addEnvironmentVariable(String name, PropertyType type, T value, Range valueRange)
