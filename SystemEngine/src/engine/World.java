@@ -3,6 +3,7 @@ package engine;
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
 import engine.property.Property;
+import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.property.api.PropertyAPI;
 
@@ -11,7 +12,7 @@ import java.util.*;
 public class World {
 
     private int currentNumberOfTicks = 0;
-    private long startTime;
+    private long startTime; // TODO: create StopWatch class
 
     ///////// Termination conditions:
     private int maxNumberOfTicks;
@@ -45,6 +46,10 @@ public class World {
 //    {
 //        return name2EnvironmentVariables.get(EnvironmentVariableName);
 //    }
+
+    public void addEntityDefinition(EntityDefinition entityDefinitionToAdd){
+        name2EntitiesDef.put(entityDefinitionToAdd.getName(), entityDefinitionToAdd);
+    }
 
     public void addRule(String name, int howManyTicksForActivation, float probabilityForActivation)
     {

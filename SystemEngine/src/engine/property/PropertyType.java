@@ -1,18 +1,11 @@
 package engine.property;
 
 public enum PropertyType {
-    BOOLEAN, //{
-//        boolean value;
-//        // <bool> bool getValue() {return value; }
-//    },
-    DECIMAL, //{
-//        int value;
-//       // <int> int getValue() {return value; }
-//    },
+    BOOLEAN,
+    DECIMAL,
     FLOAT,
     STRING
 
-   // abstract <T> T getValue();
 
 
 }

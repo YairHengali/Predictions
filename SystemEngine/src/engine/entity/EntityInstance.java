@@ -1,7 +1,6 @@
 package engine.entity;
 
 import engine.property.PropertyDefinition;
-import engine.property.PropertyInstance;
 import engine.property.api.PropertyAPI;
 import engine.property.impl.DecimalProperty;
 
@@ -15,7 +14,7 @@ public class EntityInstance {
 
     public EntityInstance(EntityDefinition entityDefinition) {
         this.name = entityDefinition.getName();
-        for (PropertyDefinition def : entityDefinition.getName2property().values()) {
+        for (PropertyDefinition def : entityDefinition.getName2propertyDef().values()) {
 
             switch (def.getType()){
                 case BOOLEAN:

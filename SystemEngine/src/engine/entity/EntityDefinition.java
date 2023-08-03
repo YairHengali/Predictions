@@ -6,15 +6,15 @@ import java.util.*;
 public class EntityDefinition {
     private final String name;
     private int population = 0;
-    private final Map<String, PropertyDefinition> name2property = new HashMap<>(); //MAYBE MAP (NAME : PROPERTY)
+    private final Map<String, PropertyDefinition> name2propertyDef = new HashMap<>(); //MAYBE MAP (NAME : PROPERTY)
 
     public EntityDefinition(String name, int population) {
         this.population = population;
         this.name = name;
     }
 
-    public void addPropertyDefinition(PropertyDefinition propertyToAdd){
-        name2property.put(propertyToAdd.getName(), propertyToAdd);
+    public void addPropertyDefinition(PropertyDefinition propertyDefinitionToAdd){
+        name2propertyDef.put(propertyDefinitionToAdd.getName(), propertyDefinitionToAdd);
     }
 
     public String getName() {
@@ -25,7 +25,7 @@ public class EntityDefinition {
         return population;
     }
 
-    public Map<String, PropertyDefinition> getName2property() {
-        return name2property;
+    public Map<String, PropertyDefinition> getName2propertyDef() {
+        return name2propertyDef;
     }
 }

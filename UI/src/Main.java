@@ -7,7 +7,7 @@ import engine.property.PropertyType;
 public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngine();
-        systemEngine.loadSimulation("/SystemEngine/src/resources/ex1-cigarets.xml");
+        systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
         /*
         //CREATE WORLD:
         World testSimulation = systemEngine.getSimulation();

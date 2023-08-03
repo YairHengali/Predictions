@@ -1,20 +1,20 @@
 package engine;
 
 public class Range {
-    private int from;
-    private int to;
+    private double from;
+    private double to;
 
-    public Range(int from, int to)
+    public Range(double from, double to)
     {
         this.from = from;
         this.to = to;
     }
 
-    public int getFrom() {
+    public double getFrom() {
         return from;
     }
 
-    public int getTo() {
+    public double getTo() {
         return to;
     }
 
