@@ -51,11 +51,18 @@ public class World {
         name2EntitiesDef.put(entityDefinitionToAdd.getName(), entityDefinitionToAdd);
     }
 
-    public void addRule(String name, int howManyTicksForActivation, float probabilityForActivation)
+    public void addRule(String name, Integer howManyTicksForActivation, Double probabilityForActivation)
     {
         Rule newRule = new Rule(name, howManyTicksForActivation, probabilityForActivation);
         name2Rule.put(name, newRule);
     }
+
+//    public void addRule(Rule ruleToAdd)//TODO: Decide which better^^
+//    {
+//        name2Rule.put(name, ruleToAdd);
+//    }
+
+
 
     public Rule getRuleByName(String ruleName)
     {

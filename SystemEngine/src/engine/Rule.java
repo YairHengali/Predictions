@@ -10,14 +10,18 @@ import java.util.Collection;
 public class Rule {
     private final String name;
     private int howManyTicksForActivation = 1;
-    private float probabilityForActivation = 1;
+    private double probabilityForActivation = 1;
 
     private final Collection<Action> Actions = new ArrayList<>();
 
-    public Rule(String name, int howManyTicksForActivation, float probabilityForActivation) {
+    public Rule(String name, Integer howManyTicksForActivation, Double probabilityForActivation) {
         this.name = name;
-        this.howManyTicksForActivation = howManyTicksForActivation;
-        this.probabilityForActivation = probabilityForActivation;
+        if (howManyTicksForActivation != null) {
+            this.howManyTicksForActivation = howManyTicksForActivation;
+        }
+        if (probabilityForActivation != null) {
+            this.probabilityForActivation = probabilityForActivation;
+        }
     }
 
     public void addIncreaseAction(EntityDef mainEntity, Property<Number> property, Number amountToIncrease)

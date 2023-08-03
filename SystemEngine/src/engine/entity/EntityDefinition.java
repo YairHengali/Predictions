@@ -5,8 +5,8 @@ import java.util.*;
 
 public class EntityDefinition {
     private final String name;
-    private int population = 0;
-    private final Map<String, PropertyDefinition> name2propertyDef = new HashMap<>(); //MAYBE MAP (NAME : PROPERTY)
+    private final int population;
+    private final Map<String, PropertyDefinition> name2propertyDef = new HashMap<>();
 
     public EntityDefinition(String name, int population) {
         this.population = population;

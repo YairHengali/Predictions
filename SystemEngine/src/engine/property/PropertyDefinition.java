@@ -7,7 +7,7 @@ public class PropertyDefinition {
     private final PropertyType type;
     private final Range valueRange;
     private final boolean isInitializedRandomly;
-    private String initValue;
+    private final String initValue;
 
     public PropertyDefinition(String name, PropertyType type, Range valueRange, boolean isInitializedRandomly, String initValue) {
         this.name = name;

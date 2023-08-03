@@ -5,6 +5,7 @@ import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import jaxb.generated.PRDEntity;
 import jaxb.generated.PRDProperty;
+import jaxb.generated.PRDRule;
 import jaxb.generated.PRDWorld;
 
 import javax.xml.bind.JAXBContext;
@@ -34,6 +35,7 @@ public class SystemEngine {
         }
 
         addEntitiesDefinitions();
+        addRules();
     }
 
     private static PRDWorld deserializeFrom(InputStream in) throws JAXBException {
@@ -62,6 +64,24 @@ public class SystemEngine {
         }
     }
 
+    private void addRules() {
+
+        int rulesCount = m_generatedWorld.getPRDRules().getPRDRule().size();
+        for (int i = 0; i < rulesCount; i++)
+        {
+            PRDRule prdRule = m_generatedWorld.getPRDRules().getPRDRule().get(i);
+            if (prdRule.getPRDActivation() != null)
+            {
+                simulation.addRule(prdRule.getName(), prdRule.getPRDActivation().getTicks(), prdRule.getPRDActivation().getProbability());
+            }
+            else
+            {
+                simulation.addRule(prdRule.getName(), null, null);
+            }
+
+
+        }
+    }
     public String showSimulation() {
         return simulation.toString();
     }
