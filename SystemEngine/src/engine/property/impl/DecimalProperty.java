@@ -8,7 +8,7 @@ import engine.property.api.PropertyAPI;
 public class DecimalProperty implements PropertyAPI {
     private String name;
     private PropertyType type;
-    private int value;
+    private int value; //TODO: Maybe Expression??????
     private Range range;
 
     public DecimalProperty(String name, PropertyType type, int value) {

@@ -33,5 +33,7 @@ public class EntityInstance {
         }
     }
 
-
+    public PropertyAPI getPropertyByName(String propertyName) {
+        return name2property.get(propertyName);
+    }
 }
