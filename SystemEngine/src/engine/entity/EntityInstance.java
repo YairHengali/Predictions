@@ -1,7 +1,7 @@
 package engine.entity;
 
 import engine.property.PropertyDefinition;
-import engine.property.api.PropertyAPI;
+import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Map;
 public class EntityInstance {
 
     private final String name;
-    private final Map<String, PropertyAPI> name2property = new HashMap<>();
+    private final Map<String, PropertyInstance> name2property = new HashMap<>();
 
     public EntityInstance(EntityDefinition entityDefinition) {
         this.name = entityDefinition.getName();
@@ -33,7 +33,7 @@ public class EntityInstance {
         }
     }
 
-    public PropertyAPI getPropertyByName(String propertyName) {
+    public PropertyInstance getPropertyByName(String propertyName) {
         return name2property.get(propertyName);
     }
 }

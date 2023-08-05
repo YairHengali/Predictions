@@ -2,10 +2,7 @@ package engine;
 
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
-import engine.property.Property;
-import engine.property.PropertyDefinition;
-import engine.property.PropertyType;
-import engine.property.api.PropertyAPI;
+import engine.property.api.PropertyInstance;
 
 import java.util.*;
 
@@ -20,7 +17,7 @@ public class World {
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
     private final Map<String, List<EntityInstance>> name2EntitiesIns = new HashMap<>();
     private final Map<String, Rule> name2Rule = new HashMap<>();
-    private final Map<String, PropertyAPI> name2EnvironmentVariables = new HashMap<>();
+    private final Map<String, PropertyInstance> name2EnvironmentVariables = new HashMap<>();
     private Set<String> methodsNames;
 
     public World() {

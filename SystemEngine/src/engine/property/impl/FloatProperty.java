@@ -4,12 +4,12 @@ import engine.Range;
 import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 
-public class DecimalProperty extends PropertyInstance {
+public class FloatProperty extends PropertyInstance {
 
-    private int value; //TODO: Maybe Expression??????
+    private float value; //TODO: Maybe Expression??????
     private Range range;
 
-    public DecimalProperty(PropertyDefinition propertyDefinition) {
+    public FloatProperty(PropertyDefinition propertyDefinition) {
         super(propertyDefinition.getName(), propertyDefinition.getType());
         this.range = propertyDefinition.getValueRange();
 
@@ -17,17 +17,17 @@ public class DecimalProperty extends PropertyInstance {
             // TODO: implement randomly
         }
         else {
-            this.value = Integer.parseInt(propertyDefinition.getInitValue());
+            this.value = Float.parseFloat(propertyDefinition.getInitValue());
         }
 
 
     }
 
-    public int getValue() {
+    public float getValue() {
         return this.value;
     }
 
-    public void setValue(int value) {
+    public void setValue(float value) {
         if (range == null || (value <= range.getTo() && value >= range.getFrom()))
             this.value = value;
     }

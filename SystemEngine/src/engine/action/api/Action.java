@@ -1,4 +1,4 @@
 package engine.action.api;
 public interface Action {
-    void Run();
+    void Run() throws Exception;
 }

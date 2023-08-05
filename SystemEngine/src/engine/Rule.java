@@ -1,17 +1,21 @@
 package engine;
 
 import engine.action.api.Action;
+import engine.action.api.ClacType;
+import engine.action.impl.Calculation;
 import engine.action.impl.Increase;
+import engine.entity.EntityInstance;
 import engine.property.Property;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Rule {
     private final String name;
     private int howManyTicksForActivation = 1;
     private double probabilityForActivation = 1;
-
+    private final Collection<String> ActionsNames= new ArrayList<>();
     private final Collection<Action> Actions = new ArrayList<>();
 
     public Rule(String name, Integer howManyTicksForActivation, Double probabilityForActivation) {
@@ -24,9 +28,15 @@ public class Rule {
         }
     }
 
-    public void addIncreaseAction(EntityDef mainEntity, Property<Number> property, Number amountToIncrease)
+    public void addIncreaseAction(List<EntityInstance> mainEntityList, String propertyName, Number amountToIncrease)
     {
-        Action action = new Increase(mainEntity, property, amountToIncrease);
+        Action action = new Increase(mainEntityList, propertyName, amountToIncrease);
+        Actions.add(action);
+    }
+
+    public void addCalculationAction(List<EntityInstance> mainEntityList, String propertyName, Number argument1, Number argument2, ClacType calcType)
+    {
+        Action action = new Calculation(mainEntityList, propertyName, argument1, argument2, calcType);
         Actions.add(action);
     }
 
