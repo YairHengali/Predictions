@@ -26,7 +26,10 @@ public class SystemEngine {
         return simulation;
     }
 
-    public void loadSimulation(String filePath) { //TODO: Add Exceptions fo invalid data
+    public void loadSimulation(String filePath) throws Exception { //TODO: Add Exceptions fo invalid data
+        if (!filePath.endsWith(".xml")){
+            throw new Exception("Invalid file format! needs to be a .xml file");
+        }
         try {
             InputStream inputStream = new FileInputStream(new File(filePath));
             m_generatedWorld = deserializeFrom(inputStream);
@@ -34,8 +37,14 @@ public class SystemEngine {
             e.printStackTrace();
         }
 
-        addEntitiesDefinitions();
-        addRules();
+        try {
+            addEnvironmentVariables();
+            addEntitiesDefinitions();
+            addRules();
+        }
+        catch (Exception e){
+            e.getMessage();
+        }
     }
 
     private static PRDWorld deserializeFrom(InputStream in) throws JAXBException {
@@ -44,7 +53,7 @@ public class SystemEngine {
         return (PRDWorld) u.unmarshal(in);
     }
 
-    private void addEnvironmentVariables() throws Exception { //TODO UNFINISHED
+    private void addEnvironmentVariables() throws Exception {
         int environmentVariablesCount = m_generatedWorld.getPRDEvironment().getPRDEnvProperty().size();
         Set<String> EnvVarsNames = new HashSet<>();
 
@@ -58,19 +67,13 @@ public class SystemEngine {
                 EnvVarsNames.add(prdEnvProperty.getPRDName());
             }
 
-            switch (PropertyType.valueOf(prdEnvProperty.getType().toUpperCase())) {
-                case BOOLEAN:
-                    simulation.addEnvironmentVariable();
-                    break;
-                case DECIMAL:
-                    this.name2property.put(def.getName(), new DecimalProperty(def));
-                    break;
-                case FLOAT:
-                    //this.name2property.put(def.getName(), new FloatProperty(def));
-                    break;
-                case STRING:
-                    //this.name2property.put(def.getName(), new StringProperty(def));
-                    break;
+            if (prdEnvProperty.getPRDRange() != null)
+            {
+                simulation.addEnvironmentVariable(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo()));
+            }
+            else
+            {
+                simulation.addEnvironmentVariable(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),null);
             }
         }
     }
@@ -94,16 +97,23 @@ public class SystemEngine {
                     entityPropertiesNames.add(prdProperty.getPRDName());
                 }
 
-                PropertyDefinition newPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
-                        new Range(prdProperty.getPRDRange().getFrom(), prdProperty.getPRDRange().getTo()),
-                        prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
+                PropertyDefinition newPropertyDef;
+                if (prdProperty.getPRDRange() != null) {
+                    newPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
+                            new Range(prdProperty.getPRDRange().getFrom(), prdProperty.getPRDRange().getTo()),
+                            prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
+                }
+                else{
+                    newPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
+                            null, prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
+                }
                 newEntityDef.addPropertyDefinition(newPropertyDef);
             }
             simulation.addEntityDefinition(newEntityDef);
         }
     }
 
-    private void addRules() {
+    private void addRules() throws Exception {
 
         int rulesCount = m_generatedWorld.getPRDRules().getPRDRule().size();
         for (int i = 0; i < rulesCount; i++)
@@ -118,7 +128,16 @@ public class SystemEngine {
                 simulation.addRule(prdRule.getName(), null, null);
             }
 
-            for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()) {
+            for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()) { //UNFINISHED! TODO: ALL THE EDGE CASES OF PROPERTIES Existing check. (5, 6 in the XML Checks)
+                if (simulation.getEntityDefinitionByName(prdAction.getEntity()) == null)
+                {
+                    throw new Exception(String.format("the entity: %s that referenced in the action: %s in the rule: %s, does not exist!",prdAction.getEntity(), prdAction.getType(), prdRule.getName()));
+                }
+                if((simulation.getEntityDefinitionByName(prdAction.getEntity()).getPropertyDefinitionByName(prdAction.getProperty()) == null) ||
+                        (simulation.getEntityDefinitionByName(prdAction.getEntity()).getPropertyDefinitionByName(prdAction.getResultProp()) == null))
+                {
+                    throw new Exception(String.format("the property: %s that referenced in the action: %s in the rule: %s, does not exist in the entity: %s!",prdAction.getProperty(), prdAction.getType(), prdRule.getName(), prdAction.getEntity()));
+                }
 
             }
 

@@ -17,6 +17,10 @@ public class EntityDefinition {
         name2propertyDef.put(propertyDefinitionToAdd.getName(), propertyDefinitionToAdd);
     }
 
+    public PropertyDefinition getPropertyDefinitionByName(String propertyName){
+        return name2propertyDef.get(propertyName);
+    }
+
     public String getName() {
         return name;
     }

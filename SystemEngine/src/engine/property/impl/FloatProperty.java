@@ -2,6 +2,7 @@ package engine.property.impl;
 
 import engine.Range;
 import engine.property.PropertyDefinition;
+import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 
 public class FloatProperty extends PropertyInstance {
@@ -19,8 +20,11 @@ public class FloatProperty extends PropertyInstance {
         else {
             this.value = Float.parseFloat(propertyDefinition.getInitValue());
         }
+    }
 
-
+    public FloatProperty(String name, PropertyType type, Range range) {
+        super(name, type);
+        this.range = range;
     }
 
     public float getValue() {

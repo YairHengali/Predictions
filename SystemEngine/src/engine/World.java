@@ -2,7 +2,10 @@ package engine;
 
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
+import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
+import engine.property.impl.DecimalProperty;
+import engine.property.impl.FloatProperty;
 
 import java.util.*;
 
@@ -33,12 +36,24 @@ public class World {
 //        methodsNames = new HashSet<>();
 //    }
 //
-//    public <T> void addEnvironmentVariable(String name, PropertyType type, T value, Range valueRange)
-//    {
-//        Property<T> newEnvVar = new Property<>(name, type, value, valueRange, false);
-//        name2EnvironmentVariables.put(name, newEnvVar);
-//    }
-//
+    public void addEnvironmentVariable(String name, PropertyType propertyType, Range valueRange)
+    {
+        switch (propertyType) {
+            case BOOLEAN:
+                name2EnvironmentVariables.put(name, new BooleanProperty();
+                break;
+            case DECIMAL:
+                name2EnvironmentVariables.put(name, new DecimalProperty(name, propertyType, valueRange));
+                break;
+            case FLOAT:
+                name2EnvironmentVariables.put(name, new FloatProperty(name, propertyType, valueRange));
+                break;
+            case STRING:
+                name2EnvironmentVariables.put(name, new StringProperty(name, propertyType);
+                break;
+    }
+    }
+
 //    public Property<?> getEnvironmentVariableByName(String EnvironmentVariableName)
 //    {
 //        return name2EnvironmentVariables.get(EnvironmentVariableName);
@@ -46,6 +61,9 @@ public class World {
 
     public void addEntityDefinition(EntityDefinition entityDefinitionToAdd){
         name2EntitiesDef.put(entityDefinitionToAdd.getName(), entityDefinitionToAdd);
+    }
+    public EntityDefinition getEntityDefinitionByName(String entityName){
+        return name2EntitiesDef.get(entityName);
     }
 
     public void addRule(String name, Integer howManyTicksForActivation, Double probabilityForActivation)

@@ -32,10 +32,10 @@ public class Calculation implements Action {
             {
                 switch (calcType) {
                     case MULTIPLY:
-                        ((DecimalProperty) currentEntityPropertyInstance).setValue((argument1.intValue() * argument2.intValue());//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+                        ((DecimalProperty) currentEntityPropertyInstance).setValue((argument1.intValue() * argument2.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
                         break;
                     case DIVIDE:
-                        ((DecimalProperty) currentEntityPropertyInstance).setValue((argument1.intValue() / argument2.intValue());//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+                        ((DecimalProperty) currentEntityPropertyInstance).setValue((argument1.intValue() / argument2.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
                         break;
                 }
             }
@@ -43,10 +43,10 @@ public class Calculation implements Action {
             {
                 switch (calcType) {
                     case MULTIPLY:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue((argument1.floatValue() * argument2.floatValue());//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+                        ((FloatProperty) currentEntityPropertyInstance).setValue((argument1.floatValue() * argument2.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
                         break;
                     case DIVIDE:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue((argument1.floatValue() / argument2.floatValue());//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+                        ((FloatProperty) currentEntityPropertyInstance).setValue((argument1.floatValue() / argument2.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
                         break;
                 }
             }
