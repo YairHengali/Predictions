@@ -4,6 +4,7 @@ import engine.entity.EntityDefinition;
 import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.property.impl.DecimalProperty;
+import engine.property.impl.FloatProperty;
 import jaxb.generated.*;
 
 import javax.xml.bind.JAXBContext;
@@ -129,6 +130,34 @@ public class SystemEngine {
             }
 
             for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()) { //UNFINISHED! TODO: ALL THE EDGE CASES OF PROPERTIES Existing check. (5, 6 in the XML Checks)
+                if (prdAction.getType().equals("increase") || prdAction.getType().equals("decrease")) //TODO: case sensitive???
+                {
+                    if(prdAction.getBy().startsWith("environment") || prdAction.getBy().startsWith("random"))
+                    {
+                    //TODO: check that inside is a numeric
+                    }
+                    else{
+                        try {
+                            Float.parseFloat(prdAction.getBy());
+                        } catch (NumberFormatException e) {
+                            throw new Exception("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
+                        }
+                    }
+                }
+                else if (prdAction.getType().equals("calculation"))
+                {
+                    if(prdAction.getPRDMultiply().getArg1().startsWith("environment"))//TODO: Continue || prdAction.getPRDMultiply().getArg2().startsWith("environment"))
+                    {
+                        //TODO: check that inside is a numeric
+                    }
+                    else{
+                        try {
+                            Float.parseFloat(prdAction.getBy());
+                        } catch (NumberFormatException e) {
+                            throw new Exception("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
+                        }
+                    }
+                }
                 if (simulation.getEntityDefinitionByName(prdAction.getEntity()) == null)
                 {
                     throw new Exception(String.format("the entity: %s that referenced in the action: %s in the rule: %s, does not exist!",prdAction.getEntity(), prdAction.getType(), prdRule.getName()));
