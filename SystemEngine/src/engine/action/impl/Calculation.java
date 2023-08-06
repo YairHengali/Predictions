@@ -1,6 +1,8 @@
 package engine.action.impl;
 
+import engine.action.api.AbstractAction;
 import engine.action.api.Action;
+import engine.action.api.ActionType;
 import engine.action.api.ClacType;
 import engine.entity.EntityInstance;
 import engine.property.api.PropertyInstance;
@@ -9,15 +11,15 @@ import engine.property.impl.FloatProperty;
 
 import java.util.List;
 
-public class Calculation implements Action {
-    List<EntityInstance> mainEntityList;
+public class Calculation extends AbstractAction {
+    //List<EntityInstance> mainEntityList;
     String propertyName;
     Number argument1;
     Number argument2;
     ClacType calcType;
 
     public Calculation(List<EntityInstance> mainEntityList, String propertyName, Number argument1, Number argument2, ClacType calcType) {
-        this.mainEntityList = mainEntityList;
+        super(ActionType.CALCULATION, mainEntityList);
         this.propertyName = propertyName;
         this.argument1 = argument1;
         this.argument2 = argument2;

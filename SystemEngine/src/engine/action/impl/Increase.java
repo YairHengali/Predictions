@@ -1,5 +1,7 @@
 package engine.action.impl;
 
+import engine.action.api.AbstractAction;
+import engine.action.api.ActionType;
 import engine.entity.EntityInstance;
 import engine.action.api.Action;
 import engine.property.api.PropertyInstance;
@@ -8,8 +10,8 @@ import engine.property.impl.FloatProperty;
 
 import java.util.List;
 
-public class Increase implements Action {
-    List<EntityInstance> mainEntityList;
+public class Increase extends AbstractAction {
+    //List<EntityInstance> mainEntityList;
     String propertyName;
     Number amountToIncrease; //TODO: Expression????
 
@@ -24,8 +26,8 @@ public class Increase implements Action {
 //    }
 
 
-    public Increase(List<EntityInstance> mainEntityList, String propertyName, Number amountToIncrease){ //TODO: EXCEPTION IF property from non-Number type
-        this.mainEntityList = mainEntityList;
+    public Increase(List<EntityInstance> mainEntityList, String propertyName, Number amountToIncrease) { //TODO: EXCEPTION IF property from non-Number type
+        super(ActionType.INCREASE, mainEntityList);
         this.propertyName = propertyName;
         this.amountToIncrease = amountToIncrease; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT
     }
@@ -38,14 +40,12 @@ public class Increase implements Action {
             if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
             {
                 ((DecimalProperty) currentEntityPropertyInstance).setValue(((DecimalProperty) currentEntityPropertyInstance).getValue() + amountToIncrease.intValue());//TODO: VALIDATE IF INT OR FLOAT
-            }
-            else if (currentEntityPropertyInstance instanceof FloatProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
+            } else if (currentEntityPropertyInstance instanceof FloatProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
             {
                 ((FloatProperty) currentEntityPropertyInstance).setValue(((FloatProperty) currentEntityPropertyInstance).getValue() + amountToIncrease.floatValue());//TODO: VALIDATE IF INT OR FLOAT
-            })
-            else
-            {
+            } else {
                 throw new Exception("Invalid Property type, need to be Numeric");
             }
         }
     }
+}

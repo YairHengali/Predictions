@@ -6,6 +6,7 @@ import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
+import engine.rule.Rule;
 
 import java.util.*;
 
