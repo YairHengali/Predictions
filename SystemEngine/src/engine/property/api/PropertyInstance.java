@@ -14,4 +14,8 @@ public abstract class PropertyInstance {
     public PropertyType getType(){
         return this.type;
     }
+
+    public String getName() {
+        return name;
+    }
 }
