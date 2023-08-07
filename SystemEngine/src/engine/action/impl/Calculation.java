@@ -5,6 +5,7 @@ import engine.action.api.Action;
 import engine.action.api.ActionType;
 import engine.action.api.ClacType;
 import engine.entity.EntityInstance;
+import engine.entity.manager.EntityInstanceManager;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -18,8 +19,8 @@ public class Calculation extends AbstractAction {
     Number argument2;
     ClacType calcType;
 
-    public Calculation(List<EntityInstance> mainEntityList, String propertyName, Number argument1, Number argument2, ClacType calcType) {
-        super(ActionType.CALCULATION, mainEntityList);
+    public Calculation(String mainEntityName, String propertyName, String argument1Expression, String argument2Expression, ClacType calcType) {
+        super(ActionType.CALCULATION, mainEntityName);
         this.propertyName = propertyName;
         this.argument1 = argument1;
         this.argument2 = argument2;
@@ -27,8 +28,8 @@ public class Calculation extends AbstractAction {
     }
 
     @Override
-    public void Run() throws Exception {
-        for (EntityInstance entityInstance : mainEntityList) {
+    public void Run(EntityInstanceManager manager) throws Exception {
+        for (EntityInstance entityInstance : manager.getInstancesLists().get(this.mainEntityName)) {
             PropertyInstance currentEntityPropertyInstance = entityInstance.getPropertyByName(propertyName);
             if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
             {

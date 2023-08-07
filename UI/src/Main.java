@@ -1,13 +1,12 @@
-import engine.*;
-import engine.property.Property;
-import engine.property.PropertyType;
+import engine.system.SystemEngine;
+import engine.system.SystemEngineImpl;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        SystemEngine systemEngine = new SystemEngine();
-        systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
+        SystemEngine systemEngine = new SystemEngineImpl();
+        systemEngine.loadSimulation("./SystemEngineImpl/src/resources/ex1-cigarets.xml");
         /*
         //CREATE WORLD:
         World testSimulation = systemEngine.getSimulation();

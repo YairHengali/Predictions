@@ -7,6 +7,7 @@ import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.rule.Rule;
+import engine.rule.RuleImpl;
 
 import java.util.*;
 
@@ -19,7 +20,7 @@ public class World {
     private int maxNumberOfTicks;
     private long SecondsToTerminate;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
-    private final Map<String, List<EntityInstance>> name2EntitiesIns = new HashMap<>();
+    //private final Map<String, List<EntityInstance>> name2EntitiesIns = new HashMap<>(); Moved to manager
     private final Map<String, Rule> name2Rule = new HashMap<>();
     private final Map<String, PropertyInstance> name2EnvironmentVariables = new HashMap<>();
     private Set<String> methodsNames;
@@ -67,18 +68,10 @@ public class World {
         return name2EntitiesDef.get(entityName);
     }
 
-    public void addRule(String name, Integer howManyTicksForActivation, Double probabilityForActivation)
+    public void addRule(Rule ruleToAdd)//TODO: Decide which better^^
     {
-        Rule newRule = new Rule(name, howManyTicksForActivation, probabilityForActivation);
-        name2Rule.put(name, newRule);
+        name2Rule.put(ruleToAdd.getName(), ruleToAdd);
     }
-
-//    public void addRule(Rule ruleToAdd)//TODO: Decide which better^^
-//    {
-//        name2Rule.put(name, ruleToAdd);
-//    }
-
-
 
     public Rule getRuleByName(String ruleName)
     {
@@ -91,7 +84,7 @@ public class World {
         for(EntityDefinition entityDefinition : name2EntitiesDef.values()) {
             List<EntityInstance> newList = new ArrayList<>(entityDefinition.getPopulation());
             for (int i = 0; i < entityDefinition.getPopulation(); i++) {
-                newList.set(i, new EntityInstance(entityDefinition));
+                newList.set(i, new EntityInstance(entityDefinition, i));
             }
             this.name2EntitiesIns.put(entityDefinition.getName(), newList );
         }
@@ -122,7 +115,7 @@ public class World {
 //        if (!name2Rule.isEmpty())
 //        {
 //            stringBuilder.append("Rules:\n");
-//            for (Map.Entry<String, Rule> entry : name2Rule.entrySet()) {
+//            for (Map.Entry<String, RuleImpl> entry : name2Rule.entrySet()) {
 //                stringBuilder.append(entry.getValue()).append("\n");
 //            }
 //        }

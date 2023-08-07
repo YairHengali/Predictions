@@ -34,13 +34,14 @@ public class Increase extends AbstractAction {
 
 
     @Override
-    public void Run() throws Exception {
-        for (EntityInstance entityInstance : mainEntityList) {
+    public void Run(EntityInstanceManager manager) throws Exception {
+        for (EntityInstance entityInstance : manager.getInstancesLists().get(this.mainEntityName)) {
             PropertyInstance currentEntityPropertyInstance = entityInstance.getPropertyByName(propertyName);
-            if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
+            if (currentEntityPropertyInstance instanceof DecimalProperty)
             {
-                ((DecimalProperty) currentEntityPropertyInstance).setValue(((DecimalProperty) currentEntityPropertyInstance).getValue() + amountToIncrease.intValue());//TODO: VALIDATE IF INT OR FLOAT
-            } else if (currentEntityPropertyInstance instanceof FloatProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
+                ((DecimalProperty) currentEntityPropertyInstance).setValue(((DecimalProperty) currentEntityPropertyInstance).getValue() + byExpression.intValue());//TODO: VALIDATE IF INT OR FLOAT
+            }
+            else if (currentEntityPropertyInstance instanceof FloatProperty)
             {
                 ((FloatProperty) currentEntityPropertyInstance).setValue(((FloatProperty) currentEntityPropertyInstance).getValue() + amountToIncrease.floatValue());//TODO: VALIDATE IF INT OR FLOAT
             } else {

@@ -9,6 +9,9 @@ public class PropertyDefinition {
     private final boolean isInitializedRandomly;
     private final String initValue;
 
+
+
+
     public PropertyDefinition(String name, PropertyType type, Range valueRange, boolean isInitializedRandomly, String initValue) {
         this.name = name;
         this.type = type;

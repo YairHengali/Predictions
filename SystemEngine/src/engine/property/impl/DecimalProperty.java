@@ -32,7 +32,7 @@ public class DecimalProperty extends PropertyInstance {
     }
 
     public void setValue(int value) {
-        if (range == null || (value <= range.getTo() && value >= range.getFrom()))
+        if (range == null || (value <= range.getTo().intValue() && value >= range.getFrom().intValue()))
             this.value = value;
     }
 }

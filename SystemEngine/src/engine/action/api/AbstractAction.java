@@ -5,12 +5,14 @@ import engine.entity.EntityInstance;
 import java.util.List;
 
 public abstract class AbstractAction implements Action {
-    ActionType actionType;
-    protected List<EntityInstance> mainEntityList;
+    private ActionType actionType;
+    //protected List<EntityInstance> mainEntityList;
+    protected String mainEntityName;
 
-    protected AbstractAction(ActionType actionType, List<EntityInstance> mainEntityList) {
+
+    protected AbstractAction(ActionType actionType, String mainEntityName) {
         this.actionType = actionType;
-        this.mainEntityList = mainEntityList;
+        this.mainEntityName = mainEntityName;
     }
 
     @Override

@@ -32,7 +32,7 @@ public class FloatProperty extends PropertyInstance {
     }
 
     public void setValue(float value) {
-        if (range == null || (value <= range.getTo() && value >= range.getFrom()))
+        if (range == null || (value <= range.getTo().floatValue() && value >= range.getFrom().floatValue()))
             this.value = value;
     }
 }

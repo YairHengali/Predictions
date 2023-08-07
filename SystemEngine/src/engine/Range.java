@@ -1,8 +1,8 @@
 package engine;
 
 public class Range {
-    private double from;
-    private double to;
+    private Number from;
+    private Number to;
 
     public Range(double from, double to)
     {
@@ -10,11 +10,11 @@ public class Range {
         this.to = to;
     }
 
-    public double getFrom() {
+    public Number getFrom() {
         return from;
     }
 
-    public double getTo() {
+    public Number getTo() {
         return to;
     }
 
