@@ -5,8 +5,7 @@ import engine.action.api.Action;
 import engine.action.api.ActionType;
 import engine.action.impl.condition.ConditionOp;
 import engine.action.impl.condition.api.Condition;
-import engine.entity.EntityInstance;
-import engine.entity.manager.EntityInstanceManager;
+import engine.context.Context;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.BooleanProperty;
@@ -25,7 +24,6 @@ public class SingleCondition extends AbstractAction implements Condition
     List<Action> thenActions;
     List<Action> elseActions;
 
-    PropertyInstance currPropertyUsedInEvaluate;
 
     public SingleCondition(String mainEntityName, String propertyName, String valueToCompare) { //TODO: EXCEPTION IF property from non-Number type
         super(ActionType.CONDITION, mainEntityName);
@@ -35,40 +33,56 @@ public class SingleCondition extends AbstractAction implements Condition
         this.elseActions = new ArrayList<>();
 
     }
+//    @Override
+//    public void Run(Context context) throws Exception {
+//        boolean resCondition = false;
+//
+//        for (EntityInstance entityInstance : context.getInstancesLists().get(this.mainEntityName)) {
+//            currPropertyUsedInEvaluate = entityInstance.getPropertyByName(this.propertyName);
+//            resCondition = evaluateCondition();
+//
+//            if (resCondition) {
+//                invokeThenActions(context);
+//            }
+//            else {
+//                invokeElseActions(context);
+//            }
+//        }
+//    }
+
     @Override
-    public void Run(EntityInstanceManager manager) throws Exception {
+    public void Run(Context context) throws Exception {
         boolean resCondition = false;
 
-        for (EntityInstance entityInstance : manager.getInstancesLists().get(this.mainEntityName)) {
-            currPropertyUsedInEvaluate = entityInstance.getPropertyByName(this.propertyName);
-            resCondition = evaluateCondition();
+        resCondition = evaluateCondition(context);
 
-            if (resCondition) {
-                invokeThenActions(manager);
-            }
-            else {
-                invokeElseActions(manager);
-            }
+        if (resCondition) {
+            invokeThenActions(context);
+        }
+        else {
+            invokeElseActions(context);
         }
     }
 
     @Override
-    public boolean evaluateCondition() {
+    public boolean evaluateCondition(Context context) {
         boolean result = false;
+
+        PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(this.propertyName);
         //TODO: figuring value out of expression
 
-        switch (currPropertyUsedInEvaluate.getType()) {
+        switch (propertyToEvaluate.getType()) {
             case BOOLEAN:
-                result = operator.eval( ((BooleanProperty) currPropertyUsedInEvaluate).getValue(), valueToCompare, PropertyType.STRING);
+                result = operator.eval( ((BooleanProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
                 break;
             case DECIMAL:
-                result = operator.eval( ((DecimalProperty) currPropertyUsedInEvaluate).getValue(), valueToCompare, PropertyType.DECIMAL);
+                result = operator.eval( ((DecimalProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.DECIMAL);
                 break;
             case FLOAT:
-                result = operator.eval( ((FloatProperty) currPropertyUsedInEvaluate).getValue(), valueToCompare, PropertyType.FLOAT);
+                result = operator.eval( ((FloatProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.FLOAT);
                 break;
             case STRING:
-                result = operator.eval( ((StringProperty) currPropertyUsedInEvaluate).getValue(), valueToCompare, PropertyType.STRING);
+                result = operator.eval( ((StringProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
                 break;
         }
 
@@ -85,23 +99,43 @@ public class SingleCondition extends AbstractAction implements Condition
         this.elseActions.add(actionToAdd);
     }
 
-    void invokeThenActions(EntityInstanceManager manager){
-        thenActions.forEach(action -> {
+//    void invokeThenActions(EntityInstanceManager manager){
+//        thenActions.forEach(action -> {
+//            try {
+//                action.Run(manager);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+//    }
+//    void invokeElseActions(EntityInstanceManager manager){
+//        elseActions.forEach(action -> {
+//            try {
+//                action.Run(manager);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+//    }
+
+    void invokeThenActions(Context context){
+        for (Action action: thenActions) {
             try {
-                action.Run(manager);
+                action.Run(context);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+        }
+
     }
-    void invokeElseActions(EntityInstanceManager manager){
-        elseActions.forEach(action -> {
+    void invokeElseActions(Context context){
+        for (Action action: elseActions) {
             try {
-                action.Run(manager);
+                action.Run(context);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-        });
+        }
     }
 
     public String getPropertyName() {

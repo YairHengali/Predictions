@@ -5,8 +5,10 @@ import engine.action.api.ClacType;
 import engine.action.impl.Calculation;
 import engine.action.impl.Increase;
 import engine.context.Context;
+import engine.context.ContextImpl;
 import engine.entity.EntityInstance;
 import engine.entity.manager.EntityInstanceManager;
+import engine.environment.active.ActiveEnvironmentVariables;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,13 +77,25 @@ public class RuleImpl implements Rule {
 //        actions.add(action);
 //    }
     @Override
-    public void runRule(EntityInstanceManager manager)
+    public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables)
     {
+//        for (Action action: actions) {
+//            try {
+//                action.Run(manager);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+
         for (Action action: actions) {
-            try {
-                action.Run(manager);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            for (EntityInstance entityInstance : manager.getInstancesListByName(action.getMainEntityName()))
+            {
+                Context context = new ContextImpl(entityInstance, manager, activeEnvironmentVariables);
+                try {
+                    action.Run(context);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

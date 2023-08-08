@@ -2,6 +2,7 @@ package engine.rule;
 
 import engine.action.api.Action;
 import engine.entity.manager.EntityInstanceManager;
+import engine.environment.active.ActiveEnvironmentVariables;
 
 import java.util.Collection;
 
@@ -12,6 +13,6 @@ public interface Rule {
     double getProbForActivations();
     Collection<Action> actionsToPerform();
     void addAction(Action actionToAdd);
-    public void runRule(EntityInstanceManager manager);
+    public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables);
 
 }

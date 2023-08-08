@@ -69,7 +69,7 @@ public class WorldFactoryImpl implements WorldFactory{
             }
         }
     }
-    private void addEntitiesDefinitions() {
+    private void addEntitiesDefinitions() throws Exception {
         int entitiesCount = generatedWorld.getPRDEntities().getPRDEntity().size();
         for (int i = 0; i < entitiesCount; i++) {
             PRDEntity prdEntity = generatedWorld.getPRDEntities().getPRDEntity().get(i);
@@ -118,7 +118,7 @@ public class WorldFactoryImpl implements WorldFactory{
 
             // Adding Rule Actions
             for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()) { //UNFINISHED! TODO: ALL THE EDGE CASES OF PROPERTIES Existing check. (5, 6 in the XML Checks)
-                Action currentAction;
+                Action currentAction = null;
 
                 if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
                     throw new Exception(String.format("the entity: %s that referenced in the action: %s in the rule: %s, does not exist!", prdAction.getEntity(), prdAction.getType(), prdRule.getName()));
@@ -133,7 +133,7 @@ public class WorldFactoryImpl implements WorldFactory{
                         currentAction = new Increase(prdAction.getEntity(), prdAction.getProperty(), prdAction.getBy());
                     }
                     else{
-                        currentAction = new Decrease(prdAction.getEntity(), prdAction.getProperty(), prdAction.getBy());
+                        //currentAction = new Decrease(prdAction.getEntity(), prdAction.getProperty(), prdAction.getBy());
                     }
                 }
 
@@ -169,7 +169,7 @@ public class WorldFactoryImpl implements WorldFactory{
                     if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp())) {
                         throw new IllegalArgumentException("the property: " + prdAction.getProperty() + " that referenced in the action: " + prdAction.getType() + " in the rule: " + prdRule.getName() + ", does not exist in the entity: " + prdAction.getEntity());
                     }
-                    //currentAction = new Set() TODO: SET ACTION
+                    //currentAction = new SetAction() TODO: SET ACTION
                 }
                 else if (prdAction.getType().equals("kill")) {
                     //currentAction = new Kill() TODO: kill ACTION
@@ -194,7 +194,7 @@ public class WorldFactoryImpl implements WorldFactory{
 
     }
     private boolean isExistingPropertyInEntity(String entityName, String propertyName) {
-        return this.currWorkingWorld.getEntityDefinitionByName(entityName).getPropertyDefinitionByName(propertyName) == null;
+        return this.currWorkingWorld.getEntityDefinitionByName(entityName).getPropertyDefinitionByName(propertyName) != null;
     }
     private boolean isNumericArg(String arg) {
         if (arg.startsWith("environment")){

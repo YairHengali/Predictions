@@ -2,8 +2,8 @@ package engine.action.impl;
 
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
+import engine.context.Context;
 import engine.entity.EntityInstance;
-import engine.action.api.Action;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -13,7 +13,7 @@ import java.util.List;
 public class Increase extends AbstractAction {
     //List<EntityInstance> mainEntityList;
     String propertyName;
-    Number amountToIncrease; //TODO: Expression????
+    String byExpression; //TODO: Expression????
 
 //    public Increase(List<EntityInstance> mainEntityList, String propertyName, float amountToIncrease){
 //        this.mainEntityList = mainEntityList;
@@ -26,27 +26,26 @@ public class Increase extends AbstractAction {
 //    }
 
 
-    public Increase(List<EntityInstance> mainEntityList, String propertyName, Number amountToIncrease) { //TODO: EXCEPTION IF property from non-Number type
-        super(ActionType.INCREASE, mainEntityList);
+    public Increase(String mainEntityName, String propertyName, String byExpression) { //TODO: EXCEPTION IF property from non-Number type
+        super(ActionType.INCREASE, mainEntityName);
         this.propertyName = propertyName;
-        this.amountToIncrease = amountToIncrease; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT
+        this.byExpression = byExpression; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT
     }
 
 
     @Override
-    public void Run(EntityInstanceManager manager) throws Exception {
-        for (EntityInstance entityInstance : manager.getInstancesLists().get(this.mainEntityName)) {
-            PropertyInstance currentEntityPropertyInstance = entityInstance.getPropertyByName(propertyName);
-            if (currentEntityPropertyInstance instanceof DecimalProperty)
-            {
-                ((DecimalProperty) currentEntityPropertyInstance).setValue(((DecimalProperty) currentEntityPropertyInstance).getValue() + byExpression.intValue());//TODO: VALIDATE IF INT OR FLOAT
-            }
-            else if (currentEntityPropertyInstance instanceof FloatProperty)
-            {
-                ((FloatProperty) currentEntityPropertyInstance).setValue(((FloatProperty) currentEntityPropertyInstance).getValue() + amountToIncrease.floatValue());//TODO: VALIDATE IF INT OR FLOAT
-            } else {
-                throw new Exception("Invalid Property type, need to be Numeric");
-            }
-        }
+    public void Run(Context context) throws Exception {
+//            PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+//            if (entityPropertyInstance instanceof DecimalProperty)
+//            {
+//                ((DecimalProperty) entityPropertyInstance).setValue(((DecimalProperty) entityPropertyInstance).getValue() + byExpression.intValue());//TODO: VALIDATE IF INT OR FLOAT
+//            }
+//            else if (entityPropertyInstance instanceof FloatProperty)
+//            {
+//                ((FloatProperty) entityPropertyInstance).setValue(((FloatProperty) entityPropertyInstance).getValue() + amountToIncrease.floatValue());//TODO: VALIDATE IF INT OR FLOAT
+//            } else {
+//                throw new Exception("Invalid Property type, need to be Numeric");
+//            }
+//        }
     }
 }

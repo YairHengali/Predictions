@@ -21,11 +21,22 @@ public class ContextImpl implements Context{
         return this.primaryEntityInstance;
     }
 
-    @Override
-    public void removeEntity(EntityInstance entityInstance) {
-    }
+//    @Override
+//    public void removeEntity(EntityInstance entityInstance) {
+//    }
     @Override
     public PropertyInstance getEnvironmentVariable(String name) {
         return activeEnvironment.getPropertyInstance(name);
     }
+
+    //////
+
+    @Override
+    public EntityInstanceManager getEntityInstanceManager() {
+        return entityInstanceManager;
+    }
+
+    @Override
+    public ActiveEnvironmentVariables getActiveEnvironmentVariables()
+    {return activeEnvironment;}
 }

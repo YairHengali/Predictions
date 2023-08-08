@@ -16,5 +16,8 @@ public abstract class AbstractAction implements Action {
     }
 
     @Override
+    public String getMainEntityName() {return mainEntityName;}
+
+    @Override
     public ActionType getActionType() { return actionType; }
 }

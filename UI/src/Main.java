@@ -6,7 +6,11 @@ import engine.system.SystemEngineImpl;
 public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngineImpl();
-        systemEngine.loadSimulation("./SystemEngineImpl/src/resources/ex1-cigarets.xml");
+        try {
+            systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         /*
         //CREATE WORLD:
         World testSimulation = systemEngine.getSimulation();

@@ -2,10 +2,13 @@ package engine;
 
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
+import engine.entity.manager.EntityInstanceManager;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
+import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
+import engine.property.impl.StringProperty;
 import engine.rule.Rule;
 import engine.rule.RuleImpl;
 
@@ -24,6 +27,7 @@ public class World {
     private final Map<String, Rule> name2Rule = new HashMap<>();
     private final Map<String, PropertyInstance> name2EnvironmentVariables = new HashMap<>();
     private Set<String> methodsNames;
+    EntityInstanceManager entityInstanceManager;
 
     public World() {
         this.startTime = System.currentTimeMillis();
@@ -42,7 +46,7 @@ public class World {
     {
         switch (propertyType) {
             case BOOLEAN:
-                name2EnvironmentVariables.put(name, new BooleanProperty();
+                name2EnvironmentVariables.put(name, new BooleanProperty(name, propertyType));
                 break;
             case DECIMAL:
                 name2EnvironmentVariables.put(name, new DecimalProperty(name, propertyType, valueRange));
@@ -51,7 +55,7 @@ public class World {
                 name2EnvironmentVariables.put(name, new FloatProperty(name, propertyType, valueRange));
                 break;
             case STRING:
-                name2EnvironmentVariables.put(name, new StringProperty(name, propertyType);
+                name2EnvironmentVariables.put(name, new StringProperty(name, propertyType));
                 break;
     }
     }
@@ -79,16 +83,16 @@ public class World {
     }
 
 
-    public void createEntityInstances()
-    {
-        for(EntityDefinition entityDefinition : name2EntitiesDef.values()) {
-            List<EntityInstance> newList = new ArrayList<>(entityDefinition.getPopulation());
-            for (int i = 0; i < entityDefinition.getPopulation(); i++) {
-                newList.set(i, new EntityInstance(entityDefinition, i));
-            }
-            this.name2EntitiesIns.put(entityDefinition.getName(), newList );
-        }
-    }
+//    public void createEntityInstances()
+//    {
+//        for(EntityDefinition entityDefinition : name2EntitiesDef.values()) {
+//            List<EntityInstance> newList = new ArrayList<>(entityDefinition.getPopulation());
+//            for (int i = 0; i < entityDefinition.getPopulation(); i++) {
+//                newList.set(i, new EntityInstance(entityDefinition, i));
+//            }
+//            this.name2EntitiesIns.put(entityDefinition.getName(), newList );
+//        }
+//    }
 
 //    public EntityDef getEntityByName(String entityName, int entityNum)
 //    {

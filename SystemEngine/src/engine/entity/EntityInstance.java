@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class EntityInstance {
 
-    int id;
+    private final int id;
     private final String name;
     private final Map<String, PropertyInstance> name2property = new HashMap<>();
 
@@ -37,6 +37,14 @@ public class EntityInstance {
                     break;
             }
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public PropertyInstance getPropertyByName(String propertyName) {

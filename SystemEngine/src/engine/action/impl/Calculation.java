@@ -1,16 +1,13 @@
 package engine.action.impl;
 
 import engine.action.api.AbstractAction;
-import engine.action.api.Action;
 import engine.action.api.ActionType;
 import engine.action.api.ClacType;
+import engine.context.Context;
 import engine.entity.EntityInstance;
-import engine.entity.manager.EntityInstanceManager;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
-
-import java.util.List;
 
 public class Calculation extends AbstractAction {
     //List<EntityInstance> mainEntityList;
@@ -28,9 +25,9 @@ public class Calculation extends AbstractAction {
     }
 
     @Override
-    public void Run(EntityInstanceManager manager) throws Exception {
-        for (EntityInstance entityInstance : manager.getInstancesLists().get(this.mainEntityName)) {
-            PropertyInstance currentEntityPropertyInstance = entityInstance.getPropertyByName(propertyName);
+    public void Run(Context context) throws Exception {
+        //for (EntityInstance entityInstance : context.getInstancesLists().get(this.mainEntityName)) {
+            PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
             if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
             {
                 switch (calcType) {
@@ -57,7 +54,7 @@ public class Calculation extends AbstractAction {
             {
                 throw new Exception("Invalid Property type, need to be Numeric");
             }
-        }
+
     }
 }
 
