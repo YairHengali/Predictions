@@ -41,7 +41,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager{
         List<EntityInstance> sameEntityInstancesList = name2EntInstancesList.get(entityInstance.getName());
         for (int i = 0; i < sameEntityInstancesList.size(); i++) {
             if (sameEntityInstancesList.get(i).getId() == entityInstance.getId()) {
-                sameEntityInstancesList.remove(i); //VALIDATE THAT REMOVE FROM ORIGINAL LIST
+                name2EntInstancesList.get(entityInstance.getName()).remove(i); //VALIDATE THAT REMOVE FROM ORIGINAL LIST
                 break;
             }
         };

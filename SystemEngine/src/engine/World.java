@@ -1,7 +1,6 @@
 package engine;
 
 import engine.entity.EntityDefinition;
-import engine.entity.EntityInstance;
 import engine.entity.manager.EntityInstanceManager;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
@@ -10,7 +9,6 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
 import engine.rule.Rule;
-import engine.rule.RuleImpl;
 
 import java.util.*;
 
@@ -58,6 +56,11 @@ public class World {
                 name2EnvironmentVariables.put(name, new StringProperty(name, propertyType));
                 break;
     }
+    }
+
+    public PropertyInstance getEnvironmentVariableByName(String name)
+    {
+        return name2EnvironmentVariables.get(name);
     }
 
 //    public Property<?> getEnvironmentVariableByName(String EnvironmentVariableName)

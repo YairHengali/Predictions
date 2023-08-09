@@ -13,17 +13,14 @@ import engine.entity.manager.EntityInstanceManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultipleCondition extends AbstractAction implements Condition {
+public class MultipleCondition extends ConditionImpl implements Condition {
     List<Condition> conditionList;
     LogicalOperator logicalOperator;
-    List<Action> thenActions;
-    List<Action> elseActions;
 
-    public MultipleCondition(String mainEntityName, String propertyName, LogicalOperator logicalOperator){
+    public MultipleCondition(String mainEntityName, LogicalOperator logicalOperator){
         super(ActionType.CONDITION,mainEntityName);
+        this.conditionList = new ArrayList<>();
         this.logicalOperator = logicalOperator;
-        thenActions = new ArrayList<>();
-        elseActions = new ArrayList<>();
     }
 
     @Override
@@ -52,15 +49,15 @@ public class MultipleCondition extends AbstractAction implements Condition {
         return res;
     }
 
-    @Override
-    public void addActionToThen(Action actionToAdd) {
-        this.thenActions.add(actionToAdd);
-    }
-
-    @Override
-    public void addActionToElse(Action actionToAdd) {
-        this.elseActions.add(actionToAdd);
-    }
+//    @Override
+//    public void addActionToThen(Action actionToAdd) {
+//        this.thenActions.add(actionToAdd);
+//    }
+//
+//    @Override
+//    public void addActionToElse(Action actionToAdd) {
+//        this.elseActions.add(actionToAdd);
+//    }
 
 //    private void invokeThenActions(EntityInstanceManager manager){
 //        thenActions.forEach(action -> {
@@ -81,25 +78,25 @@ public class MultipleCondition extends AbstractAction implements Condition {
 //        });
 //    }
 
-    void invokeThenActions(Context context){
-        for (Action action: thenActions) {
-            try {
-                action.Run(context);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-    void invokeElseActions(Context context){
-        for (Action action: elseActions) {
-            try {
-                action.Run(context);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+//    void invokeThenActions(Context context){
+//        for (Action action: thenActions) {
+//            try {
+//                action.Run(context);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//
+//    }
+//    void invokeElseActions(Context context){
+//        for (Action action: elseActions) {
+//            try {
+//                action.Run(context);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 
     public void addCondition(Condition conditionToAdd){
         this.conditionList.add(conditionToAdd);
