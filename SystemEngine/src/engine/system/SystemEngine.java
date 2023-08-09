@@ -1,6 +1,6 @@
 package engine.system;
 
-import engine.World;
+import engine.world.World;
 
 public interface SystemEngine {
     public World getSimulation();

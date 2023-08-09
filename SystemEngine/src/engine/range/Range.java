@@ -1,4 +1,4 @@
-package engine;
+package engine.range;
 
 public class Range {
     private Number from;

@@ -1,4 +1,4 @@
-package engine;
+package engine.world;
 
 import engine.entity.EntityDefinition;
 import engine.entity.manager.EntityInstanceManager;
@@ -8,6 +8,7 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
+import engine.range.Range;
 import engine.rule.Rule;
 
 import java.util.*;

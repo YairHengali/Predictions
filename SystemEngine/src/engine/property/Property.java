@@ -66,7 +66,7 @@ package engine.property;
 //    }
 //}
 
-import engine.Range;
+import engine.range.Range;
 
 public class Property <T> {
     private final String name;

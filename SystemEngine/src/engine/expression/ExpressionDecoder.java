@@ -29,7 +29,7 @@ public class ExpressionDecoder {
         if (openingParenIndex != -1) {
             String methodName = firstWord.substring(0, openingParenIndex);
             try {
-                Method[] worldMethods = Class.forName("engine.World").getDeclaredMethods();
+                Method[] worldMethods = Class.forName("engine.world.World").getDeclaredMethods();
                 for (Method method : worldMethods) {
                     if (method.getName().substring(0,method.getName().indexOf("(")).contains(methodName))
                         return true;

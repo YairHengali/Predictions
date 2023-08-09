@@ -1,10 +1,6 @@
 package engine.system;
 
-import engine.Range;
-import engine.World;
-import engine.entity.EntityDefinition;
-import engine.property.PropertyDefinition;
-import engine.property.PropertyType;
+import engine.world.World;
 import engine.world.factory.WorldFactory;
 import engine.world.factory.WorldFactoryImpl;
 import jaxb.generated.*;
@@ -16,8 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";

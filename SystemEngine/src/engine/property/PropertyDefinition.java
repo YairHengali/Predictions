@@ -1,6 +1,6 @@
 package engine.property;
 
-import engine.Range;
+import engine.range.Range;
 
 public class PropertyDefinition {
     private final String name;

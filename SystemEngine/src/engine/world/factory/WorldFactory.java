@@ -1,6 +1,6 @@
 package engine.world.factory;
 
-import engine.World;
+import engine.world.World;
 import jaxb.generated.PRDWorld;
 
 public interface WorldFactory {

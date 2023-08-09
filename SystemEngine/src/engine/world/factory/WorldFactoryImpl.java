@@ -1,7 +1,7 @@
 package engine.world.factory;
 
-import engine.Range;
-import engine.World;
+import engine.range.Range;
+import engine.world.World;
 import engine.action.api.Action;
 import engine.action.api.ClacType;
 import engine.action.impl.*;

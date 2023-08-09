@@ -1,6 +1,6 @@
 package engine.property.impl;
 
-import engine.Range;
+import engine.range.Range;
 import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
