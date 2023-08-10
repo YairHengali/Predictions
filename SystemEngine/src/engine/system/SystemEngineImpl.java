@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
+
     private World simulation = null;
     private WorldFactory worldFactory = new WorldFactoryImpl();
 
@@ -61,7 +62,14 @@ public class SystemEngineImpl implements SystemEngine{
 
     @Override
 
-    public void runSimulation() {
+    public int runSimulation() {
+//        initializeEnvVars();
+//        showEnvVarValues();
+//        runTheSimulation();
+
+        simulation.runMainLoop();
+
+        return 1;
     }
     @Override
 

@@ -11,7 +11,12 @@ public class Main {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        /*
+
+        systemEngine.runSimulation();
+
+
+
+                /*
         //CREATE WORLD:
         World testSimulation = systemEngine.getSimulation();
         testSimulation.addEntity("person", 100);
@@ -36,8 +41,6 @@ public class Main {
         System.out.println(systemEngine.showSimulation());
 
          */
-
-
 
         }
     }

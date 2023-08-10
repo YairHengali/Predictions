@@ -1,8 +1,6 @@
 package engine.expression;
 import java.lang.reflect.*;
 
-import engine.EntityDef;
-
 public class ExpressionDecoder {
     private String expression;
 

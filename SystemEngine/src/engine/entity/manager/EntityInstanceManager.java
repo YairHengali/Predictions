@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface EntityInstanceManager {
-    EntityInstance create(EntityDefinition entityDefinition);
+    void createEntityInstances(EntityDefinition entityDefinition);
     Map<String, List<EntityInstance>> getInstancesLists();
     void killEntity(EntityInstance entityInstance);
 

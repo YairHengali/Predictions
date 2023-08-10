@@ -40,6 +40,7 @@ public class WorldFactoryImpl implements WorldFactory{
             addEnvironmentVariables();
             addEntitiesDefinitions();
             addRules();
+            addTerminationSettings();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -63,14 +64,20 @@ public class WorldFactoryImpl implements WorldFactory{
                 EnvVarsNames.add(prdEnvProperty.getPRDName());
             }
 
-            if (prdEnvProperty.getPRDRange() != null)
-            {
-                currWorkingWorld.addEnvironmentVariable(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo()));
+            PropertyDefinition newEnvVarDef;
+
+            if (prdEnvProperty.getPRDRange() != null) {
+                newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
+                        new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo()),
+                        false, "");
             }
-            else
-            {
-                currWorkingWorld.addEnvironmentVariable(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),null);
+            else{
+                newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
+                        null, false, "");
             }
+
+            currWorkingWorld.addEnvironmentVariableDef(newEnvVarDef);
+
         }
     } //TODO: CURRENTLY ADDED DIRECTLY INTO PROPERTY INSTANCES
     private void addEntitiesDefinitions() throws Exception {
@@ -93,20 +100,28 @@ public class WorldFactoryImpl implements WorldFactory{
                     entityPropertiesNames.add(prdProperty.getPRDName());
                 }
 
-                PropertyDefinition newPropertyDef;
-                if (prdProperty.getPRDRange() != null) {
-                    newPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
-                            new Range(prdProperty.getPRDRange().getFrom(), prdProperty.getPRDRange().getTo()),
-                            prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
-                }
-                else{
-                    newPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
-                            null, prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
-                }
+                PropertyDefinition newPropertyDef = createPropertyDefinitionFromPrdProperty(prdProperty);
                 newEntityDef.addPropertyDefinition(newPropertyDef);
             }
             currWorkingWorld.addEntityDefinition(newEntityDef);
         }
+    }
+
+    private PropertyDefinition createPropertyDefinitionFromPrdProperty(PRDProperty prdProperty)
+    {
+        PropertyDefinition resPropertyDef;
+
+        if (prdProperty.getPRDRange() != null) {
+            resPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
+                    new Range(prdProperty.getPRDRange().getFrom(), prdProperty.getPRDRange().getTo()),
+                    prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
+        }
+        else{
+            resPropertyDef = new PropertyDefinition(prdProperty.getPRDName(), PropertyType.valueOf(prdProperty.getType().toUpperCase()),
+                    null, prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit());
+        }
+
+        return resPropertyDef;
     }
     private void addRules() throws Exception {
         for (PRDRule prdRule : generatedWorld.getPRDRules().getPRDRule()) {
@@ -130,6 +145,10 @@ public class WorldFactoryImpl implements WorldFactory{
 //////////
     // TODO: REARRANGE THE METHODS BELLOW
     //
+    private void addTerminationSettings()
+    {
+       //TODO: how to get them???
+    }
     private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
     {
         ConditionImpl resCondition;
@@ -195,15 +214,19 @@ public class WorldFactoryImpl implements WorldFactory{
                 if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp())) {
                     throw new IllegalArgumentException("the property: " + prdAction.getResultProp() + " that referenced in the action: " + prdAction.getType() + " does not exist in the entity: " + prdAction.getEntity());
                 }
+                else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp()))
+                {
+                    throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getResultProp() + "must be of numeric type.");
+                }
 
                 if (prdAction.getPRDMultiply() != null) {
-                    if (!(isNumericArg(prdAction.getPRDMultiply().getArg1()) && isNumericArg(prdAction.getPRDMultiply().getArg2()))) {
+                    if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg2()))) {
                         throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
                     } else {
                         resAction = new Calculation(prdAction.getEntity(), prdAction.getProperty(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
                     }
                 } else if (prdAction.getPRDDivide() != null) {
-                    if (!(isNumericArg(prdAction.getPRDDivide().getArg1()) && isNumericArg(prdAction.getPRDDivide().getArg2()))) {
+                    if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg2()))) {
                         throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
                     } else {
                         resAction = new Calculation(prdAction.getEntity(), prdAction.getProperty(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
@@ -246,7 +269,7 @@ public class WorldFactoryImpl implements WorldFactory{
 
     private void checkForValidIncreaseDecreaseArguments(PRDAction prdAction)
     {
-        if (!isNumericArg(prdAction.getBy())) {
+        if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) {
             throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
         } else if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
             throw new IllegalArgumentException("the property: " + prdAction.getProperty() + " that referenced in action: " + prdAction.getType() + ", does not exist in the entity: " + prdAction.getEntity());
@@ -262,22 +285,22 @@ public class WorldFactoryImpl implements WorldFactory{
         return (inputPropertyType == PropertyType.DECIMAL || inputPropertyType == PropertyType.FLOAT);
     }
 
-    private void checkForValidCaclulationArguments(PRDAction prdAction)
-    {
-
-    }
     private boolean isExistingPropertyInEntity(String entityName, String propertyName) {
         return this.currWorkingWorld.getEntityDefinitionByName(entityName).getPropertyDefinitionByName(propertyName) != null;
     }
-    private boolean isNumericArg(String arg) { //TODO: IS THERE ANOTHER OPTION?? DOES EXPRESSION CAN BE A NAME OF PROPERTY? (AND THEN WE NEDD TO CHECK THAT IT IS A NUMERIC ONE)
+    private boolean isNumericArg(String mainEntityName, String arg) {
         if (arg.startsWith("environment")){
             String envVarName = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
-            return (this.currWorkingWorld.getEnvironmentVariableByName(envVarName).getType() == PropertyType.DECIMAL
-                    || this.currWorkingWorld.getEnvironmentVariableByName(envVarName).getType() == PropertyType.FLOAT);
+            return (this.currWorkingWorld.getEnvironmentVariableDefByName(envVarName).getType() == PropertyType.DECIMAL
+                    || this.currWorkingWorld.getEnvironmentVariableDefByName(envVarName).getType() == PropertyType.FLOAT);
         }
         else if(arg.startsWith("random")){
             String value = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
             return isNumericStr(value);
+        }
+        else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg))
+        {
+            return true;
         }
         else {
             return isNumericStr(arg);

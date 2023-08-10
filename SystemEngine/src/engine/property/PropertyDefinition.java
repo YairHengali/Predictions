@@ -6,8 +6,8 @@ public class PropertyDefinition {
     private final String name;
     private final PropertyType type;
     private final Range valueRange;
-    private final boolean isInitializedRandomly;
-    private final String initValue;
+    private boolean isInitializedRandomly;
+    private String initValue;
 
 
 
@@ -38,5 +38,13 @@ public class PropertyDefinition {
 
     public String getInitValue() {
         return initValue;
+    }
+
+    public void setInitializedRandomly(boolean initializedRandomly) {
+        isInitializedRandomly = initializedRandomly;
+    }
+
+    public void setInitValue(String initValue) {
+        this.initValue = initValue;
     }
 }

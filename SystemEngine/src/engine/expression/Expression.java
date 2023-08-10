@@ -1,9 +1,12 @@
 package engine.expression;
 
+import engine.environment.active.ActiveEnvironmentVariables;
+import engine.property.PropertyType;
+
 import java.lang.reflect.Type;
 
 public class Expression {
-    protected String rawExpression; //TODO: כל הטעינה והבדיקה קורית בטעינת הקובץ, SO MAYBE EXPRESSION CAN BE WITH THE REAL VALUE
+    protected String rawExpression;
 
     public Expression(String rawExpression) {
         this.rawExpression = rawExpression;

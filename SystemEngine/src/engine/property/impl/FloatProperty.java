@@ -5,6 +5,8 @@ import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 
+import java.util.Random;
+
 public class FloatProperty extends PropertyInstance {
 
     private float value; //TODO: Maybe Expression??????
@@ -15,7 +17,15 @@ public class FloatProperty extends PropertyInstance {
         this.range = propertyDefinition.getValueRange();
 
         if(propertyDefinition.isInitializedRandomly()){
-            // TODO: implement randomly
+            Random random = new Random();
+            if (range != null)
+            {
+                this.value = random.nextFloat() * (range.getTo().floatValue() - range.getFrom().floatValue() + 1) + range.getFrom().floatValue();
+            }
+            else
+            {
+                this.value = random.nextFloat();
+            }
         }
         else {
             this.value = Float.parseFloat(propertyDefinition.getInitValue());

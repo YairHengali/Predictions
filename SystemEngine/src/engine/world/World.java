@@ -2,13 +2,10 @@ package engine.world;
 
 import engine.entity.EntityDefinition;
 import engine.entity.manager.EntityInstanceManager;
-import engine.property.PropertyType;
-import engine.property.api.PropertyInstance;
-import engine.property.impl.BooleanProperty;
-import engine.property.impl.DecimalProperty;
-import engine.property.impl.FloatProperty;
-import engine.property.impl.StringProperty;
-import engine.range.Range;
+import engine.entity.manager.EntityInstanceManagerImpl;
+import engine.environment.active.ActiveEnvironmentVariables;
+import engine.environment.active.ActiveEnvironmentVariablesImpl;
+import engine.property.PropertyDefinition;
 import engine.rule.Rule;
 
 import java.util.*;
@@ -18,56 +15,73 @@ public class World {
     private int currentNumberOfTicks = 0;
     private long startTime; // TODO: create StopWatch class
 
+    private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
+    private final Map<String, PropertyDefinition> name2EnvironmentVariablesDef = new HashMap<>();
+    private final Map<String, Rule> name2Rule = new HashMap<>();
+
+    EntityInstanceManager entityInstanceManager;
+    ActiveEnvironmentVariables activeEnvironmentVariables;
+
+
     ///////// Termination conditions:
     private int maxNumberOfTicks;
     private long SecondsToTerminate;
-    private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
-    //private final Map<String, List<EntityInstance>> name2EntitiesIns = new HashMap<>(); Moved to manager
-    private final Map<String, Rule> name2Rule = new HashMap<>();
-    private final Map<String, PropertyInstance> name2EnvironmentVariables = new HashMap<>();
+
     private Set<String> methodsNames;
-    EntityInstanceManager entityInstanceManager;
 
     public World() {
-        this.startTime = System.currentTimeMillis();
         methodsNames = new HashSet<>();
         methodsNames.add("environment"); //TODO: MAYBE ENUM
         methodsNames.add("random"); //TODO: MAYBE ENUM
     }
 
-//    public World(int maxNumberOfTicks, long maxNumOfSeconds) {
-//        this.SecondsToTerminate = maxNumOfSeconds;
-//        this.startTime = System.currentTimeMillis();
-//        methodsNames = new HashSet<>();
-//    }
-//
-    public void addEnvironmentVariable(String name, PropertyType propertyType, Range valueRange)
+
+    public void runMainLoop()
     {
-        switch (propertyType) {
-            case BOOLEAN:
-                name2EnvironmentVariables.put(name, new BooleanProperty(name, propertyType));
-                break;
-            case DECIMAL:
-                name2EnvironmentVariables.put(name, new DecimalProperty(name, propertyType, valueRange));
-                break;
-            case FLOAT:
-                name2EnvironmentVariables.put(name, new FloatProperty(name, propertyType, valueRange));
-                break;
-            case STRING:
-                name2EnvironmentVariables.put(name, new StringProperty(name, propertyType));
-                break;
+        runTick0();
+        runLoop();
     }
+    private void runTick0()
+    {
+        entityInstanceManager = new EntityInstanceManagerImpl();
+        for(EntityDefinition entityDefinition : name2EntitiesDef.values())
+        {
+            entityInstanceManager.createEntityInstances(entityDefinition);
+        }
+
+        activeEnvironmentVariables = new ActiveEnvironmentVariablesImpl();
+        for(PropertyDefinition envVarDef : name2EnvironmentVariablesDef.values())
+        {
+            activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
+        }
+
+        this.startTime = System.currentTimeMillis();
+        currentNumberOfTicks++;
     }
 
-    public PropertyInstance getEnvironmentVariableByName(String name)
+    private void runLoop() //TICK 1 and up...;
     {
-        return name2EnvironmentVariables.get(name);
+        while (!isTermination())
+        {
+            for (Rule rule: name2Rule.values()) { //TODO: MAYBE NEED TO BE ORDERED (LIST OF RULES) - page 13
+                if (rule.isActive(this.currentNumberOfTicks))
+                {
+                    rule.runRule(this.entityInstanceManager, this.activeEnvironmentVariables);
+                }
+            }
+            currentNumberOfTicks++;
+        }
     }
 
-//    public Property<?> getEnvironmentVariableByName(String EnvironmentVariableName)
-//    {
-//        return name2EnvironmentVariables.get(EnvironmentVariableName);
-//    }
+    public void addEnvironmentVariableDef(PropertyDefinition EnvVarDefinitionToAdd)
+    {
+        name2EnvironmentVariablesDef.put(EnvVarDefinitionToAdd.getName(), EnvVarDefinitionToAdd);
+    }
+
+    public PropertyDefinition getEnvironmentVariableDefByName(String name)
+    {
+        return name2EnvironmentVariablesDef.get(name);
+    }
 
     public void addEntityDefinition(EntityDefinition entityDefinitionToAdd){
         name2EntitiesDef.put(entityDefinitionToAdd.getName(), entityDefinitionToAdd);
@@ -86,22 +100,29 @@ public class World {
         return name2Rule.get(ruleName);
     }
 
+    public boolean isTermination(){
+        return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
+                (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+    }
 
-//    public void createEntityInstances()
-//    {
-//        for(EntityDefinition entityDefinition : name2EntitiesDef.values()) {
-//            List<EntityInstance> newList = new ArrayList<>(entityDefinition.getPopulation());
-//            for (int i = 0; i < entityDefinition.getPopulation(); i++) {
-//                newList.set(i, new EntityInstance(entityDefinition, i));
-//            }
-//            this.name2EntitiesIns.put(entityDefinition.getName(), newList );
-//        }
-//    }
+    public Object environment(String varName) throws Exception {
+        if(this.name2EnvironmentVariablesDef.containsKey(varName)) {
+            return this.name2EnvironmentVariablesDef.get(varName);
+        }
+        throw new Exception("Environment Variable Not Found!");
+    }
 
-//    public EntityDef getEntityByName(String entityName, int entityNum)
-//    {
-//        return name2Entities.get(entityName).get(entityNum);
-//    }
+    public int random(String argValue) throws NumberFormatException{
+        try {
+            int val = Integer.parseInt(argValue);
+            Random random = new Random();
+            return random.nextInt(val+1);
+        }
+        catch (NumberFormatException e){
+            throw e;
+        }
+    }
+
 
     //@Override
 //    public String toString() {
@@ -129,27 +150,5 @@ public class World {
 //        }
 //        return stringBuilder.toString();
 //    }
-    public boolean isTermination(){
-        return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
-                (this.currentNumberOfTicks >= this.maxNumberOfTicks);
-    }
-    public Object environment(String varName) throws Exception {
-        if(this.name2EnvironmentVariables.containsKey(varName)) {
-            return this.name2EnvironmentVariables.get(varName);
-        }
-        throw new Exception("Environment Variable Not Found!");
-    }
-
-    public int random(String argValue) throws NumberFormatException{
-        try {
-            int val = Integer.parseInt(argValue);
-            Random random = new Random();
-            return random.nextInt(val+1);
-        }
-        catch (NumberFormatException e){
-            throw e;
-        }
-    }
-
 
 }

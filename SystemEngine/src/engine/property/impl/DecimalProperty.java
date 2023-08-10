@@ -5,6 +5,8 @@ import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 
+import java.util.Random;
+
 public class DecimalProperty extends PropertyInstance {
 
     private int value; //TODO: Maybe Expression??????
@@ -15,7 +17,15 @@ public class DecimalProperty extends PropertyInstance {
         this.range = propertyDefinition.getValueRange();
 
         if(propertyDefinition.isInitializedRandomly()){
-            // TODO: implement randomly
+            Random random = new Random();
+            if (range != null)
+            {
+                this.value = random.nextInt(range.getTo().intValue() - range.getFrom().intValue() + 1) + range.getFrom().intValue();
+            }
+            else
+            {
+                this.value = random.nextInt();
+            }
         }
         else {
             this.value = Integer.parseInt(propertyDefinition.getInitValue());

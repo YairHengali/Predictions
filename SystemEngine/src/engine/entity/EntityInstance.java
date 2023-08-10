@@ -24,16 +24,16 @@ public class EntityInstance {
 
             switch (def.getType()){
                 case BOOLEAN:
-                    //this.name2property.put(def.getName(), new BooleanProperty(def));
+                    this.name2property.put(def.getName(), new BooleanProperty(def));
                     break;
                 case DECIMAL:
                     this.name2property.put(def.getName(), new DecimalProperty(def));
                     break;
                 case FLOAT:
-                    //this.name2property.put(def.getName(), new FloatProperty(def));
+                    this.name2property.put(def.getName(), new FloatProperty(def));
                     break;
                 case STRING:
-                    //this.name2property.put(def.getName(), new StringProperty(def));
+                    this.name2property.put(def.getName(), new StringProperty(def));
                     break;
             }
         }

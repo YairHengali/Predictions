@@ -24,29 +24,29 @@ public class Calculation extends AbstractAction {
 
     @Override
     public void Run(Context context) throws Exception {
-            PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-            if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
-            {
-                switch (calcType) {
-                    case MULTIPLY:
-                        ((DecimalProperty) currentEntityPropertyInstance).setValue((arg1Expression.intValue() * arg2Expression.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-                        break;
-                    case DIVIDE:
-                        ((DecimalProperty) currentEntityPropertyInstance).setValue((arg1Expression.intValue() / arg2Expression.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-                        break;
-                }
-            }
-            else if (currentEntityPropertyInstance instanceof FloatProperty)
-            {
-                switch (calcType) {
-                    case MULTIPLY:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue((arg1Expression.floatValue() * arg2Expression.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-                        break;
-                    case DIVIDE:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue((arg1Expression.floatValue() / arg2Expression.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-                        break;
-                }
-            }
+//            PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+//            if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
+//            {
+//                switch (calcType) {
+//                    case MULTIPLY:
+//                        ((DecimalProperty) currentEntityPropertyInstance).setValue((arg1Expression.intValue() * arg2Expression.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+//                        break;
+//                    case DIVIDE:
+//                        ((DecimalProperty) currentEntityPropertyInstance).setValue((arg1Expression.intValue() / arg2Expression.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+//                        break;
+//                }
+//            }
+//            else if (currentEntityPropertyInstance instanceof FloatProperty)
+//            {
+//                switch (calcType) {
+//                    case MULTIPLY:
+//                        ((FloatProperty) currentEntityPropertyInstance).setValue((arg1Expression.floatValue() * arg2Expression.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+//                        break;
+//                    case DIVIDE:
+//                        ((FloatProperty) currentEntityPropertyInstance).setValue((arg1Expression.floatValue() / arg2Expression.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+//                        break;
+//                }
+//            }
     }
 }
 
