@@ -24,8 +24,8 @@ public class World {
 
 
     ///////// Termination conditions:
-    private int maxNumberOfTicks;
-    private long SecondsToTerminate;
+    private int maxNumberOfTicks = 100;
+    private long SecondsToTerminate = 10000;
 
     private Set<String> methodsNames;
 
@@ -116,7 +116,7 @@ public class World {
         try {
             int val = Integer.parseInt(argValue);
             Random random = new Random();
-            return random.nextInt(val+1);
+            return random.nextInt(val) + 1;
         }
         catch (NumberFormatException e){
             throw e;

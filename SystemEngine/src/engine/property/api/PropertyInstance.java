@@ -3,6 +3,7 @@ package engine.property.api;
 import engine.property.PropertyType;
 
 public abstract class PropertyInstance {
+    protected String value;
     private final String name;
     private final PropertyType type;
 
@@ -17,5 +18,9 @@ public abstract class PropertyInstance {
 
     public String getName() {
         return name;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

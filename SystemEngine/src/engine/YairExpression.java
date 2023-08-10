@@ -4,6 +4,8 @@ import engine.entity.EntityInstance;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.property.PropertyType;
 
+import java.util.Random;
+
 public class YairExpression {
     protected String rawExpression;
     private ActiveEnvironmentVariables environmentVariables;
@@ -15,42 +17,37 @@ public class YairExpression {
         this.mainEntity = mainEntity;
     }
 
-
-    private boolean isExistingPropertyInEntity(String entityName, String propertyName) {
-        return this.currWorkingWorld.getEntityDefinitionByName(entityName).getPropertyDefinitionByName(propertyName) != null;
-    }
-
     public String praseExpressionToValueString()
     {
-        if (rawExpression.startsWith("environment")) || (rawExpression.startsWith("random")) {
-            return func;
+        if (rawExpression.startsWith("environment") || (rawExpression.startsWith("random"))) {
+            return convertHelpFunctionsToStr();
         }
 
         else if(mainEntity.getPropertyByName(rawExpression) != null){
-            return mainEntity.getPropertyByName(rawExpression).;
+            return mainEntity.getPropertyByName(rawExpression).getValue();
         }
 
         else {
             return rawExpression;
         }
     }
-    private String func()
+    private String convertHelpFunctionsToStr()
     {
         if (rawExpression.startsWith("environment")){
             String envVarName = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
-            return environmentVariables.getEvnVariable(envVarName);
+            return environmentVariables.getEvnVariable(envVarName).getValue();
         }
 
-        else if(rawExpression.startsWith("random")){
+        else{ // if(rawExpression.startsWith("random")){
             String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
-            return Float.parseFloat(value);
-        }
-        else if(isExistingPropertyInEntity(mainEntityName, rawExpression) && isNumericPropertyInEntity(mainEntityName, arg))
-        {
-            return true;
-        }
-        else {
-            return isNumericStr(rawExpression);
+            try {
+                int val = Integer.parseInt(value);
+                Random random = new Random();
+                return String.valueOf(random.nextInt(val) + 1);
+            }
+            catch (NumberFormatException e){
+                throw e;
+            }
         }
     }
 }

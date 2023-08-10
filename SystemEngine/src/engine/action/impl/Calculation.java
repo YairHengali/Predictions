@@ -1,5 +1,6 @@
 package engine.action.impl;
 
+import engine.YairExpression;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.action.api.ClacType;
@@ -23,30 +24,38 @@ public class Calculation extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) throws Exception {
-//            PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-//            if (currentEntityPropertyInstance instanceof DecimalProperty) //TODO: || (currentEntityPropertyInstance instanceof (FloatProperty))))
-//            {
-//                switch (calcType) {
-//                    case MULTIPLY:
-//                        ((DecimalProperty) currentEntityPropertyInstance).setValue((arg1Expression.intValue() * arg2Expression.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-//                        break;
-//                    case DIVIDE:
-//                        ((DecimalProperty) currentEntityPropertyInstance).setValue((arg1Expression.intValue() / arg2Expression.intValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-//                        break;
-//                }
-//            }
-//            else if (currentEntityPropertyInstance instanceof FloatProperty)
-//            {
-//                switch (calcType) {
-//                    case MULTIPLY:
-//                        ((FloatProperty) currentEntityPropertyInstance).setValue((arg1Expression.floatValue() * arg2Expression.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-//                        break;
-//                    case DIVIDE:
-//                        ((FloatProperty) currentEntityPropertyInstance).setValue((arg1Expression.floatValue() / arg2Expression.floatValue()));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
-//                        break;
-//                }
-//            }
+    public void Run(Context context) throws Exception {//TODO: ADD EXCEPTIONS WHERE NEEDED
+
+            YairExpression arg1AsExpression = new YairExpression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+            YairExpression arg2AsExpression = new YairExpression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+
+            String value1FromExpression = arg1AsExpression.praseExpressionToValueString();
+            String value2FromExpression = arg2AsExpression.praseExpressionToValueString();
+
+            PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+
+            if (currentEntityPropertyInstance instanceof DecimalProperty)
+            {
+                switch (calcType) {
+                    case MULTIPLY:
+                        ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression));
+                        break;
+                    case DIVIDE:
+                        ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression));
+                        break;
+                }
+            }
+            else if (currentEntityPropertyInstance instanceof FloatProperty)
+            {
+                switch (calcType) {
+                    case MULTIPLY:
+                        ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+                        break;
+                    case DIVIDE:
+                        ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression));
+                        break;
+                }
+            }
     }
 }
 

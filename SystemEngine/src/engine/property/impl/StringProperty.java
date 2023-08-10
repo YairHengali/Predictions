@@ -8,8 +8,6 @@ import java.util.Random;
 
 public class StringProperty extends PropertyInstance {
 
-    private String value;
-
     public StringProperty(PropertyDefinition propertyDefinition) {
         super(propertyDefinition.getName(), propertyDefinition.getType());
 

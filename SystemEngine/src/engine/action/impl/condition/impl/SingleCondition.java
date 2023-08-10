@@ -1,5 +1,6 @@
 package engine.action.impl.condition.impl;
 
+import engine.YairExpression;
 import engine.action.api.ActionType;
 import engine.action.impl.condition.ConditionOp;
 import engine.action.impl.condition.api.Condition;
@@ -17,7 +18,7 @@ public class SingleCondition extends ConditionImpl implements Condition
     ConditionOp operator;
     String valueToCompareExpression;
 
-    public SingleCondition(String mainEntityName, String propertyName, ConditionOp conditionOperator, String valueToCompareExpression) { //TODO: EXCEPTION IF property from unmatching type
+    public SingleCondition(String mainEntityName, String propertyName, ConditionOp conditionOperator, String valueToCompareExpression) {
         super(ActionType.CONDITION, mainEntityName);
         this.propertyName = propertyName;
         this.operator = conditionOperator;
@@ -25,7 +26,7 @@ public class SingleCondition extends ConditionImpl implements Condition
     }
 
     @Override
-    public void Run(Context context) throws Exception {
+    public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type
         if (evaluateCondition(context)) {
             invokeThenActions(context);
         }
@@ -39,22 +40,39 @@ public class SingleCondition extends ConditionImpl implements Condition
         boolean result = false;
 
         PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(this.propertyName);
-        //TODO: figuring value out of expression
+        //figuring value out of expression
+        YairExpression valueToCompareAsExpression = new YairExpression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString();
 
         switch (propertyToEvaluate.getType()) {
             case BOOLEAN:
-                result = operator.eval( ((BooleanProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.STRING);
+                result = operator.eval( ((BooleanProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
                 break;
             case DECIMAL:
-                result = operator.eval( ((DecimalProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.DECIMAL);
+                result = operator.eval( ((DecimalProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.DECIMAL);
                 break;
             case FLOAT:
-                result = operator.eval( ((FloatProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.FLOAT);
+                result = operator.eval( ((FloatProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.FLOAT);
                 break;
             case STRING:
-                result = operator.eval( ((StringProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.STRING);
+                result = operator.eval( ((StringProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
                 break;
         }
+
+//        switch (propertyToEvaluate.getType()) {
+//            case BOOLEAN:
+//                result = operator.eval( ((BooleanProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.STRING);
+//                break;
+//            case DECIMAL:
+//                result = operator.eval( ((DecimalProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.DECIMAL);
+//                break;
+//            case FLOAT:
+//                result = operator.eval( ((FloatProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.FLOAT);
+//                break;
+//            case STRING:
+//                result = operator.eval( ((StringProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.STRING);
+//                break;
+//        }
 
         return result;
     }

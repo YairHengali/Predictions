@@ -11,6 +11,7 @@ public interface EntityInstanceManager {
     Map<String, List<EntityInstance>> getInstancesLists();
     void killEntity(EntityInstance entityInstance);
 
+    void killEntities();
 
     //////////////////////////////// trying run on instances from outside
 

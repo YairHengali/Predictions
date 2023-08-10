@@ -9,8 +9,7 @@ import java.util.Random;
 
 public class DecimalProperty extends PropertyInstance {
 
-    private int value; //TODO: Maybe Expression??????
-    private Range range;
+    private final Range range;
 
     public DecimalProperty(PropertyDefinition propertyDefinition) {
         super(propertyDefinition.getName(), propertyDefinition.getType());
@@ -20,15 +19,15 @@ public class DecimalProperty extends PropertyInstance {
             Random random = new Random();
             if (range != null)
             {
-                this.value = random.nextInt(range.getTo().intValue() - range.getFrom().intValue() + 1) + range.getFrom().intValue();
+                this.value = String.valueOf(random.nextInt(range.getTo().intValue() - range.getFrom().intValue() + 1) + range.getFrom().intValue());
             }
             else
             {
-                this.value = random.nextInt();
+                this.value = String.valueOf(random.nextInt());
             }
         }
         else {
-            this.value = Integer.parseInt(propertyDefinition.getInitValue());
+            this.value = propertyDefinition.getInitValue(); //TODO: MAYBE TRYPARSE HERE OR NOT NEEDED (ANYWAY WILL FIND OUT?)
         }
     }
 
@@ -37,12 +36,12 @@ public class DecimalProperty extends PropertyInstance {
         this.range = range;
     }
 
-    public int getValue() {
-        return this.value;
-    }
+//    public int getValue() {
+//        return this.value;
+//    }
 
-    public void setValue(int value) {
+    public void setValue(Integer value) {
         if (range == null || (value <= range.getTo().intValue() && value >= range.getFrom().intValue()))
-            this.value = value;
+            this.value = value.toString();
     }
 }

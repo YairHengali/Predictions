@@ -14,7 +14,7 @@ public class SetAction extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) throws Exception {
+    public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type
         //TODO WITH EXPRESSIONS
     }
 }

@@ -69,17 +69,17 @@ public class WorldFactoryImpl implements WorldFactory{
             if (prdEnvProperty.getPRDRange() != null) {
                 newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
                         new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo()),
-                        false, "");
+                        true, ""); //TODO: TEMPORARY ON "true" FOR TESTING
             }
             else{
                 newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
-                        null, false, "");
+                        null, true, "");
             }
 
             currWorkingWorld.addEnvironmentVariableDef(newEnvVarDef);
 
         }
-    } //TODO: CURRENTLY ADDED DIRECTLY INTO PROPERTY INSTANCES
+    }
     private void addEntitiesDefinitions() throws Exception {
         int entitiesCount = generatedWorld.getPRDEntities().getPRDEntity().size();
         for (int i = 0; i < entitiesCount; i++) {
@@ -296,7 +296,12 @@ public class WorldFactoryImpl implements WorldFactory{
         }
         else if(arg.startsWith("random")){
             String value = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
-            return isNumericStr(value);
+            try {
+                Integer.parseInt(value);
+                return true;
+            } catch (NumberFormatException e) { //TODO: MAYBE THROW THE EXCEPTION OUTSIDE
+                return false;
+            }
         }
         else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg))
         {

@@ -8,17 +8,15 @@ import java.util.Random;
 
 public class BooleanProperty extends PropertyInstance {
 
-    private boolean value;
-
     public BooleanProperty(PropertyDefinition propertyDefinition) {
         super(propertyDefinition.getName(), propertyDefinition.getType());
 
         if(propertyDefinition.isInitializedRandomly()){
             Random random = new Random();
-            this.value = random.nextBoolean();
+            this.value = String.valueOf(random.nextBoolean());
         }
         else {
-            this.value = Boolean.parseBoolean(propertyDefinition.getInitValue());
+            this.value = propertyDefinition.getInitValue();
         }
     }
 
@@ -26,11 +24,11 @@ public class BooleanProperty extends PropertyInstance {
         super(name, type);
     }
 
-    public boolean getValue() {
-        return this.value;
-    }
+//    public boolean getValue() {
+//        return this.value;
+//    }
 
-    public void setValue(boolean value) {
-            this.value = value;
+    public void setValue(Boolean value) {
+            this.value = value.toString();
     }
 }

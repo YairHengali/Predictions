@@ -97,6 +97,7 @@ public class RuleImpl implements Rule {
                     throw new RuntimeException(e);
                 }
             }
+            manager.killEntities(); //TODO: MAYBE AFTER THIS LOOP
         }
     }
 

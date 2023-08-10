@@ -9,7 +9,6 @@ import java.util.Random;
 
 public class FloatProperty extends PropertyInstance {
 
-    private float value; //TODO: Maybe Expression??????
     private Range range;
 
     public FloatProperty(PropertyDefinition propertyDefinition) {
@@ -20,15 +19,15 @@ public class FloatProperty extends PropertyInstance {
             Random random = new Random();
             if (range != null)
             {
-                this.value = random.nextFloat() * (range.getTo().floatValue() - range.getFrom().floatValue() + 1) + range.getFrom().floatValue();
+                this.value = String.valueOf(random.nextFloat() * (range.getTo().floatValue() - range.getFrom().floatValue() + 1) + range.getFrom().floatValue());
             }
             else
             {
-                this.value = random.nextFloat();
+                this.value = String.valueOf(random.nextFloat());
             }
         }
         else {
-            this.value = Float.parseFloat(propertyDefinition.getInitValue());
+            this.value = propertyDefinition.getInitValue();
         }
     }
 
@@ -37,12 +36,12 @@ public class FloatProperty extends PropertyInstance {
         this.range = range;
     }
 
-    public float getValue() {
-        return this.value;
-    }
+//    public float getValue() {
+//        return this.value;
+//    }
 
-    public void setValue(float value) {
+    public void setValue(Float value) {
         if (range == null || (value <= range.getTo().floatValue() && value >= range.getFrom().floatValue()))
-            this.value = value;
+            this.value = value.toString();
     }
 }
