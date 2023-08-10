@@ -223,13 +223,13 @@ public class WorldFactoryImpl implements WorldFactory{
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg2()))) {
                         throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
                     } else {
-                        resAction = new Calculation(prdAction.getEntity(), prdAction.getProperty(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
+                        resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
                     }
                 } else if (prdAction.getPRDDivide() != null) {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg2()))) {
                         throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
                     } else {
-                        resAction = new Calculation(prdAction.getEntity(), prdAction.getProperty(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
+                        resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
                     }
                 } else {
                     throw new IllegalArgumentException("Calculation action supports MULTIPLY or DIVIDE only!");

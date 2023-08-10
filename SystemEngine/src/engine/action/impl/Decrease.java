@@ -13,7 +13,7 @@ public class Decrease extends AbstractAction {
     String byExpression; //TODO: Expression????
 
     public Decrease(String mainEntityName, String propertyName, String byExpression) {
-        super(ActionType.INCREASE, mainEntityName);
+        super(ActionType.DECREASE, mainEntityName);
         this.propertyName = propertyName;
         this.byExpression = byExpression; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT
     }

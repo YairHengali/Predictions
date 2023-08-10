@@ -34,7 +34,7 @@ public class MultipleCondition extends ConditionImpl implements Condition {
 
     @Override
     public boolean evaluateCondition(Context context) { //TODO: VALIDATE THAT IS WORKING NOW WHEN ADDED CONTEXT AND MAYBE CAN BE DONE BETTER
-        boolean res = true;
+        boolean res = logicalOperator == LogicalOperator.AND;
 
         for(Condition condition : this.conditionList){
             switch (logicalOperator){

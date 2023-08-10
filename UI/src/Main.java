@@ -9,7 +9,7 @@ public class Main {
         try {
             systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            //TODO: DEAL WITH EXCEPTION
         }
 
         systemEngine.runSimulation();

@@ -90,7 +90,7 @@ public class World {
         return name2EntitiesDef.get(entityName);
     }
 
-    public void addRule(Rule ruleToAdd)//TODO: Decide which better^^
+    public void addRule(Rule ruleToAdd)
     {
         name2Rule.put(ruleToAdd.getName(), ruleToAdd);
     }
