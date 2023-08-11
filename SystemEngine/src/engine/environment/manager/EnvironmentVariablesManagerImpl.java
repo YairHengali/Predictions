@@ -27,7 +27,15 @@ public class EnvironmentVariablesManagerImpl implements EnvironmentVariablesMana
     }
 
     @Override
-    public Collection<PropertyDefinition> getEnvVariables() {
+    public Collection<PropertyDefinition> getEnvironmentVariables() {
         return this.name2PropertyDef.values();
+    }
+
+    @Override
+    public PropertyDefinition getEnvironmentVariableByName(String name) throws IllegalArgumentException {
+        if(this.name2PropertyDef.containsKey(name)){
+            return this.name2PropertyDef.get(name);
+        }
+        throw new IllegalArgumentException("Environment variable: " + name + "does not exist!");
     }
 }

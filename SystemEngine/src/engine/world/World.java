@@ -4,7 +4,6 @@ import engine.entity.EntityDefinition;
 import engine.entity.manager.EntityInstanceManager;
 import engine.entity.manager.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
-import engine.environment.active.ActiveEnvironmentVariablesImpl;
 import engine.environment.manager.EnvironmentVariablesManager;
 import engine.property.PropertyDefinition;
 import engine.rule.Rule;
@@ -17,7 +16,7 @@ public class World {
     private long startTime; // TODO: create StopWatch class
 
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
-    private final Map<String, PropertyDefinition> name2EnvironmentVariablesDef = new HashMap<>();
+    //private final Map<String, PropertyDefinition> name2EnvironmentVariablesDef = new HashMap<>();
     private final Map<String, Rule> name2Rule = new HashMap<>();
 
     EntityInstanceManager entityInstanceManager;
@@ -57,7 +56,7 @@ public class World {
 //        {
 //            activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
 //        }
-        for(PropertyDefinition envVarDef : this.environmentVariablesManager.getEnvVariables())
+        for(PropertyDefinition envVarDef : this.environmentVariablesManager.getEnvironmentVariables())
         {
             activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
         }
@@ -88,7 +87,12 @@ public class World {
 
     public PropertyDefinition getEnvironmentVariableDefByName(String name)
     {
-        return name2EnvironmentVariablesDef.get(name);
+        try {
+            return this.environmentVariablesManager.getEnvironmentVariableByName(name);
+        }
+        catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addEntityDefinition(EntityDefinition entityDefinitionToAdd){
@@ -113,11 +117,19 @@ public class World {
                 (this.currentNumberOfTicks >= this.maxNumberOfTicks);
     }
 
+//    public Object environment(String varName) throws Exception {
+//        if(this.name2EnvironmentVariablesDef.containsKey(varName)) {
+//            return this.name2EnvironmentVariablesDef.get(varName);
+//        }
+//        throw new Exception("Environment Variable Not Found!");
+//    }
     public Object environment(String varName) throws Exception {
-        if(this.name2EnvironmentVariablesDef.containsKey(varName)) {
-            return this.name2EnvironmentVariablesDef.get(varName);
+        try{
+            return this.activeEnvironmentVariables.getEvnVariable(varName).getValue();
         }
-        throw new Exception("Environment Variable Not Found!");
+        catch (IllegalArgumentException e){
+            throw new RuntimeException(e);
+        }
     }
 
     public int random(String argValue) throws NumberFormatException{
