@@ -5,6 +5,7 @@ import engine.entity.manager.EntityInstanceManager;
 import engine.entity.manager.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.environment.manager.EnvironmentVariablesManager;
+//import engine.environment.manager.EnvironmentVariablesManager;
 import engine.property.PropertyDefinition;
 import engine.rule.Rule;
 
@@ -25,24 +26,41 @@ public class World {
 
 
     ///////// Termination conditions:
-    private int maxNumberOfTicks = 100;
-    private long SecondsToTerminate = 10000;
+    private int maxNumberOfTicks = 100; //TODO: initialized only for testing
+    private long SecondsToTerminate = 10000;//TODO: initialized only for testing
 
-    private Set<String> methodsNames;
+    //private Set<String> methodsNames;
 
     public World() {
-        methodsNames = new HashSet<>();
-        methodsNames.add("environment"); //TODO: MAYBE ENUM
-        methodsNames.add("random"); //TODO: MAYBE ENUM
+//        methodsNames = new HashSet<>();
+//        methodsNames.add("environment"); //TODO: MAYBE ENUM
+//        methodsNames.add("random"); //TODO: MAYBE ENUM
+    }
+
+    public int getMaxNumberOfTicks() {
+        return maxNumberOfTicks;
+    }
+
+    public long getSecondsToTerminate() {
+        return SecondsToTerminate;
+    }
+
+    public void setMaxNumberOfTicks(int maxNumberOfTicks) {
+        this.maxNumberOfTicks = maxNumberOfTicks;
+    }
+
+    public void setSecondsToTerminate(long secondsToTerminate) {
+        SecondsToTerminate = secondsToTerminate;
     }
 
 
-    public void runMainLoop()
+
+    public TerminationReason runMainLoop()
     {
-        runTick0();
-        runLoop();
+        runInitIteration();
+        return runLoop();
     }
-    private void runTick0()
+    private void runInitIteration() //Tick0
     {
         entityInstanceManager = new EntityInstanceManagerImpl();
         for(EntityDefinition entityDefinition : name2EntitiesDef.values())
@@ -65,7 +83,7 @@ public class World {
         currentNumberOfTicks++;
     }
 
-    private void runLoop() //TICK 1 and up...;
+    private TerminationReason runLoop() //TICK 1 and up...;
     {
         while (!isTermination())
         {
@@ -76,6 +94,14 @@ public class World {
                 }
             }
             currentNumberOfTicks++;
+        }
+        if(currentNumberOfTicks >= maxNumberOfTicks)
+        {
+            return TerminationReason.MAXTICKSREACHED;
+        }
+        else
+        {
+            return TerminationReason.SECONDSREACHED;
         }
     }
 
@@ -118,29 +144,39 @@ public class World {
     }
 
 //    public Object environment(String varName) throws Exception {
-//        if(this.name2EnvironmentVariablesDef.containsKey(varName)) {
-//            return this.name2EnvironmentVariablesDef.get(varName);
+//        try{
+//            return this.activeEnvironmentVariables.getEvnVariable(varName).getValue();
 //        }
-//        throw new Exception("Environment Variable Not Found!");
+//        catch (IllegalArgumentException e){
+//            throw new RuntimeException(e);
+//        }
 //    }
-    public Object environment(String varName) throws Exception {
-        try{
-            return this.activeEnvironmentVariables.getEvnVariable(varName).getValue();
-        }
-        catch (IllegalArgumentException e){
-            throw new RuntimeException(e);
-        }
+//
+//    public int random(String argValue) throws NumberFormatException{
+//        try {
+//            int val = Integer.parseInt(argValue);
+//            Random random = new Random();
+//            return random.nextInt(val) + 1;
+//        }
+//        catch (NumberFormatException e){
+//            throw e;
+//        }
+//    }
+
+    public Collection<Rule> getRules()
+    {
+        return name2Rule.values();
     }
 
-    public int random(String argValue) throws NumberFormatException{
-        try {
-            int val = Integer.parseInt(argValue);
-            Random random = new Random();
-            return random.nextInt(val) + 1;
-        }
-        catch (NumberFormatException e){
-            throw e;
-        }
+    public Collection<PropertyDefinition> getEnvironmentVariablesDefinitions()
+    {
+        return this.environmentVariablesManager.getEnvironmentVariables()3;
+    }
+
+
+    public Collection<EntityDefinition> getEntitiesDefinitions()
+    {
+        return name2EntitiesDef.values();
     }
 
 

@@ -1,8 +1,14 @@
 package engine.system;
 
+import engine.action.api.Action;
+import engine.entity.EntityDefinition;
+import engine.property.PropertyDefinition;
+import engine.rule.Rule;
+import engine.world.TerminationReason;
 import engine.world.World;
 import engine.world.factory.WorldFactory;
 import engine.world.factory.WorldFactoryImpl;
+import engineAnswers.*;
 import jaxb.generated.*;
 
 import javax.xml.bind.JAXBContext;
@@ -12,12 +18,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
-
     private World simulation = null;
-    private WorldFactory worldFactory = new WorldFactoryImpl();
+    private final WorldFactory worldFactory = new WorldFactoryImpl();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
+    int currentSimulationID = 0;
+
 
     public SystemEngineImpl(){
         this.simulation = worldFactory.createWorld();
@@ -49,8 +62,39 @@ public class SystemEngineImpl implements SystemEngine{
     }
 
     @Override
-    public String showSimulationDetails() {
-        return null;
+    public SimulationDetailsDTO showSimulationDetails() {
+        SimulationDetailsDTO simulationDetails;
+        List<EntityDTO> entitiesDetails = new ArrayList<>();
+        List<RuleDTO> rulesDetails = new ArrayList<>();
+
+        for (EntityDefinition entityDefinition: simulation.getEntitiesDefinitions()) {
+
+            List<PropertyDTO> propertiesDetails = new ArrayList<>();
+            for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
+                addPropertyToDtoList(propertiesDetails, propertyDefinition);
+            }
+            entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
+        }
+
+        for (Rule rule: simulation.getRules()) {
+            List<ActionDTO> actionsDetails = new ArrayList<>();
+            for (Action action: rule.getActions()){
+                actionsDetails.add(new ActionDTO(action.getActionType().toString()));
+            }
+            rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
+        }
+
+        simulationDetails = new SimulationDetailsDTO(entitiesDetails, rulesDetails, simulation.getMaxNumberOfTicks(), simulation.getSecondsToTerminate());
+        return simulationDetails;
+    }
+
+    private void addPropertyToDtoList(List<PropertyDTO> propertiesDtoList, PropertyDefinition propertyDefinition) {
+        if (propertyDefinition.getValueRange() != null) {
+            propertiesDtoList.add( new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), propertyDefinition.getValueRange().getFrom(),propertyDefinition.getValueRange().getTo(), propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));
+        }
+        else{
+            propertiesDtoList.add(new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), null,null, propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));
+        }
     }
 
     private static PRDWorld deserializeFrom(InputStream in) throws JAXBException {
@@ -61,15 +105,44 @@ public class SystemEngineImpl implements SystemEngine{
 
 
     @Override
-    public int runSimulation() {
-//        initializeEnvVars();
-//        showEnvVarValues();
-//        runTheSimulation();
 
-        simulation.runMainLoop();
+    public EndOfSimulationDTO runSimulation() {
+        String dateOfRun = simpleDateFormat.format(new Date());
 
-        return 1;
+//    initializeEnvVars();
+        //getEnvVarsDto();
+        //setEnvVarsFromDto(); //TODO: NEED TO SHOW THE USER THE VALUES OF ENVs - WHEN?? Do Tick 0 Before??
+
+//    runTheSimulation();
+
+
+        TerminationReason terminationReason = simulation.runMainLoop();
+
+
+
+//return ID of simulation and add it to Past Simulations with its date
+        currentSimulationID++;
+        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
+
+
+    public List<PropertyDTO> getEnvVarsDto() {
+        List<PropertyDTO> environmentVariablesDetails = new ArrayList<>();
+        for (PropertyDefinition environmentVariableDefinition: simulation.getEnvironmentVariablesDefinitions()) {
+            addPropertyToDtoList(environmentVariablesDetails, environmentVariableDefinition);
+        }
+        return environmentVariablesDetails;
+    }
+
+    private void setEnvVarsFromDto(List<PropertyDTO> envVarsDto)
+    {
+        for (PropertyDTO envVarDto :envVarsDto) {
+            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
+        }
+    }
+
     @Override
-    public String showPastSimulation(){return "";}
+    public String showPastSimulationDetails(){return "";}
+
 }

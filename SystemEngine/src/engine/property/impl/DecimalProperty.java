@@ -43,5 +43,13 @@ public class DecimalProperty extends PropertyInstance {
     public void setValue(Integer value) {
         if (range == null || (value <= range.getTo().intValue() && value >= range.getFrom().intValue()))
             this.value = value.toString();
+        else if(value > range.getTo().intValue())
+        {
+            this.value = String.valueOf(range.getTo().intValue());
+        }
+        else if(value < range.getFrom().intValue())
+        {
+            this.value = String.valueOf(range.getFrom().intValue());
+        }
     }
 }

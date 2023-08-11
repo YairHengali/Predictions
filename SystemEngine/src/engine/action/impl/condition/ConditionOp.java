@@ -10,7 +10,7 @@ public enum ConditionOp {
         {
             switch (propertyType){
                 case BOOLEAN:
-                    return Boolean.parseBoolean(propertyValue) == Boolean.parseBoolean(value);
+                    return Boolean.valueOf(propertyValue) == Boolean.valueOf(value);
                 case DECIMAL:
                     return Integer.parseInt(propertyValue) == Integer.parseInt(value);
                 case FLOAT:
@@ -26,7 +26,7 @@ public enum ConditionOp {
         public boolean eval(String propertyValue, String value, PropertyType propertyType) {
             switch (propertyType){
                 case BOOLEAN:
-                    return Boolean.parseBoolean(propertyValue) != Boolean.parseBoolean(value);
+                    return Boolean.valueOf(propertyValue) != Boolean.valueOf(value);
                 case DECIMAL:
                     return Integer.parseInt(propertyValue) != Integer.parseInt(value);
                 case FLOAT:

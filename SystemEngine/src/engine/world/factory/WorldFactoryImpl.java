@@ -40,7 +40,7 @@ public class WorldFactoryImpl implements WorldFactory{
             addEnvironmentVariables();
             addEntitiesDefinitions();
             addRules();
-            addTerminationSettings();
+            //addTerminationSettings(); TODO: commented for testing
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -123,6 +123,20 @@ public class WorldFactoryImpl implements WorldFactory{
 
         return resPropertyDef;
     }
+
+    private void addTerminationSettings()
+    {
+        for (Object obj: generatedWorld.getPRDTermination().getPRDByTicksOrPRDBySecond()) {
+            if (obj instanceof PRDByTicks) {
+                PRDByTicks ticks = (PRDByTicks) obj;
+                currWorkingWorld.setMaxNumberOfTicks(ticks.getCount());
+            } else if (obj instanceof PRDBySecond) {
+                PRDBySecond seconds = (PRDBySecond) obj;
+                currWorkingWorld.setSecondsToTerminate(seconds.getCount());
+            }
+        }
+    }
+
     private void addRules() throws Exception {
         for (PRDRule prdRule : generatedWorld.getPRDRules().getPRDRule()) {
 
@@ -142,13 +156,10 @@ public class WorldFactoryImpl implements WorldFactory{
             currWorkingWorld.addRule(currentRule);
         }
     } //TODO: DEAL WITH EXCEPTIONS
-//////////
+
     // TODO: REARRANGE THE METHODS BELLOW
-    //
-    private void addTerminationSettings()
-    {
-       //TODO: how to get them???
-    }
+
+
     private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
     {
         ConditionImpl resCondition;

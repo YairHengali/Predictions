@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class FloatProperty extends PropertyInstance {
 
-    private Range range;
+    private final Range range;
 
     public FloatProperty(PropertyDefinition propertyDefinition) {
         super(propertyDefinition.getName(), propertyDefinition.getType());
@@ -43,5 +43,13 @@ public class FloatProperty extends PropertyInstance {
     public void setValue(Float value) {
         if (range == null || (value <= range.getTo().floatValue() && value >= range.getFrom().floatValue()))
             this.value = value.toString();
+        else if(value > range.getTo().floatValue())
+        {
+            this.value = String.valueOf(range.getTo().floatValue());
+        }
+        else if(value < range.getFrom().floatValue())
+        {
+            this.value = String.valueOf(range.getFrom().floatValue());
+        }
     }
 }

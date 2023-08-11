@@ -11,7 +11,7 @@ public interface Rule {
     boolean isActive(int currTick);
     int getTicksForActivations();
     double getProbForActivations();
-    Collection<Action> actionsToPerform();
+    Collection<Action> getActions();
     void addAction(Action actionToAdd);
     public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables);
 
