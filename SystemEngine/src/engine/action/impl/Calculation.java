@@ -24,7 +24,7 @@ public class Calculation extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) throws Exception {//TODO: ADD EXCEPTIONS WHERE NEEDED
+    public void Run(Context context) throws Exception {//TODO: ADD EXCEPTIONS WHERE NEEDED (for example dividing by zero and unmatching type)
 
             YairExpression arg1AsExpression = new YairExpression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
             YairExpression arg2AsExpression = new YairExpression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());

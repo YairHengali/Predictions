@@ -7,5 +7,5 @@ public interface SystemEngine {
     public void loadSimulation(String filePath) throws Exception;
     public String showSimulationDetails();
     public int runSimulation();
-    public String showPastSimulation();
+    public String showPastSimulationDetails();
 }

@@ -1,5 +1,6 @@
 package engine.system;
 
+import engine.world.TerminationReason;
 import engine.world.World;
 import engine.world.factory.WorldFactory;
 import engine.world.factory.WorldFactoryImpl;
@@ -12,12 +13,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
-
     private World simulation = null;
-    private WorldFactory worldFactory = new WorldFactoryImpl();
+    private final WorldFactory worldFactory = new WorldFactoryImpl();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
+
 
     public SystemEngineImpl(){
         this.simulation = worldFactory.createWorld();
@@ -63,15 +67,26 @@ public class SystemEngineImpl implements SystemEngine{
     @Override
 
     public int runSimulation() {
+        String datOfRun = simpleDateFormat.format(new Date());
+
 //        initializeEnvVars();
 //        showEnvVarValues();
 //        runTheSimulation();
 
-        simulation.runMainLoop();
+        TerminationReason terminationReason = simulation.runMainLoop();
 
+
+
+//return ID of simulation
         return 1;
     }
-    @Override
 
-    public String showPastSimulation(){return "";}
+
+    private void initializeEnvVars() {
+
+        }
+    }
+    @Override
+    public String showPastSimulationDetails(){return "";}
+
 }

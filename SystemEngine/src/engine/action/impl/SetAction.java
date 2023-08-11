@@ -34,7 +34,7 @@ public class SetAction extends AbstractAction {
                 ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(valueFromExpression));
             }
             else if (entityPropertyInstance instanceof BooleanProperty) {
-                ((BooleanProperty) entityPropertyInstance).setValue(Boolean.parseBoolean(valueFromExpression));
+                ((BooleanProperty) entityPropertyInstance).setValue(Boolean.valueOf(valueFromExpression));
             }
             else if (entityPropertyInstance instanceof StringProperty) {
                 ((StringProperty) entityPropertyInstance).setValue(valueFromExpression);

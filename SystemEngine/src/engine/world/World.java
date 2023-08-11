@@ -24,22 +24,29 @@ public class World {
 
 
     ///////// Termination conditions:
-    private int maxNumberOfTicks = 100;
-    private long SecondsToTerminate = 10000;
+    private int maxNumberOfTicks = 100; //TODO: initialized only for testing
+    private long SecondsToTerminate = 10000;//TODO: initialized only for testing
 
-    private Set<String> methodsNames;
+    //private Set<String> methodsNames;
 
     public World() {
-        methodsNames = new HashSet<>();
-        methodsNames.add("environment"); //TODO: MAYBE ENUM
-        methodsNames.add("random"); //TODO: MAYBE ENUM
+//        methodsNames = new HashSet<>();
+//        methodsNames.add("environment"); //TODO: MAYBE ENUM
+//        methodsNames.add("random"); //TODO: MAYBE ENUM
     }
 
+    public void setMaxNumberOfTicks(int maxNumberOfTicks) {
+        this.maxNumberOfTicks = maxNumberOfTicks;
+    }
 
-    public void runMainLoop()
+    public void setSecondsToTerminate(long secondsToTerminate) {
+        SecondsToTerminate = secondsToTerminate;
+    }
+
+    public TerminationReason runMainLoop()
     {
         runTick0();
-        runLoop();
+        return runLoop();
     }
     private void runTick0()
     {
@@ -59,7 +66,7 @@ public class World {
         currentNumberOfTicks++;
     }
 
-    private void runLoop() //TICK 1 and up...;
+    private TerminationReason runLoop() //TICK 1 and up...;
     {
         while (!isTermination())
         {
@@ -70,6 +77,14 @@ public class World {
                 }
             }
             currentNumberOfTicks++;
+        }
+        if(currentNumberOfTicks >= maxNumberOfTicks)
+        {
+            return TerminationReason.MAXTICKSREACHED;
+        }
+        else
+        {
+            return TerminationReason.SECONDSREACHED;
         }
     }
 
