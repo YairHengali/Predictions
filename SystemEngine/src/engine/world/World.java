@@ -5,6 +5,7 @@ import engine.entity.manager.EntityInstanceManager;
 import engine.entity.manager.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.environment.active.ActiveEnvironmentVariablesImpl;
+import engine.environment.manager.EnvironmentVariablesManager;
 import engine.property.PropertyDefinition;
 import engine.rule.Rule;
 
@@ -21,6 +22,7 @@ public class World {
 
     EntityInstanceManager entityInstanceManager;
     ActiveEnvironmentVariables activeEnvironmentVariables;
+    EnvironmentVariablesManager environmentVariablesManager;
 
 
     ///////// Termination conditions:
@@ -49,8 +51,13 @@ public class World {
             entityInstanceManager.createEntityInstances(entityDefinition);
         }
 
-        activeEnvironmentVariables = new ActiveEnvironmentVariablesImpl();
-        for(PropertyDefinition envVarDef : name2EnvironmentVariablesDef.values())
+        activeEnvironmentVariables = this.environmentVariablesManager.createActiveEnvironment();
+        //activeEnvironmentVariables = new ActiveEnvironmentVariablesImpl();
+//        for(PropertyDefinition envVarDef : name2EnvironmentVariablesDef.values())
+//        {
+//            activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
+//        }
+        for(PropertyDefinition envVarDef : this.environmentVariablesManager.getEnvVariables())
         {
             activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
         }
@@ -73,9 +80,10 @@ public class World {
         }
     }
 
-    public void addEnvironmentVariableDef(PropertyDefinition EnvVarDefinitionToAdd)
+    public void addEnvironmentVariableDef(PropertyDefinition envVarDefinitionToAdd)
     {
-        name2EnvironmentVariablesDef.put(EnvVarDefinitionToAdd.getName(), EnvVarDefinitionToAdd);
+        this.environmentVariablesManager.addEnvironmentVariable(envVarDefinitionToAdd);
+        //name2EnvironmentVariablesDef.put(EnvVarDefinitionToAdd.getName(), EnvVarDefinitionToAdd);
     }
 
     public PropertyDefinition getEnvironmentVariableDefByName(String name)

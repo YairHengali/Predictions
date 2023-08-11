@@ -61,7 +61,6 @@ public class SystemEngineImpl implements SystemEngine{
 
 
     @Override
-
     public int runSimulation() {
 //        initializeEnvVars();
 //        showEnvVarValues();
@@ -72,6 +71,5 @@ public class SystemEngineImpl implements SystemEngine{
         return 1;
     }
     @Override
-
     public String showPastSimulation(){return "";}
 }
