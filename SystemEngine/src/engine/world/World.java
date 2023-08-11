@@ -35,6 +35,14 @@ public class World {
 //        methodsNames.add("random"); //TODO: MAYBE ENUM
     }
 
+    public int getMaxNumberOfTicks() {
+        return maxNumberOfTicks;
+    }
+
+    public long getSecondsToTerminate() {
+        return SecondsToTerminate;
+    }
+
     public void setMaxNumberOfTicks(int maxNumberOfTicks) {
         this.maxNumberOfTicks = maxNumberOfTicks;
     }
@@ -120,23 +128,33 @@ public class World {
                 (this.currentNumberOfTicks >= this.maxNumberOfTicks);
     }
 
-    public Object environment(String varName) throws Exception {
-        if(this.name2EnvironmentVariablesDef.containsKey(varName)) {
-            return this.name2EnvironmentVariablesDef.get(varName);
-        }
-        throw new Exception("Environment Variable Not Found!");
+    public Collection<EntityDefinition> getEntitiesDefinitions()
+    {
+        return name2EntitiesDef.values();
     }
 
-    public int random(String argValue) throws NumberFormatException{
-        try {
-            int val = Integer.parseInt(argValue);
-            Random random = new Random();
-            return random.nextInt(val) + 1;
-        }
-        catch (NumberFormatException e){
-            throw e;
-        }
+    public Collection<Rule> getRules()
+    {
+        return name2Rule.values();
     }
+
+//    public Object environment(String varName) throws Exception {
+//        if(this.name2EnvironmentVariablesDef.containsKey(varName)) {
+//            return this.name2EnvironmentVariablesDef.get(varName);
+//        }
+//        throw new Exception("Environment Variable Not Found!");
+//    }
+//
+//    public int random(String argValue) throws NumberFormatException{
+//        try {
+//            int val = Integer.parseInt(argValue);
+//            Random random = new Random();
+//            return random.nextInt(val) + 1;
+//        }
+//        catch (NumberFormatException e){
+//            throw e;
+//        }
+//    }
 
 
     //@Override

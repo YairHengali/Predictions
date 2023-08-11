@@ -1,11 +1,12 @@
 package engine.system;
 
 import engine.world.World;
+import engineAnswers.SimulationDetailsDTO;
 
 public interface SystemEngine {
     public World getSimulation();
     public void loadSimulation(String filePath) throws Exception;
-    public String showSimulationDetails();
+    public SimulationDetailsDTO showSimulationDetails();
     public int runSimulation();
     public String showPastSimulationDetails();
 }

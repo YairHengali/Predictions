@@ -57,7 +57,7 @@ public class RuleImpl implements Rule {
     }
 
     @Override
-    public Collection<Action> actionsToPerform() {
+    public Collection<Action> getActions() {
         return this.actions;
     }
 
