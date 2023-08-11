@@ -170,7 +170,7 @@ public class World {
 
     public Collection<PropertyDefinition> getEnvironmentVariablesDefinitions()
     {
-        return this.environmentVariablesManager.getEnvironmentVariables()3;
+        return this.environmentVariablesManager.getEnvironmentVariables();
     }
 
 
