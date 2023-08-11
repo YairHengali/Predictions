@@ -6,13 +6,19 @@ public class PropertyDTO {
     private final Number from;
     private final Number to;
     private final boolean isInitialisedRandomly;
+    private String initValue;
 
-    public PropertyDTO(String name, String type, Number from, Number to, boolean isInitialisedRandomly) {
+    public PropertyDTO(String name, String type, Number from, Number to, boolean isInitialisedRandomly, String initValue) {
         this.name = name;
         this.type = type;
         this.from = from;
         this.to = to;
         this.isInitialisedRandomly = isInitialisedRandomly;
+        this.initValue = initValue;
+    }
+
+    public String getInitValue() {
+        return initValue;
     }
 
     public String getName() {

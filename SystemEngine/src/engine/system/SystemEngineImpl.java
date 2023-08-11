@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class SystemEngineImpl implements SystemEngine{
     private World simulation = null;
     private final WorldFactory worldFactory = new WorldFactoryImpl();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
+    int currentSimulationID = 0;
 
 
     public SystemEngineImpl(){
@@ -69,12 +71,7 @@ public class SystemEngineImpl implements SystemEngine{
 
             List<PropertyDTO> propertiesDetails = new ArrayList<>();
             for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
-                if (propertyDefinition.getValueRange() != null) {
-                    propertiesDetails.add( new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), propertyDefinition.getValueRange().getFrom(),propertyDefinition.getValueRange().getTo(), propertyDefinition.isInitializedRandomly()));
-                }
-                else{
-                    propertiesDetails.add(new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), null,null, propertyDefinition.isInitializedRandomly()));
-                }
+                addPropertyToDtoList(propertiesDetails, propertyDefinition);
             }
             entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
         }
@@ -91,6 +88,15 @@ public class SystemEngineImpl implements SystemEngine{
         return simulationDetails;
     }
 
+    private void addPropertyToDtoList(List<PropertyDTO> propertiesDtoList, PropertyDefinition propertyDefinition) {
+        if (propertyDefinition.getValueRange() != null) {
+            propertiesDtoList.add( new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), propertyDefinition.getValueRange().getFrom(),propertyDefinition.getValueRange().getTo(), propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));
+        }
+        else{
+            propertiesDtoList.add(new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), null,null, propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));
+        }
+    }
+
     private static PRDWorld deserializeFrom(InputStream in) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller u = jc.createUnmarshaller();
@@ -100,24 +106,40 @@ public class SystemEngineImpl implements SystemEngine{
 
     @Override
 
-    public int runSimulation() {
-        String datOfRun = simpleDateFormat.format(new Date());
+    public EndOfSimulationDTO runSimulation() {
+        String dateOfRun = simpleDateFormat.format(new Date());
 
-//        initializeEnvVars();
-//        showEnvVarValues();
-//        runTheSimulation();
+//    initializeEnvVars();
+        //getEnvVarsDto();
+        //setEnvVarsFromDto(); //TODO: NEED TO SHOW THE USER THE VALUES OF ENVs - WHEN?? Do Tick 0 Before??
+
+//    runTheSimulation();
+
 
         TerminationReason terminationReason = simulation.runMainLoop();
 
 
 
-//return ID of simulation
-        return 1;
+//return ID of simulation and add it to Past Simulations with its date
+        currentSimulationID++;
+        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
 
 
-    private void initializeEnvVars() {
+    public List<PropertyDTO> getEnvVarsDto() {
+        List<PropertyDTO> environmentVariablesDetails = new ArrayList<>();
+        for (PropertyDefinition environmentVariableDefinition: simulation.getEnvironmentVariablesDefinitions()) {
+            addPropertyToDtoList(environmentVariablesDetails, environmentVariableDefinition);
+        }
+        return environmentVariablesDetails;
+    }
 
+    private void setEnvVarsFromDto(List<PropertyDTO> envVarsDto)
+    {
+        for (PropertyDTO envVarDto :envVarsDto) {
+            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
+        }
     }
 
     @Override

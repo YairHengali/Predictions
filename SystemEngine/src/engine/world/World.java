@@ -51,12 +51,14 @@ public class World {
         SecondsToTerminate = secondsToTerminate;
     }
 
+
+
     public TerminationReason runMainLoop()
     {
-        runTick0();
+        runInitIteration();
         return runLoop();
     }
-    private void runTick0()
+    private void runInitIteration() //Tick0
     {
         entityInstanceManager = new EntityInstanceManagerImpl();
         for(EntityDefinition entityDefinition : name2EntitiesDef.values())
@@ -127,6 +129,12 @@ public class World {
         return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
                 (this.currentNumberOfTicks >= this.maxNumberOfTicks);
     }
+
+    public Collection<PropertyDefinition> getEnvironmentVariablesDefinitions()
+    {
+        return name2EnvironmentVariablesDef.values();
+    }
+
 
     public Collection<EntityDefinition> getEntitiesDefinitions()
     {
