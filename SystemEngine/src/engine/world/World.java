@@ -81,7 +81,7 @@ public class World {
         }
 
         this.startTime = System.currentTimeMillis();
-        currentNumberOfTicks++;
+        currentNumberOfTicks = 1;
     }
 
     private TerminationReason runLoop() //TICK 1 and up...;

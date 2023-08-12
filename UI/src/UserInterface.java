@@ -54,6 +54,7 @@ public class UserInterface {
 
                 break;
             case 3:
+                systemEngine.runSimulation();
                 break;
             case 4:
                 break;
@@ -94,6 +95,6 @@ public class UserInterface {
         }
         System.out.println("Termination conditions: "); //TODO: NOT ALL CONDITIONS MUST BE SET! NEED TO DEAL WITH NULLS
         System.out.println("Number of ticks: " + simulationDetailsDTO.getMaxNumberOfTicks());
-        System.out.println("Number of seconds: " + simulationDetailsDTO.getMaxNumberOfTicks());
+        System.out.println("Number of seconds: " + simulationDetailsDTO.getSecondsToTerminate());
     }
 }

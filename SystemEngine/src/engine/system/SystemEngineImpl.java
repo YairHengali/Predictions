@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
@@ -31,6 +32,7 @@ public class SystemEngineImpl implements SystemEngine{
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
     int currentSimulationID = 0;
     boolean isThereLoadedSimulation = false;
+    private List <pastSimulationDTO> pastSimulations = new ArrayList<>(); //TODO: maybe need to order by date somehow, in case changing clock
 
 
     public SystemEngineImpl(){
@@ -124,6 +126,8 @@ public class SystemEngineImpl implements SystemEngine{
 
 //return ID of simulation and add it to Past Simulations with its date
         currentSimulationID++;
+        pastSimulations.add(new pastSimulationDTO(dateOfRun, currentSimulationID));
+
         return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
 
