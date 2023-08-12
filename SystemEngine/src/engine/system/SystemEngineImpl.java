@@ -30,6 +30,7 @@ public class SystemEngineImpl implements SystemEngine{
     private final WorldFactory worldFactory = new WorldFactoryImpl();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
     int currentSimulationID = 0;
+    boolean isThereLoadedSimulation = false;
 
 
     public SystemEngineImpl(){
@@ -55,6 +56,7 @@ public class SystemEngineImpl implements SystemEngine{
 
         try {
             worldFactory.insertDataToWorld(this.simulation);
+            isThereLoadedSimulation = true;
         }
         catch (Exception e){
             e.getMessage();
@@ -145,4 +147,8 @@ public class SystemEngineImpl implements SystemEngine{
     @Override
     public String showPastSimulationDetails(){return "";}
 
+    @Override
+    public Boolean isThereLoadedSimulation() {
+        return isThereLoadedSimulation; //TODO: maybe more complex tesing
+    }
 }

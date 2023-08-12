@@ -6,6 +6,7 @@ import engine.entity.manager.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.environment.manager.EnvironmentVariablesManager;
 //import engine.environment.manager.EnvironmentVariablesManager;
+import engine.environment.manager.EnvironmentVariablesManagerImpl;
 import engine.property.PropertyDefinition;
 import engine.rule.Rule;
 
@@ -22,7 +23,7 @@ public class World {
 
     EntityInstanceManager entityInstanceManager;
     ActiveEnvironmentVariables activeEnvironmentVariables;
-    EnvironmentVariablesManager environmentVariablesManager;
+    EnvironmentVariablesManager environmentVariablesManager = new EnvironmentVariablesManagerImpl(); //TODO: Needed? (added c'tor)
 
 
     ///////// Termination conditions:

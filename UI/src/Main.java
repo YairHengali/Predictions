@@ -7,26 +7,33 @@ import ofir.menu.api.MenuManager;
 import ofir.menu.impl.MenuItemImpl;
 import ofir.menu.impl.MenuManagerImpl;
 
+import java.util.Scanner;
+
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngineImpl();
         UserInterface UI = new UserInterface();
-
+        Scanner scanner = new Scanner(System.in);
+        int userChoice;
 
         UI.buildMainMenu();
-        UI.printMenu("mainMenu");
-        System.out.println("enter choice num in range: ");
-        int userChoice = 2;
+        do {
+            UI.printMenu("mainMenu");
+            System.out.println("enter choice num in range: ");
 
-        while (!UI.getMenuManager().getMenuByName("mainMenu").isInRange(userChoice)) {
-            System.out.println("Bad choice, try again:");
-            // TODO: read input from user - just an example
-        }
+            userChoice = scanner.nextInt();
+            //int userChoice = 2;
 
-        UI.decodeUserChoice("mainMenu",userChoice);
+            while (!UI.getMenuManager().getMenuByName("mainMenu").isInRange(userChoice)) {
+                System.out.println("Bad choice, try again:");
+                // TODO: read input from user - just an example
+                userChoice = scanner.nextInt();
+            }
 
+            UI.decodeUserChoice("mainMenu", userChoice);
+        }while (userChoice != 0);
 
         SimulationDetailsDTO simulationDetailsDTO = systemEngine.showSimulationDetails();
 

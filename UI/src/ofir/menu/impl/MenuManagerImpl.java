@@ -41,6 +41,8 @@ public class MenuManagerImpl implements MenuManager {
     public void showMenuByName(String menuName) {
         if(this.name2menu.containsKey(menuName))
             this.name2menu.get(menuName).showMenu();
-        throw new IllegalArgumentException("No menu with name: " + menuName);
+        else{
+            throw new IllegalArgumentException("No menu with name: " + menuName);
+        }
     }
 }

@@ -40,4 +40,16 @@ public class PropertyDTO {
     public boolean isInitialisedRandomly() {
         return isInitialisedRandomly;
     }
+
+    @Override
+    public String toString() {
+        return "PropertyDTO{" +
+                "name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", from=" + from +
+                ", to=" + to +
+                ", isInitialisedRandomly=" + isInitialisedRandomly +
+                ", initValue='" + initValue + '\'' +
+                '}';
+    }
 }
