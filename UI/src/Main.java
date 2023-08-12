@@ -12,43 +12,20 @@ import ofir.menu.impl.MenuManagerImpl;
 public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngineImpl();
+        UserInterface UI = new UserInterface();
 
-        //TODO: need to mova all the menu build to another func
-        MenuManager menuManager = new MenuManagerImpl();
-        Menu mainMenu = menuManager.createMenu("main");
-        mainMenu.addItem("Load simulation");
-        mainMenu.addItem("Run simulation");
-        mainMenu.addItem("Show past simulation");
-        menuManager.addMenu(mainMenu);
-        menuManager.showMenuByName("main");
 
+        UI.buildMainMenu();
+        UI.printMenu("mainMenu");
         System.out.println("enter choice num in range: ");
         int userChoice = 2;
-        while(!menuManager.getMenuByName("main").isInRange(userChoice)){
+
+        while (!UI.getMenuManager().getMenuByName("mainMenu").isInRange(userChoice)) {
             System.out.println("Bad choice, try again:");
             // TODO: read input from user - just an example
         }
 
-        switch(userChoice){
-            case 1:
-                try {
-                    systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
-                } catch (Exception e) {
-                    //TODO: DEAL WITH EXCEPTION
-                }
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-        }
-
-
-
+        UI.decodeUserChoice("mainMenu",userChoice);
 
 
         SimulationDetailsDTO simulationDetailsDTO = systemEngine.showSimulationDetails();
@@ -83,7 +60,9 @@ public class Main {
 
          */
 
-        }
+    }
+
+
 
     private void printSimulationDetails(){
 
