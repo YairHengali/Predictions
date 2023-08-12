@@ -1,17 +1,55 @@
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engineAnswers.SimulationDetailsDTO;
+import ofir.menu.api.Menu;
+import ofir.menu.api.MenuItem;
+import ofir.menu.api.MenuManager;
+import ofir.menu.impl.MenuItemImpl;
+import ofir.menu.impl.MenuManagerImpl;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngineImpl();
-        try {
-            systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
-        } catch (Exception e) {
-            //TODO: DEAL WITH EXCEPTION
+
+        //TODO: need to mova all the menu build to another func
+        MenuManager menuManager = new MenuManagerImpl();
+        Menu mainMenu = menuManager.createMenu("main");
+        mainMenu.addItem("Load simulation");
+        mainMenu.addItem("Run simulation");
+        mainMenu.addItem("Show past simulation");
+        menuManager.addMenu(mainMenu);
+        menuManager.showMenuByName("main");
+
+        System.out.println("enter choice num in range: ");
+        int userChoice = 2;
+        while(!menuManager.getMenuByName("main").isInRange(userChoice)){
+            System.out.println("Bad choice, try again:");
+            // TODO: read input from user - just an example
         }
+
+        switch(userChoice){
+            case 1:
+                try {
+                    systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
+                } catch (Exception e) {
+                    //TODO: DEAL WITH EXCEPTION
+                }
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+        }
+
+
+
+
 
         SimulationDetailsDTO simulationDetailsDTO = systemEngine.showSimulationDetails();
 
