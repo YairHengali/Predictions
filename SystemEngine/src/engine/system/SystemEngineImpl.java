@@ -117,7 +117,7 @@ public class SystemEngineImpl implements SystemEngine{
         //getEnvVarsDto();
         //setEnvVarsFromDto(); //TODO: NEED TO SHOW THE USER THE VALUES OF ENVs - WHEN?? Do Tick 0 Before??
         //tick 0 and show Env values to user
-//        simulation.runInitIteration();
+        simulation.runInitIteration();
         //create EnvDTO to show values to user
 //    runTheSimulation();
         //tick 1 and up

@@ -15,8 +15,10 @@ public class UserInterface {
     void buildMainMenu(){
         Menu mainMenu = menuManager.createMenu("mainMenu");
         mainMenu.addItem("Load simulation");
+        mainMenu.addItem("Show loaded simulation details");
         mainMenu.addItem("Run simulation");
-        mainMenu.addItem("Show past simulation");
+        mainMenu.addItem("Show full details of a previous simulation");
+        mainMenu.addItem("Exit");
         menuManager.addMenu(mainMenu);
     }
     void printMenu(String menuName){
@@ -39,6 +41,7 @@ public class UserInterface {
             case 1:
                 try {
                     systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
+                    System.out.println("xml file loaded successfully!");
                 } catch (Exception e) {
                     //TODO: DEAL WITH EXCEPTION
                 }
