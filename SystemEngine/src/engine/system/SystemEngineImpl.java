@@ -116,9 +116,11 @@ public class SystemEngineImpl implements SystemEngine{
 //    initializeEnvVars();
         //getEnvVarsDto();
         //setEnvVarsFromDto(); //TODO: NEED TO SHOW THE USER THE VALUES OF ENVs - WHEN?? Do Tick 0 Before??
-
+        //tick 0 and show Env values to user
+//        simulation.runInitIteration();
+        //create EnvDTO to show values to user
 //    runTheSimulation();
-
+        //tick 1 and up
 
         TerminationReason terminationReason = simulation.runMainLoop();
 
@@ -145,7 +147,7 @@ public class SystemEngineImpl implements SystemEngine{
         for (PropertyDTO envVarDto :envVarsDto) {
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
-        }
+        }//SET AS STRING??
     }
 
     @Override

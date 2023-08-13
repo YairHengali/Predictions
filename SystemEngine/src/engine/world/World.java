@@ -56,13 +56,13 @@ public class World {
 
 
 
-    public TerminationReason runMainLoop()
+//    public TerminationReason runMainLoop()
+//    {
+//        return runLoop();
+//    }
+    public void runInitIteration() //Tick0
     {
-        runInitIteration();
-        return runLoop();
-    }
-    private void runInitIteration() //Tick0
-    {
+        currentNumberOfTicks = 0;
         entityInstanceManager = new EntityInstanceManagerImpl();
         for(EntityDefinition entityDefinition : name2EntitiesDef.values())
         {
@@ -79,13 +79,13 @@ public class World {
         {
             activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
         }
-
-        this.startTime = System.currentTimeMillis();
-        currentNumberOfTicks = 1;
     }
 
-    private TerminationReason runLoop() //TICK 1 and up...;
+    public TerminationReason runMainLoop() //TICK 1 and up...;
     {
+        this.startTime = System.currentTimeMillis();
+        currentNumberOfTicks = 1;
+
         while (!isTermination())
         {
             for (Rule rule: name2Rule.values()) { //TODO: MAYBE NEED TO BE ORDERED (LIST OF RULES) - page 13

@@ -45,8 +45,6 @@ public enum ConditionOp {
                     return Integer.parseInt(propertyValue) > Integer.parseInt(value);
                 case FLOAT:
                     return Float.parseFloat(propertyValue) > Float.parseFloat(value);
-                case STRING:
-                    return propertyValue.compareTo(value) > 0; //TODO: MIGHT NOT BE NEEDED (COMPARE ONLY NUMERIC)
             }
             return false;
         }
@@ -59,8 +57,6 @@ public enum ConditionOp {
                     return Integer.parseInt(propertyValue) < Integer.parseInt(value);
                 case FLOAT:
                     return Float.parseFloat(propertyValue) < Float.parseFloat(value);
-                case STRING:
-                    return propertyValue.compareTo(value) < 0; //TODO: MIGHT NOT BE NEEDED (COMPARE ONLY NUMERIC)
             }
             return false;
         }
