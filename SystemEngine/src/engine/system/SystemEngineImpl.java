@@ -20,10 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
@@ -128,12 +126,20 @@ public class SystemEngineImpl implements SystemEngine{
 
 //return ID of simulation and add it to Past Simulations with its date
         currentSimulationID++;
-        pastSimulations.add(new pastSimulationDTO(dateOfRun, currentSimulationID));
+        List<EntityCountDTO> entityCountDtos = new ArrayList<>();
+        for (EntityDefinition entityDefinition :simulation.getEntitiesDefinitions()) {
+            int startCount = entityDefinition.getPopulation();
+            int endCount = simulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size();
+            entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
+        }
+
+        pastSimulations.add(new pastSimulationDTO(dateOfRun, currentSimulationID, entityCountDtos)); //TODO: add properties histogram to DTO
 
         return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
 
 
+    @Override
     public List<PropertyDTO> getEnvVarsDto() {
         List<PropertyDTO> environmentVariablesDetails = new ArrayList<>();
         for (PropertyDefinition environmentVariableDefinition: simulation.getEnvironmentVariablesDefinitions()) {
@@ -147,11 +153,15 @@ public class SystemEngineImpl implements SystemEngine{
         for (PropertyDTO envVarDto :envVarsDto) {
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
-        }//SET AS STRING??
+        }
+
+        //After:
+            //runInitIteration();
+            //return dto with value, so the manu could print it
     }
 
     @Override
-    public String showPastSimulationDetails(){return "";}
+    public List<pastSimulationDTO> getPastSimulationsDetails(){return pastSimulations;}
 
     @Override
     public Boolean isThereLoadedSimulation() {

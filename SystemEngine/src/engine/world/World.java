@@ -25,10 +25,13 @@ public class World {
     ActiveEnvironmentVariables activeEnvironmentVariables;
     EnvironmentVariablesManager environmentVariablesManager = new EnvironmentVariablesManagerImpl(); //TODO: Needed? (added c'tor)
 
+    public EntityInstanceManager getEntityInstanceManager() {
+        return entityInstanceManager;
+    }
 
     ///////// Termination conditions:
-    private int maxNumberOfTicks = 100; //TODO: initialized only for testing
-    private long SecondsToTerminate = 10000;//TODO: initialized only for testing
+    private Integer maxNumberOfTicks = 100; // = null TODO: initialized only for testing
+    private Long SecondsToTerminate = 10000L;// = null TODO: initialized only for testing
 
     //private Set<String> methodsNames;
 
@@ -140,8 +143,20 @@ public class World {
     }
 
     public boolean isTermination(){
-        return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
-                (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+        if (this.SecondsToTerminate != null && this.maxNumberOfTicks != null)
+        {
+            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate) ||
+                    (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+        }
+        else if (this.SecondsToTerminate != null)
+        {
+            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.SecondsToTerminate);
+        }
+        else // this.maxNumberOfTicks != null
+        {
+            return (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+        }
+
     }
 
 //    public Object environment(String varName) throws Exception {

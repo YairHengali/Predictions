@@ -6,6 +6,8 @@ import ofir.menu.api.Menu;
 import ofir.menu.api.MenuManager;
 import ofir.menu.impl.MenuManagerImpl;
 
+import java.util.List;
+
 public class UserInterface {
     SystemEngine systemEngine = new SystemEngineImpl();
     SimulationDetailsDTO simulationDetailsDTO;
@@ -57,16 +59,37 @@ public class UserInterface {
 
                 break;
             case 3:
+                List<PropertyDTO> envVarsDto = systemEngine.getEnvVarsDto();
+                letUserChooseEnvVarsValues(envVarsDto);//TODO: implement menu of this option
                 systemEngine.runSimulation();
                 break;
             case 4:
+                List<pastSimulationDTO> pastSimulationsDetails = systemEngine.getPastSimulationsDetails();
+                //TODO: implement menu of this option
                 break;
             case 5:
                 break;
         }
     }
 
-    private void printSimulationDetails()
+    private void letUserChooseEnvVarsValues(List<PropertyDTO> envVarsDto) {
+        for (PropertyDTO envVarDto : envVarsDto) {
+            System.out.println("        Name: " + envVarDto.getName());
+            System.out.println("        Type: " + envVarDto.getType());
+            if (envVarDto.getFrom() != null)
+                System.out.println("        Range: " + envVarDto.getFrom() + " to " + envVarDto.getTo());
+
+            //letUserChooseEnvVarValue();
+        }
+    }
+
+    private void letUserChooseEnvVarValue() {
+        return;
+        }
+
+
+
+        private void printSimulationDetails()
     {
         System.out.println("Currently loaded simulation details:");
         System.out.println("Entities:");
@@ -101,3 +124,4 @@ public class UserInterface {
         System.out.println("Number of seconds: " + simulationDetailsDTO.getSecondsToTerminate());
     }
 }
+
