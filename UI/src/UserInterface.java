@@ -1,4 +1,3 @@
-import engine.rule.Rule;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engineAnswers.*;
@@ -7,10 +6,12 @@ import ofir.menu.api.MenuManager;
 import ofir.menu.impl.MenuManagerImpl;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class UserInterface {
-    SystemEngine systemEngine = new SystemEngineImpl();
-    SimulationDetailsDTO simulationDetailsDTO;
+    private SystemEngine systemEngine = new SystemEngineImpl();
+    private SimulationDetailsDTO simulationDetailsDTO;
+    private boolean exit = false;
 
     private MenuManager menuManager = new MenuManagerImpl();
 
@@ -23,11 +24,18 @@ public class UserInterface {
         mainMenu.addItem("Exit");
         menuManager.addMenu(mainMenu);
     }
-    void printMenu(String menuName){
+    void buildEnvironmentVariablesInitiationMenu(){
+        Menu mainMenu = menuManager.createMenu("EnvVarMenu");
+        mainMenu.addItem("Insert value");
+        mainMenu.addItem("Skip");
+        menuManager.addMenu(mainMenu);
+    }
+    public void printMenu(String menuName){
         menuManager.showMenuByName(menuName);
     }
 
-    MenuManager getMenuManager(){return this.menuManager;}
+    public MenuManager getMenuManager(){return this.menuManager;}
+    public boolean isExit(){return this.exit;}
 
     public void decodeUserChoice(String menuName, int choice){
         switch(menuName){
@@ -60,7 +68,8 @@ public class UserInterface {
                 break;
             case 3:
                 List<PropertyDTO> envVarsDto = systemEngine.getEnvVarsDto();
-                letUserChooseEnvVarsValues(envVarsDto);//TODO: implement menu of this option
+                letUserChooseEnvVarsValues(envVarsDto);
+
                 systemEngine.runSimulation();
                 break;
             case 4:
@@ -68,28 +77,63 @@ public class UserInterface {
                 //TODO: implement menu of this option
                 break;
             case 5:
+                this.exit = true;
                 break;
+        }
+    }
+    private void decodeEnvVarMenu(int choice){
+        if(choice == 1){
+
         }
     }
 
     private void letUserChooseEnvVarsValues(List<PropertyDTO> envVarsDto) {
+        buildEnvironmentVariablesInitiationMenu();
+        System.out.println("Environment variables initiation:");
+        System.out.println("================================");
         for (PropertyDTO envVarDto : envVarsDto) {
             System.out.println("        Name: " + envVarDto.getName());
             System.out.println("        Type: " + envVarDto.getType());
-            if (envVarDto.getFrom() != null)
+            if (envVarDto.getFrom() != null) {
                 System.out.println("        Range: " + envVarDto.getFrom() + " to " + envVarDto.getTo());
+            }
 
-            //letUserChooseEnvVarValue();
+            letUserChooseEnvVarValue(envVarDto);
         }
     }
 
-    private void letUserChooseEnvVarValue() {
-        return;
+    private void letUserChooseEnvVarValue(PropertyDTO envVarDto) {
+        PropertyDTO resPropertyDto;
+        String userInputValue;
+        boolean isValidInput = false;
+        int userChoice;
+        Scanner scanner;
+
+        while(!isValidInput) {
+            menuManager.showMenuByName("EnvVarMenu");
+            System.out.println("Please choose the number of the preferred methode (skip = random value in range)");
+            userChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
+            if (userChoice == 1) { // User initiation
+                System.out.println("Please insert a valid value:");
+                scanner = new Scanner(System.in);
+                userInputValue = scanner.next(); // TODO: need to validate here or at the set property???
+                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), null, null, false, userInputValue);
+            }
+            else { // (userChoice == 2) means Random initiation
+                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), true, "");
+            }
+
+            try {
+                systemEngine.setEnvVarFromDto(resPropertyDto);
+                isValidInput = true;
+            }
+            catch (Exception e) {
+                System.out.println("Error: " + e.getMessage() + " try again!");
+            }
         }
 
-
-
-        private void printSimulationDetails()
+    }
+    private void printSimulationDetails()
     {
         System.out.println("Currently loaded simulation details:");
         System.out.println("Entities:");

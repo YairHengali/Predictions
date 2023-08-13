@@ -148,16 +148,27 @@ public class SystemEngineImpl implements SystemEngine{
         return environmentVariablesDetails;
     }
 
-    private void setEnvVarsFromDto(List<PropertyDTO> envVarsDto)
-    {
-        for (PropertyDTO envVarDto :envVarsDto) {
+//    @Override
+//    public void setEnvVarsFromDto(List<PropertyDTO> envVarsDto)
+//    {
+//        for (PropertyDTO envVarDto :envVarsDto) {
+//            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+//            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
+//        }
+//
+//        //After:
+//            //runInitIteration();
+//            //return dto with value, so the manu could print it
+//    }
+
+    @Override
+    public void setEnvVarFromDto(PropertyDTO envVarDto) {
+        if(envVarDto.isInitialisedRandomly())
+            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+        else {
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
         }
-
-        //After:
-            //runInitIteration();
-            //return dto with value, so the manu could print it
     }
 
     @Override

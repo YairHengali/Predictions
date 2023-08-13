@@ -3,9 +3,7 @@ package ofir.menu.impl;
 import ofir.menu.api.Menu;
 import ofir.menu.api.MenuItem;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class MenuImpl implements Menu {
     String menuName;
@@ -53,5 +51,30 @@ public class MenuImpl implements Menu {
         if(itemsCounter == 0)
             return false;
         else return choiceNum > 0 && choiceNum <= itemsCounter;
+    }
+
+    @Override
+    public int getValidInput() {
+        Scanner scanner;
+        boolean isValid = false;
+        int userChoice = -1;
+
+        System.out.println("enter choice num in range: ");
+
+        while (!isValid) {
+            try {
+                scanner = new Scanner(System.in);
+                userChoice = scanner.nextInt();
+                isValid = isInRange(userChoice);
+                if(!isValid){
+                    System.out.println("Number not in range, please enter a number between 1 - " + this.itemsCounter + ":");
+                }
+            }
+            catch (InputMismatchException mismatchException) {
+                System.out.println("Not a number, try again (digits only):");
+            }
+        }
+
+        return userChoice;
     }
 }

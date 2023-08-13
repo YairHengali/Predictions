@@ -9,5 +9,6 @@ public interface Menu {
     void showMenu();
     String getMenuName();
     boolean isInRange(int choiceNum);
+    int getValidInput();
 
 }

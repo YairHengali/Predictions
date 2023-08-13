@@ -15,28 +15,16 @@ public class Main {
     public static void main(String[] args) {
         SystemEngine systemEngine = new SystemEngineImpl();
         UserInterface UI = new UserInterface();
-        Scanner scanner = new Scanner(System.in);
-        int userChoice;
-
+        boolean exit = false;
         UI.buildMainMenu();
+
         do {
             UI.printMenu("mainMenu");
-            System.out.println("enter choice num in range: ");
-
-            userChoice = scanner.nextInt();
-            //int userChoice = 2;
-
-            while (!UI.getMenuManager().getMenuByName("mainMenu").isInRange(userChoice)) {
-                System.out.println("Bad choice, try again:");
-                // TODO: read input from user - just an example
-                userChoice = scanner.nextInt();
-            }
-
-            UI.decodeUserChoice("mainMenu", userChoice);
-        }while (userChoice != 0);
+            UI.decodeUserChoice("mainMenu", UI.getMenuManager().getMenuByName("mainMenu").getValidInput());
+        }
+        while (!UI.isExit());
 
         SimulationDetailsDTO simulationDetailsDTO = systemEngine.showSimulationDetails();
-
         systemEngine.runSimulation();
 
 
