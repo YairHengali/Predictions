@@ -1,3 +1,4 @@
+import engine.property.PropertyType;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engineAnswers.*;
@@ -27,12 +28,20 @@ public class UserInterface {
         mainMenu.addItem("Exit");
         menuManager.addMenu(mainMenu);
     }
-    void buildEnvironmentVariablesInitiationMenu(){
-        Menu mainMenu = menuManager.createMenu("EnvVarMenu");
-        mainMenu.addItem("Insert value");
-        mainMenu.addItem("Skip");
-        menuManager.addMenu(mainMenu);
+    private void buildEnvironmentVariablesInitiationMenu(){
+        Menu EnvVarMenu = menuManager.createMenu("EnvVarMenu");
+        EnvVarMenu.addItem("Insert value");
+        EnvVarMenu.addItem("Skip");
+        menuManager.addMenu(EnvVarMenu);
     }
+
+    private void buildBooleanChoiceForUserMenu(){
+        Menu booleanChoice = menuManager.createMenu("booleanChoice");
+        booleanChoice.addItem("True");
+        booleanChoice.addItem("False");
+        menuManager.addMenu(booleanChoice);
+    }
+
     public void printMenu(String menuName){
         menuManager.showMenuByName(menuName);
     }
@@ -72,7 +81,6 @@ public class UserInterface {
             case 3:
                 List<PropertyDTO> envVarsDto = systemEngine.getEnvVarsDto();
                 letUserChooseEnvVarsValues(envVarsDto);
-
                 systemEngine.runSimulation();
                 break;
             case 4:
@@ -107,7 +115,31 @@ public class UserInterface {
                 System.out.println("        Range: " + envVarDto.getFrom() + " to " + envVarDto.getTo());
             }
 
-            letUserChooseEnvVarValue(envVarDto);
+            if(envVarDto.getType().equals(PropertyType.BOOLEAN.toString()))
+                letUserChooseBooleanEnvVarValue(envVarDto);
+            else
+                letUserChooseEnvVarValue(envVarDto);
+        }
+    }
+
+    private void letUserChooseBooleanEnvVarValue(PropertyDTO envVarDto) {
+        boolean isValidInput = false;
+        String value = "true";
+        int userChoice = 0;
+
+        menuManager.showMenuByName("booleanChoice");
+        while(!isValidInput) {
+            userChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
+            if (userChoice == 2)
+                value = "false";
+            PropertyDTO resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, value);
+            try {
+                systemEngine.setEnvVarFromDto(resPropertyDto);
+                isValidInput = true;
+            }
+            catch (Exception e) {
+                System.out.println("Error: " + e.getMessage() + " try again!");
+            }
         }
     }
 
