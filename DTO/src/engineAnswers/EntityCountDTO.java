@@ -22,4 +22,11 @@ public class EntityCountDTO {
     public int getPopulationAtEnd() {
         return populationAtEnd;
     }
+
+    @Override
+    public String toString() {
+        return  "name='" + name + '\'' +
+                ", population at start=" + populationAtStart +
+                ", population at end=" + populationAtEnd;
+    }
 }

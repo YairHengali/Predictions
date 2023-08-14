@@ -10,11 +10,13 @@ import engine.environment.manager.EnvironmentVariablesManagerImpl;
 import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
+import javafx.beans.binding.Bindings;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class World {
-
+    private String dateOfRun = "";
     private int currentNumberOfTicks = 0;
     private long startTime; // TODO: create StopWatch class
 
@@ -41,6 +43,7 @@ public class World {
     //private Set<String> methodsNames;
 
     public World() {
+
 //        methodsNames = new HashSet<>();
 //        methodsNames.add("environment"); //TODO: MAYBE ENUM
 //        methodsNames.add("random"); //TODO: MAYBE ENUM
@@ -198,6 +201,14 @@ public class World {
     public Collection<EntityDefinition> getEntitiesDefinitions()
     {
         return name2EntitiesDef.values();
+    }
+
+    public String getDateOfRun() {
+        return dateOfRun;
+    }
+
+    public void setDateOfRun(String dateOfRun) {
+        this.dateOfRun = dateOfRun;
     }
 
 

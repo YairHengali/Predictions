@@ -9,6 +9,7 @@ import ofir.menu.impl.MenuManagerImpl;
 
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class UserInterface {
@@ -35,18 +36,28 @@ public class UserInterface {
         EnvVarMenu.addItem("Skip (let system choose a random value)");
         menuManager.addMenu(EnvVarMenu);
     }
-
     private void buildBooleanChoiceForUserMenu(){
         Menu booleanChoice = menuManager.createMenu("booleanChoice");
         booleanChoice.addItem("True");
         booleanChoice.addItem("False");
         menuManager.addMenu(booleanChoice);
     }
+    private void buildPastSimulationPresentingMethodMenu(){
+        Menu presentingMethod = menuManager.createMenu("PastSimulationPresentingMethod");
+        presentingMethod.addItem("Entity count");
+        presentingMethod.addItem("Histogram of entity's specific property");
+        menuManager.addMenu(presentingMethod);
+    }
+    private void buildPsastSimulationPresentingMethodMenu(){
+        Menu presentingMethod = menuManager.createMenu("PastSimulationPresentingMethod");
+        presentingMethod.addItem("Entity count");
+        presentingMethod.addItem("Histogram of entity's specific property");
+        menuManager.addMenu(presentingMethod);
+    }
 
     public void printMenu(String menuName){
         menuManager.showMenuByName(menuName);
     }
-
     public MenuManager getMenuManager(){return this.menuManager;}
     public boolean isExit(){return this.exit;}
 
@@ -63,7 +74,7 @@ public class UserInterface {
         switch (choice){
             case 1:
                 try {
-                    systemEngine.loadSimulation("./SystemEngine/src/resources/master-ex1.xml");
+                    systemEngine.loadSimulation(filePath);
                     System.out.println("xml file loaded successfully!");
                 } catch (Exception e) {
                     //TODO: DEAL WITH EXCEPTION
@@ -111,6 +122,57 @@ public class UserInterface {
     }
 
     private void letUserChooseAndPrintDestails(pastSimulationDTO desiredPastSimulation) {
+        buildPastSimulationPresentingMethodMenu();
+        menuManager.showMenuByName("PastSimulationPresentingMethod");
+        int userChoice = menuManager.getMenuByName("PastSimulationPresentingMethod").getValidInput();
+
+        if(userChoice == 1) {
+            // Entity count
+            List<EntityCountDTO> entityCountList = systemEngine.getPastSimulationEntityCount(desiredPastSimulation);
+            entityCountList.forEach(System.out::println);
+        }
+        else if(userChoice == 2){
+            // histogram
+
+            List<EntityDTO> pastSimulationEntitiesDTO = systemEngine.getPastSimulationEntitiesDTO(desiredPastSimulation);
+
+            // getting entity of that past simulation from user
+            buildPastSimulationEntitiesMenu(pastSimulationEntitiesDTO);
+            menuManager.showMenuByName("PastSimulationEntitiesMenu");
+            System.out.println("Select the number of the desired entity,");
+            int chosenEntityIndex = menuManager.getMenuByName("PastSimulationEntitiesMenu").getValidInput() - 1;
+
+            // get property of that entity from user
+            buildPastSimulationEntitysPropertiesMenu(pastSimulationEntitiesDTO.get(chosenEntityIndex));
+            menuManager.showMenuByName("PastSimulationEntitysPropertiesMenu");
+            System.out.println("Select the number of the desired property,");
+            int chosenPropertyIndex = menuManager.getMenuByName("PastSimulationEntitysPropertiesMenu").getValidInput() - 1;
+
+            // summery ang printing histogram
+            String entityName = pastSimulationEntitiesDTO.get(chosenEntityIndex).getName();
+            String propertyName = pastSimulationEntitiesDTO.get(chosenEntityIndex).getProperties().get(chosenPropertyIndex).getName();
+            System.out.println(systemEngine.getHistoram(desiredPastSimulation.getId(),entityName, propertyName));
+        }
+        // build menu histogram or count
+        // get DTO
+        // print the desired data
+    }
+
+    private void buildPastSimulationEntitysPropertiesMenu(EntityDTO entityDTO) {
+        Menu pastSimulationEntitysPropertiesMenu = menuManager.createMenu("PastSimulationEntitysPropertiesMenu");
+        for(PropertyDTO property : entityDTO.getProperties()){
+            pastSimulationEntitysPropertiesMenu.addItem(property.getName());
+        }
+        menuManager.addMenu(pastSimulationEntitysPropertiesMenu);
+    }
+
+    private void buildPastSimulationEntitiesMenu(List<EntityDTO> pastSimulationEntitiesDTO) {
+            Menu pastSimulationEntitiesMenu = menuManager.createMenu("PastSimulationEntitiesMenu");
+        for(EntityDTO entity : pastSimulationEntitiesDTO){
+            pastSimulationEntitiesMenu.addItem(entity.getName());
+        }
+
+        menuManager.addMenu(pastSimulationEntitiesMenu);
     }
 
     private pastSimulationDTO letUserChoosePastSimulation(List<pastSimulationDTO> pastSimulationsDetails) {

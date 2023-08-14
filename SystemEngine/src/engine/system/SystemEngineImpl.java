@@ -2,6 +2,7 @@ package engine.system;
 
 import engine.action.api.Action;
 import engine.entity.EntityDefinition;
+import engine.entity.EntityInstance;
 import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
@@ -21,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
@@ -29,12 +31,7 @@ public class SystemEngineImpl implements SystemEngine{
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
     int currentSimulationID = 0;
     boolean isThereLoadedSimulation = false;
-    private List <pastSimulationDTO> pastSimulations = new ArrayList<>(); //TODO: maybe need to order by date somehow, in case changing clock
-    private Map<Integer,World> pastSimulationsWorld = new HashMap<>();
-
-    public SystemEngineImpl(){
-        this.simulation = worldFactory.createWorld();
-    }
+    private Map<Integer,World> id2pastSimulation = new HashMap<>();
 
     @Override
     public World getSimulation() {
@@ -48,7 +45,11 @@ public class SystemEngineImpl implements SystemEngine{
         }
         try {
             InputStream inputStream = new FileInputStream(new File(filePath));
-            worldFactory.setGeneratedWorld(deserializeFrom(inputStream));
+            PRDWorld generated = deserializeFrom(inputStream);
+            worldFactory.setGeneratedWorld(generated);
+            createNewSimulation();
+            // set engine PRDWorld
+            isThereLoadedSimulation = true;
         } catch (JAXBException | FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -105,28 +106,23 @@ public class SystemEngineImpl implements SystemEngine{
     }
 
 
-    @Override
+    private void createNewSimulation()
+    {
+        simulation = worldFactory.createWorld();
 
+        worldFactory.insertDataToWorld(this.simulation);
+    }
+
+    @Override
     public EndOfSimulationDTO runSimulation() {
         String dateOfRun = simpleDateFormat.format(new Date());
+        simulation.setDateOfRun(dateOfRun);
+
         TerminationReason terminationReason = simulation.runMainLoop();
-
-
-
-//return ID of simulation and add it to Past Simulations with its date
         currentSimulationID++;
 
-        //TODO: CRREATE PAST SIMULATIONS NOT AS DTO
-        List<EntityCountDTO> entityCountDtos = new ArrayList<>();
-        for (EntityDefinition entityDefinition :simulation.getEntitiesDefinitions()) {
-            int startCount = entityDefinition.getPopulation();
-            int endCount = simulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size();
-            entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
-        }
-
-        pastSimulations.add(new pastSimulationDTO(dateOfRun, currentSimulationID, entityCountDtos)); //TODO: add properties histogram to DTO
-        //TODO:^^
-
+        id2pastSimulation.put(currentSimulationID,this.simulation);
+        createNewSimulation();
         return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
 
@@ -174,10 +170,62 @@ public class SystemEngineImpl implements SystemEngine{
     }
 
     @Override
-    public List<pastSimulationDTO> getPastSimulationsDetails(){return pastSimulations;} //TODO - create the DTO Here
+    public List<pastSimulationDTO> getPastSimulationsDetails(){
+        List <pastSimulationDTO> pastSimulations = new ArrayList<>(); //TODO: maybe need to order by date somehow, in case changing clock
+        for(Map.Entry<Integer, World> entry : id2pastSimulation.entrySet()){
+            pastSimulations.add(new pastSimulationDTO(entry.getValue().getDateOfRun(), entry.getKey().intValue()));
+        }
+
+        return pastSimulations;
+    }
 
     @Override
     public Boolean isThereLoadedSimulation() {
         return isThereLoadedSimulation; //TODO: maybe more complex tesing
+    }
+
+    @Override
+    public HistogramDTO getHistoram (int simulationID, String entityName, String propertyName){
+
+        if(!this.id2pastSimulation.containsKey(simulationID))
+            throw new RuntimeException("Trying to view simulation with ID:" + simulationID + ", this ID does not exist in the system!");
+
+        World desiredSimulation = this.id2pastSimulation.get(simulationID);
+        List<EntityInstance> pastSimulationEntities = desiredSimulation.getEntityInstanceManager().getInstancesListByName(entityName);
+        Map<String, Long> histogram = pastSimulationEntities
+                .stream()
+                .map(entityInstance -> entityInstance.getPropertyByName(propertyName))
+                .collect(Collectors.groupingBy(property -> property.getValue(),Collectors.counting()));
+
+        return new HistogramDTO(simulationID, entityName, propertyName, histogram);
+
+    }
+
+    @Override
+    public List<EntityCountDTO> getPastSimulationEntityCount(pastSimulationDTO desiredPastSimulation) {
+
+        List<EntityCountDTO> entityCountDtos = new ArrayList<>();
+        World pastSimulation = this.id2pastSimulation.get(desiredPastSimulation.getId());
+        for (EntityDefinition entityDefinition :pastSimulation.getEntitiesDefinitions()) {
+            int startCount = entityDefinition.getPopulation();
+            int endCount = pastSimulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size();
+            entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
+        }
+        return entityCountDtos;
+    }
+
+    @Override
+    public List<EntityDTO> getPastSimulationEntitiesDTO(pastSimulationDTO desiredPastSimulation) {
+        List<EntityDTO> entitiesDetails = new ArrayList<>();
+
+        for (EntityDefinition entityDefinition: simulation.getEntitiesDefinitions()) {
+            List<PropertyDTO> propertiesDetails = new ArrayList<>();
+            for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
+                addPropertyToDtoList(propertiesDetails, propertyDefinition);
+            }
+            entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
+        }
+
+        return entitiesDetails;
     }
 }

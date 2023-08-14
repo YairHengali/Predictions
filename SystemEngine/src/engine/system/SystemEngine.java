@@ -16,4 +16,10 @@ public interface SystemEngine {
     List<ActiveEnvVarDTO> getActiveEnvVarsDto();
     //void setEnvVarsFromDto(List<PropertyDTO> envVarsDto);
     void setEnvVarFromDto(PropertyDTO envVarDto);
+    public HistogramDTO getHistoram (int simulationID, String entityName, String propertyName);
+
+    List<EntityCountDTO> getPastSimulationEntityCount(pastSimulationDTO desiredPastSimulation);
+
+    List<EntityDTO> getPastSimulationEntitiesDTO(pastSimulationDTO desiredPastSimulation);
+
 }

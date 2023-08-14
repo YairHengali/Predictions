@@ -15,13 +15,15 @@ import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.rule.Rule;
 import engine.rule.RuleImpl;
+import exceptions.*;
 import jaxb.generated.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class WorldFactoryImpl implements WorldFactory{
-    private PRDWorld generatedWorld;
+    private PRDWorld generatedWorld = null;
+    private PRDWorld pastGeneratedWorld = null;
     private World currWorkingWorld;
 
     @Override
@@ -30,6 +32,7 @@ public class WorldFactoryImpl implements WorldFactory{
     }
     @Override
     public void setGeneratedWorld(PRDWorld worldToSet) {
+        pastGeneratedWorld = this.generatedWorld;
         this.generatedWorld = worldToSet;
     }
     @Override
@@ -43,6 +46,9 @@ public class WorldFactoryImpl implements WorldFactory{
             addTerminationSettings();
 
         } catch (Exception e) {
+            this.generatedWorld = pastGeneratedWorld;
+            if(this.generatedWorld != null)
+            this.insertDataToWorld(simulation);
             throw new RuntimeException(e);
         }
 

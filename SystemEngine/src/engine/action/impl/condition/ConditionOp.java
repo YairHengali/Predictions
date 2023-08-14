@@ -46,7 +46,7 @@ public enum ConditionOp {
                 case FLOAT:
                     return Float.parseFloat(propertyValue) > Float.parseFloat(value);
             }
-            return false;
+
         }
     },
     LT {
@@ -58,7 +58,6 @@ public enum ConditionOp {
                 case FLOAT:
                     return Float.parseFloat(propertyValue) < Float.parseFloat(value);
             }
-            return false;
         }
     };
 
