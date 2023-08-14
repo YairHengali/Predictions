@@ -1,10 +1,10 @@
 package engineAnswers;
 
-public class ActiveEnvVarDto {
+public class ActiveEnvVarDTO {
     String name;
     String value;
 
-    public ActiveEnvVarDto(String name, String value) {
+    public ActiveEnvVarDTO(String name, String value) {
         this.name = name;
         this.value = value;
     }

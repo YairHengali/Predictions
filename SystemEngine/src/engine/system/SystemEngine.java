@@ -13,7 +13,7 @@ public interface SystemEngine {
     public List<pastSimulationDTO> getPastSimulationsDetails();
     public Boolean isThereLoadedSimulation();
     List<PropertyDTO> getEnvVarsDefinitionDto();
-    List<ActiveEnvVarDto> getActiveEnvVarsDto();
+    List<ActiveEnvVarDTO> getActiveEnvVarsDto();
     //void setEnvVarsFromDto(List<PropertyDTO> envVarsDto);
     void setEnvVarFromDto(PropertyDTO envVarDto);
 }

@@ -140,12 +140,12 @@ public class SystemEngineImpl implements SystemEngine{
     }
 
     @Override
-    public List<ActiveEnvVarDto> getActiveEnvVarsDto() { //TODO: getActiveEnvironmentVariables return COLLECTION, so the order might change! if relevant - we can change by get by name for each one by the original list
-        List<ActiveEnvVarDto> activeEnvVarDtos = new ArrayList<>();
+    public List<ActiveEnvVarDTO> getActiveEnvVarsDto() { //TODO: getActiveEnvironmentVariables return COLLECTION, so the order might change! if relevant - we can change by get by name for each one by the original list
+        List<ActiveEnvVarDTO> activeEnvVarDtos = new ArrayList<>();
         simulation.runInitIteration();
 
         for (PropertyInstance activeEnvVar : simulation.getActiveEnvironmentVariables()) {
-            activeEnvVarDtos.add(new ActiveEnvVarDto(activeEnvVar.getName(), activeEnvVar.getValue()));
+            activeEnvVarDtos.add(new ActiveEnvVarDTO(activeEnvVar.getName(), activeEnvVar.getValue()));
         }
         return activeEnvVarDtos;
     }

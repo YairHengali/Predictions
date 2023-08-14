@@ -1,6 +1,7 @@
 import engine.property.PropertyType;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
+import engine.world.TerminationReason;
 import engineAnswers.*;
 import ofir.menu.api.Menu;
 import ofir.menu.api.MenuManager;
@@ -81,9 +82,10 @@ public class UserInterface {
             case 3:
                 List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
                 letUserChooseEnvVarsValues(envVarDtos);
-                List<ActiveEnvVarDto> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
+                List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
                 printActiveEnvVars(activeEnvVarDtos);
-                systemEngine.runSimulation();
+                EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
+                printEndOfSimulationDetails(endOfSimulationDTO);
                 break;
             case 4:
                 List<pastSimulationDTO> pastSimulationsDetails = systemEngine.getPastSimulationsDetails();
@@ -101,9 +103,24 @@ public class UserInterface {
         }
     }
 
-    private void printActiveEnvVars(List<ActiveEnvVarDto> activeEnvVarDtos) {
+    private void printEndOfSimulationDetails(EndOfSimulationDTO endOfSimulationDTO) {
+        System.out.println("The simulation terminated!");
+        System.out.println("Simulation ID: " + endOfSimulationDTO.getSimulationID());
+        switch (TerminationReason.valueOf(endOfSimulationDTO.getReasonOfTermination())) {
+            case MAXTICKSREACHED:
+                System.out.println("Reason of Termination: the simulation reached the desired number of ticks.");
+                break;
+            case SECONDSREACHED:
+                System.out.println("Reason of Termination: the simulation reached the desired number of seconds.");
+                break;
+        }
+        System.out.println();
+
+    }
+
+    private void printActiveEnvVars(List<ActiveEnvVarDTO> activeEnvVarDtos) {
         System.out.println("The values that determined for environment variables are:");
-        for (ActiveEnvVarDto activeEnvVarDto: activeEnvVarDtos) {
+        for (ActiveEnvVarDTO activeEnvVarDto: activeEnvVarDtos) {
             System.out.println("Name: " + activeEnvVarDto.getName() + " Value: " + activeEnvVarDto.getValue());
         }
         System.out.println(System.lineSeparator() + "Running the simulation!" + System.lineSeparator());
