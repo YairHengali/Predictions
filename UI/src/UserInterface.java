@@ -267,7 +267,6 @@ public class UserInterface {
         System.out.println("Number of seconds: " + simulationDetailsDTO.getSecondsToTerminate());
     }
 
-
     private void serializeEngine() //TODO, make all Serielizable at the end and check
     {
         Scanner scanner = new Scanner(System.in);

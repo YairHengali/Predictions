@@ -20,9 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class SystemEngineImpl implements SystemEngine{
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
@@ -32,7 +30,7 @@ public class SystemEngineImpl implements SystemEngine{
     int currentSimulationID = 0;
     boolean isThereLoadedSimulation = false;
     private List <pastSimulationDTO> pastSimulations = new ArrayList<>(); //TODO: maybe need to order by date somehow, in case changing clock
-
+    private Map<Integer,World> pastSimulationsWorld = new HashMap<>();
 
     public SystemEngineImpl(){
         this.simulation = worldFactory.createWorld();
