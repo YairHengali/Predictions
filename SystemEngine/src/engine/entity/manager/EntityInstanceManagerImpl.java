@@ -20,8 +20,8 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager{
     @Override
     public void createEntityInstances(EntityDefinition entityDefinition) {
         for (int i = 0; i < entityDefinition.getPopulation(); i++) {
-            count++;
             EntityInstance newEntityInstance = new EntityInstance(entityDefinition, count);
+            count++;
 
             if(!name2EntInstancesList.containsKey(entityDefinition.getName())) {
                 name2EntInstancesList.put(entityDefinition.getName(),new ArrayList<>());

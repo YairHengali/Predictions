@@ -163,10 +163,10 @@ public class SystemEngineImpl implements SystemEngine{
 
     @Override
     public void setEnvVarFromDto(PropertyDTO envVarDto) {
-        if(envVarDto.isInitialisedRandomly())
-            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
-        else {
-            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+        simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+
+        if(!(envVarDto.isInitialisedRandomly()))
+        {
             simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
         }
     }

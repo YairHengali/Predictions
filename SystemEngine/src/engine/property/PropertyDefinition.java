@@ -71,7 +71,7 @@ public class PropertyDefinition {
                     Float.parseFloat(newValue);
                 }
                 catch (NumberFormatException e){
-                    throw new NumberFormatException("Type is not matching, expecting decimal!");
+                    throw new NumberFormatException("Type is not matching, expecting float!");
                 }
                 break;
         }

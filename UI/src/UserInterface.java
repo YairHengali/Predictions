@@ -5,6 +5,7 @@ import ofir.menu.api.Menu;
 import ofir.menu.api.MenuManager;
 import ofir.menu.impl.MenuManagerImpl;
 
+import java.io.*;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,6 +22,8 @@ public class UserInterface {
         mainMenu.addItem("Show loaded simulation details");
         mainMenu.addItem("Run simulation");
         mainMenu.addItem("Show full details of a previous simulation");
+        mainMenu.addItem("Save system state to file");
+        mainMenu.addItem("Load system state from file");
         mainMenu.addItem("Exit");
         menuManager.addMenu(mainMenu);
     }
@@ -77,6 +80,12 @@ public class UserInterface {
                 //TODO: implement menu of this option
                 break;
             case 5:
+                serializeEngine();
+                break;
+            case 6:
+                deserializeEngine();
+                break;
+            case 7:
                 this.exit = true;
                 break;
         }
@@ -117,7 +126,7 @@ public class UserInterface {
                 System.out.println("Please insert a valid value:");
                 scanner = new Scanner(System.in);
                 userInputValue = scanner.next(); // TODO: need to validate here or at the set property???
-                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), null, null, false, userInputValue);
+                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, userInputValue);
             }
             else { // (userChoice == 2) means Random initiation
                 resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), true, "");
@@ -166,6 +175,43 @@ public class UserInterface {
         System.out.println("Termination conditions: "); //TODO: NOT ALL CONDITIONS MUST BE SET! NEED TO DEAL WITH NULLS
         System.out.println("Number of ticks: " + simulationDetailsDTO.getMaxNumberOfTicks());
         System.out.println("Number of seconds: " + simulationDetailsDTO.getSecondsToTerminate());
+    }
+
+
+    private void serializeEngine() //TODO, make all Serielizable at the end and check
+    {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the file path (including the file name) you would like to save to:");
+        String filePath = scanner.nextLine();
+        filePath = filePath + ".ser"; // \obj\bin
+
+        try (FileOutputStream fileOut = new FileOutputStream(filePath);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+
+            out.writeObject(systemEngine);
+            System.out.println("System saved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deserializeEngine()
+    {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the file path (including the file name) you would like load the system from:");
+        String filePath = scanner.nextLine();
+        filePath = filePath + ".ser"; // \obj\bin
+
+        try (FileInputStream fileIn = new FileInputStream(filePath);
+             ObjectInputStream in = new ObjectInputStream(fileIn)) {
+
+//            return (SystemEngineImpl) in.readObject();
+            this.systemEngine = (SystemEngineImpl) in.readObject();
+            System.out.println("System loaded successfully!");
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
 
