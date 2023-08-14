@@ -62,7 +62,7 @@ public class UserInterface {
         switch (choice){
             case 1:
                 try {
-                    systemEngine.loadSimulation("./SystemEngine/src/resources/ex1-cigarets.xml");
+                    systemEngine.loadSimulation("./SystemEngine/src/resources/master-ex1.xml");
                     System.out.println("xml file loaded successfully!");
                 } catch (Exception e) {
                     //TODO: DEAL WITH EXCEPTION
@@ -106,6 +106,7 @@ public class UserInterface {
 
     private void letUserChooseEnvVarsValues(List<PropertyDTO> envVarsDto) {
         buildEnvironmentVariablesInitiationMenu();
+        buildBooleanChoiceForUserMenu();
         System.out.println("Environment variables initiation:");
         System.out.println("================================");
         for (PropertyDTO envVarDto : envVarsDto) {
