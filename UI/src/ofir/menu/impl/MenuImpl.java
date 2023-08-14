@@ -59,7 +59,7 @@ public class MenuImpl implements Menu {
         boolean isValid = false;
         int userChoice = -1;
 
-        System.out.println("enter choice num in range: ");
+        System.out.println("Please enter your choice: ");
 
         while (!isValid) {
             try {

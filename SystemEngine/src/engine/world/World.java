@@ -8,6 +8,7 @@ import engine.environment.manager.EnvironmentVariablesManager;
 //import engine.environment.manager.EnvironmentVariablesManager;
 import engine.environment.manager.EnvironmentVariablesManagerImpl;
 import engine.property.PropertyDefinition;
+import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
 
 import java.util.*;
@@ -27,6 +28,10 @@ public class World {
 
     public EntityInstanceManager getEntityInstanceManager() {
         return entityInstanceManager;
+    }
+
+    public Collection<PropertyInstance> getActiveEnvironmentVariables() {
+        return activeEnvironmentVariables.getEvnVariables();
     }
 
     ///////// Termination conditions:

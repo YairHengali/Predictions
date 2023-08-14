@@ -82,7 +82,7 @@ public class PropertyDefinition {
             if(this.type == PropertyType.DECIMAL){
                 int decimalValue = Integer.parseInt(newValue);
                 if(  !(decimalValue >= valueRange.getFrom().intValue() && decimalValue <= valueRange.getTo().intValue()) ){
-                    throw new RuntimeException("Value not in range ("+ valueRange.getFrom() + " - " + valueRange.getTo() + ")");
+                    throw new RuntimeException("Value not in range ("+ valueRange.getFrom().intValue() + " - " + valueRange.getTo().intValue() + ")");
                 }
             }
             else if (this.type == PropertyType.FLOAT) {

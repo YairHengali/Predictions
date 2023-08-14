@@ -31,7 +31,7 @@ public class UserInterface {
     private void buildEnvironmentVariablesInitiationMenu(){
         Menu EnvVarMenu = menuManager.createMenu("EnvVarMenu");
         EnvVarMenu.addItem("Insert value");
-        EnvVarMenu.addItem("Skip");
+        EnvVarMenu.addItem("Skip (let system choose a random value)");
         menuManager.addMenu(EnvVarMenu);
     }
 
@@ -79,8 +79,10 @@ public class UserInterface {
 
                 break;
             case 3:
-                List<PropertyDTO> envVarsDto = systemEngine.getEnvVarsDto();
-                letUserChooseEnvVarsValues(envVarsDto);
+                List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
+                letUserChooseEnvVarsValues(envVarDtos);
+                List<ActiveEnvVarDto> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
+                printActiveEnvVars(activeEnvVarDtos);
                 systemEngine.runSimulation();
                 break;
             case 4:
@@ -98,52 +100,60 @@ public class UserInterface {
                 break;
         }
     }
+
+    private void printActiveEnvVars(List<ActiveEnvVarDto> activeEnvVarDtos) {
+        System.out.println("The values that determined for environment variables are:");
+        for (ActiveEnvVarDto activeEnvVarDto: activeEnvVarDtos) {
+            System.out.println("Name: " + activeEnvVarDto.getName() + " Value: " + activeEnvVarDto.getValue());
+        }
+        System.out.println(System.lineSeparator() + "Running the simulation!" + System.lineSeparator());
+    }
+
     private void decodeEnvVarMenu(int choice){
         if(choice == 1){
 
         }
     }
 
+//MINE:
     private void letUserChooseEnvVarsValues(List<PropertyDTO> envVarsDto) {
         buildEnvironmentVariablesInitiationMenu();
         buildBooleanChoiceForUserMenu();
-        System.out.println("Environment variables initiation:");
-        System.out.println("================================");
+        System.out.println("Environment variables initialization:");
+        System.out.println("====================================");
         for (PropertyDTO envVarDto : envVarsDto) {
             System.out.println("        Name: " + envVarDto.getName());
             System.out.println("        Type: " + envVarDto.getType());
             if (envVarDto.getFrom() != null) {
-                System.out.println("        Range: " + envVarDto.getFrom() + " to " + envVarDto.getTo());
+                if (envVarDto.getType().equals(PropertyType.DECIMAL.toString()))
+                {
+                    System.out.println("        Range: " + envVarDto.getFrom().intValue() + " to " + envVarDto.getTo().intValue());
+                }
+                else
+                {
+                    System.out.println("        Range: " + envVarDto.getFrom() + " to " + envVarDto.getTo());
+                }
             }
 
-            if(envVarDto.getType().equals(PropertyType.BOOLEAN.toString()))
-                letUserChooseBooleanEnvVarValue(envVarDto);
-            else
-                letUserChooseEnvVarValue(envVarDto);
+            letUserChooseEnvVarValue(envVarDto);
         }
     }
 
-    private void letUserChooseBooleanEnvVarValue(PropertyDTO envVarDto) {
-        boolean isValidInput = false;
+    ///MINE:
+    private PropertyDTO letUserChooseBooleanEnvVarValue(PropertyDTO envVarDto) {
+        //boolean isValidInput = false;
         String value = "true";
         int userChoice = 0;
 
         menuManager.showMenuByName("booleanChoice");
-        while(!isValidInput) {
-            userChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
-            if (userChoice == 2)
-                value = "false";
-            PropertyDTO resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, value);
-            try {
-                systemEngine.setEnvVarFromDto(resPropertyDto);
-                isValidInput = true;
-            }
-            catch (Exception e) {
-                System.out.println("Error: " + e.getMessage() + " try again!");
-            }
-        }
+        //while(!isValidInput) {
+        userChoice = menuManager.getMenuByName("booleanChoice").getValidInput();
+        if (userChoice == 2)
+            value = "false";
+        return new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, value);
     }
 
+    //MINE:
     private void letUserChooseEnvVarValue(PropertyDTO envVarDto) {
         PropertyDTO resPropertyDto;
         String userInputValue;
@@ -153,13 +163,19 @@ public class UserInterface {
 
         while(!isValidInput) {
             menuManager.showMenuByName("EnvVarMenu");
-            System.out.println("Please choose the number of the preferred methode (skip = random value in range)");
+            //System.out.println("Please choose the number of the preferred methode (skip = random value in range)");
             userChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
             if (userChoice == 1) { // User initiation
-                System.out.println("Please insert a valid value:");
-                scanner = new Scanner(System.in);
-                userInputValue = scanner.next(); // TODO: need to validate here or at the set property???
-                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, userInputValue);
+                if(envVarDto.getType().equals(PropertyType.BOOLEAN.toString()))
+                {
+                    resPropertyDto = letUserChooseBooleanEnvVarValue(envVarDto);
+                }
+                else{
+                    System.out.println("Please insert a valid value:");
+                    scanner = new Scanner(System.in);
+                    userInputValue = scanner.next(); // TODO: need to validate here or at the set property???
+                    resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, userInputValue);
+                }
             }
             else { // (userChoice == 2) means Random initiation
                 resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), true, "");
@@ -173,8 +189,79 @@ public class UserInterface {
                 System.out.println("Error: " + e.getMessage() + " try again!");
             }
         }
-
     }
+
+//    private void letUserChooseEnvVarsValues(List<PropertyDTO> envVarsDto) {
+//        buildEnvironmentVariablesInitiationMenu();
+//        buildBooleanChoiceForUserMenu();
+//        System.out.println("Environment variables initialization:");
+//        System.out.println("====================================");
+//        for (PropertyDTO envVarDto : envVarsDto) {
+//            System.out.println("        Name: " + envVarDto.getName());
+//            System.out.println("        Type: " + envVarDto.getType());
+//            if (envVarDto.getFrom() != null) {
+//                System.out.println("        Range: " + envVarDto.getFrom() + " to " + envVarDto.getTo());
+//            }
+//
+//            if(envVarDto.getType().equals(PropertyType.BOOLEAN.toString()))
+//                letUserChooseBooleanEnvVarValue(envVarDto);
+//            else
+//                letUserChooseEnvVarValue(envVarDto);
+//        }
+//    }
+
+//    private void letUserChooseBooleanEnvVarValue(PropertyDTO envVarDto) {
+//        boolean isValidInput = false;
+//        String value = "true";
+//        int userChoice = 0;
+//
+//        menuManager.showMenuByName("booleanChoice");
+//        while(!isValidInput) {
+//            userChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
+//            if (userChoice == 2)
+//                value = "false";
+//            PropertyDTO resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, value);
+//            try {
+//                systemEngine.setEnvVarFromDto(resPropertyDto);
+//                isValidInput = true;
+//            }
+//            catch (Exception e) {
+//                System.out.println("Error: " + e.getMessage() + " try again!");
+//            }
+//        }
+//    }
+
+
+//    private void letUserChooseEnvVarValue(PropertyDTO envVarDto) {
+//        PropertyDTO resPropertyDto;
+//        String userInputValue;
+//        boolean isValidInput = false;
+//        int userChoice;
+//        Scanner scanner;
+//
+//        while(!isValidInput) {
+//            menuManager.showMenuByName("EnvVarMenu");
+//            //System.out.println("Please choose the number of the preferred methode (skip = random value in range)");
+//            userChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
+//            if (userChoice == 1) { // User initiation
+//                System.out.println("Please insert a valid value:");
+//                scanner = new Scanner(System.in);
+//                userInputValue = scanner.next(); // TODO: need to validate here or at the set property???
+//                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, userInputValue);
+//            }
+//            else { // (userChoice == 2) means Random initiation
+//                resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), true, "");
+//            }
+//
+//            try {
+//                systemEngine.setEnvVarFromDto(resPropertyDto);
+//                isValidInput = true;
+//            }
+//            catch (Exception e) {
+//                System.out.println("Error: " + e.getMessage() + " try again!");
+//            }
+//        }
+//    }
     private void printSimulationDetails()
     {
         System.out.println("Currently loaded simulation details:");
@@ -187,7 +274,14 @@ public class UserInterface {
                 System.out.println("        Name: " + propertyDTO.getName());
                 System.out.println("        Type: " + propertyDTO.getType());
                 if (propertyDTO.getFrom() != null)
-                    System.out.println("        Range: " + propertyDTO.getFrom() + " to " + propertyDTO.getTo());
+                    if (propertyDTO.getType().equals("DECIMAL"))
+                    {
+                        System.out.println("        Range: " + propertyDTO.getFrom().intValue() + " to " + propertyDTO.getTo().intValue());
+                    }
+                    else
+                    {
+                        System.out.println("        Range: " + propertyDTO.getFrom() + " to " + propertyDTO.getTo());
+                    }
                 System.out.println("        Is initialized randomly: " + propertyDTO.isInitialisedRandomly());
                 System.out.println();
             }

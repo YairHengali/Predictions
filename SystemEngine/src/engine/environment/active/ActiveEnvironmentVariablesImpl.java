@@ -7,7 +7,9 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ActiveEnvironmentVariablesImpl implements ActiveEnvironmentVariables {
@@ -39,6 +41,10 @@ public class ActiveEnvironmentVariablesImpl implements ActiveEnvironmentVariable
                 this.envVariables.put(EvnVarDef.getName(), new StringProperty(EvnVarDef));
                 break;
         }
+    }
 
+    @Override
+    public Collection<PropertyInstance> getEvnVariables() {
+        return envVariables.values();
     }
 }

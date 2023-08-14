@@ -3,6 +3,7 @@ package engine.system;
 import engine.action.api.Action;
 import engine.entity.EntityDefinition;
 import engine.property.PropertyDefinition;
+import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
 import engine.world.TerminationReason;
 import engine.world.World;
@@ -112,10 +113,10 @@ public class SystemEngineImpl implements SystemEngine{
         String dateOfRun = simpleDateFormat.format(new Date());
 
 //    initializeEnvVars();
-        //getEnvVarsDto();
-        //setEnvVarsFromDto(); //TODO: NEED TO SHOW THE USER THE VALUES OF ENVs - WHEN?? Do Tick 0 Before??
+        //getEnvVarsDefinitionDto();
+        //setEnvVarsFromDto();
         //tick 0 and show Env values to user
-        simulation.runInitIteration();
+
         //create EnvDTO to show values to user
 //    runTheSimulation();
         //tick 1 and up
@@ -138,9 +139,19 @@ public class SystemEngineImpl implements SystemEngine{
         return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
 
+    @Override
+    public List<ActiveEnvVarDto> getActiveEnvVarsDto() { //TODO: getActiveEnvironmentVariables return COLLECTION, so the order might change! if relevant - we can change by get by name for each one by the original list
+        List<ActiveEnvVarDto> activeEnvVarDtos = new ArrayList<>();
+        simulation.runInitIteration();
+
+        for (PropertyInstance activeEnvVar : simulation.getActiveEnvironmentVariables()) {
+            activeEnvVarDtos.add(new ActiveEnvVarDto(activeEnvVar.getName(), activeEnvVar.getValue()));
+        }
+        return activeEnvVarDtos;
+    }
 
     @Override
-    public List<PropertyDTO> getEnvVarsDto() {
+    public List<PropertyDTO> getEnvVarsDefinitionDto() {
         List<PropertyDTO> environmentVariablesDetails = new ArrayList<>();
         for (PropertyDefinition environmentVariableDefinition: simulation.getEnvironmentVariablesDefinitions()) {
             addPropertyToDtoList(environmentVariablesDetails, environmentVariableDefinition);

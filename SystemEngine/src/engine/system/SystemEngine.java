@@ -1,10 +1,7 @@
 package engine.system;
 
 import engine.world.World;
-import engineAnswers.EndOfSimulationDTO;
-import engineAnswers.PropertyDTO;
-import engineAnswers.SimulationDetailsDTO;
-import engineAnswers.pastSimulationDTO;
+import engineAnswers.*;
 
 import java.util.List;
 
@@ -15,7 +12,8 @@ public interface SystemEngine {
     public EndOfSimulationDTO runSimulation();
     public List<pastSimulationDTO> getPastSimulationsDetails();
     public Boolean isThereLoadedSimulation();
-    List<PropertyDTO> getEnvVarsDto();
+    List<PropertyDTO> getEnvVarsDefinitionDto();
+    List<ActiveEnvVarDto> getActiveEnvVarsDto();
     //void setEnvVarsFromDto(List<PropertyDTO> envVarsDto);
     void setEnvVarFromDto(PropertyDTO envVarDto);
 }
