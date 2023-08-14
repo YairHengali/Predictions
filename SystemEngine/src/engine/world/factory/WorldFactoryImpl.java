@@ -43,7 +43,7 @@ public class WorldFactoryImpl implements WorldFactory{
             addEnvironmentVariables();
             addEntitiesDefinitions();
             addRules();
-            addTerminationSettings();
+//            addTerminationSettings();
 
         } catch (Exception e) {
             this.generatedWorld = pastGeneratedWorld;
@@ -63,7 +63,7 @@ public class WorldFactoryImpl implements WorldFactory{
         for (int i = 0; i < environmentVariablesCount; i++) {
             PRDEnvProperty prdEnvProperty = generatedWorld.getPRDEvironment().getPRDEnvProperty().get(i);
             if (EnvVarsNames.contains(prdEnvProperty.getPRDName())) {
-                throw new Exception(String.format("an environment variable with the name: %s is already exists. each environment variable needs to have a unique name!", prdEnvProperty.getPRDName()));
+                throw new NotUniqueEnvVarException(prdEnvProperty.getPRDName());
             }
             else
             {
@@ -75,15 +75,14 @@ public class WorldFactoryImpl implements WorldFactory{
             if (prdEnvProperty.getPRDRange() != null) {
                 newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
                         new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo()),
-                        true, ""); //TODO: TEMPORARY ON "true" FOR TESTING
+                        false, "");
             }
             else{
                 newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
-                        null, true, "");
+                        null, false, "");
             }
 
             currWorkingWorld.addEnvironmentVariableDef(newEnvVarDef);
-
         }
     }
     private void addEntitiesDefinitions() throws Exception {
@@ -99,7 +98,7 @@ public class WorldFactoryImpl implements WorldFactory{
                 PRDProperty prdProperty = prdEntity.getPRDProperties().getPRDProperty().get(j);
 
                 if (entityPropertiesNames.contains(prdProperty.getPRDName())) {
-                    throw new Exception(String.format("an property with the name: %s is already exists in the entity: %s. each property in a entity needs to have a unique name!", prdProperty.getPRDName(), prdEntity.getName()));
+                    throw new NotUniquePropertyException(prdProperty.getPRDName(), prdEntity.getName());
                 }
                 else
                 {
@@ -171,7 +170,7 @@ public class WorldFactoryImpl implements WorldFactory{
         ConditionImpl resCondition;
         if (prdCondition.getSingularity().equals("single")) {
             if (!isExistingPropertyInEntity(prdCondition.getEntity(), prdCondition.getProperty())) {
-                throw new IllegalArgumentException("the property: " + prdCondition.getProperty() + " that referenced in a condition does not exist in the entity: " + prdCondition.getEntity());
+                throw new NotExistingPropertyException(prdCondition.getProperty(),"Condition", prdCondition.getEntity());
             }
 
             ConditionOp conditionOp = null;
@@ -209,7 +208,7 @@ public class WorldFactoryImpl implements WorldFactory{
     {
         Action resAction = null;
         if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
-            throw new IllegalArgumentException("the entity: " + prdAction.getEntity() + " that referenced in action: " + prdAction.getType() + "does not exist!");
+            throw new NotExistingEntityException(prdAction.getEntity(), prdAction.getType());
         }
 
         switch (prdAction.getType()) {
@@ -229,11 +228,11 @@ public class WorldFactoryImpl implements WorldFactory{
             case "calculation":
 
                 if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp())) {
-                    throw new IllegalArgumentException("the property: " + prdAction.getResultProp() + " that referenced in the action: " + prdAction.getType() + " does not exist in the entity: " + prdAction.getEntity());
+                    throw new NotExistingPropertyException(prdAction.getResultProp(), prdAction.getType(), prdAction.getEntity());
                 }
                 else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp()))
                 {
-                    throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getResultProp() + "must be of numeric type.");
+                    throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getType() + "must be of a numeric type.");
                 }
 
                 if (prdAction.getPRDMultiply() != null) {
@@ -249,7 +248,7 @@ public class WorldFactoryImpl implements WorldFactory{
                         resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
                     }
                 } else {
-                    throw new IllegalArgumentException("Calculation action supports MULTIPLY or DIVIDE only!");
+                    throw new IllegalArgumentException("Invalid xml file! Calculation action supports MULTIPLY or DIVIDE only!");
                 }
                 break;
 
@@ -271,7 +270,7 @@ public class WorldFactoryImpl implements WorldFactory{
 
             case "set":
                 if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
-                    throw new IllegalArgumentException("the property: " + prdAction.getProperty() + " that referenced in action: " + prdAction.getType() + " does not exist in the entity: " + prdAction.getEntity());
+                    throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
                 }
                 resAction = new SetAction(prdAction.getEntity(), prdAction.getProperty(), prdAction.getValue());
                 break;
@@ -286,14 +285,16 @@ public class WorldFactoryImpl implements WorldFactory{
 
     private void checkForValidIncreaseDecreaseArguments(PRDAction prdAction)
     {
-        if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) {
+
+        if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
+            throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
+        }
+        else if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) { //TODO: NEED TO GIVE MORE DETAILS? such as the ARGUMENTS?
             throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
-        } else if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
-            throw new IllegalArgumentException("the property: " + prdAction.getProperty() + " that referenced in action: " + prdAction.getType() + ", does not exist in the entity: " + prdAction.getEntity());
         }
         else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getProperty()))
         {
-            throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getType() + "must be of numeric type.");
+            throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getType() + "must be of a numeric type."); //TODO: NEED TO GIVE MORE DETAILS? WHAT ARGUMENTS?
         }
     }
 
@@ -305,6 +306,7 @@ public class WorldFactoryImpl implements WorldFactory{
     private boolean isExistingPropertyInEntity(String entityName, String propertyName) {
         return this.currWorkingWorld.getEntityDefinitionByName(entityName).getPropertyDefinitionByName(propertyName) != null;
     }
+
     private boolean isNumericArg(String mainEntityName, String arg) {
         if (arg.startsWith("environment")){
             String envVarName = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));

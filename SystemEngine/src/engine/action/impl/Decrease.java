@@ -9,8 +9,8 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 
 public class Decrease extends AbstractAction {
-    String propertyName;
-    String byExpression; //TODO: Expression????
+    private String propertyName;
+    private String byExpression; //TODO: Expression????
 
     public Decrease(String mainEntityName, String propertyName, String byExpression) {
         super(ActionType.DECREASE, mainEntityName);
@@ -22,15 +22,17 @@ public class Decrease extends AbstractAction {
     public void Run(Context context) throws Exception { //TODO: ADD EXCEPTIONS WHERE NEEDED
         YairExpression expression = new YairExpression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueFromExpression = expression.praseExpressionToValueString();
-
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-        if (entityPropertyInstance instanceof DecimalProperty)
+
+        try {
+            if (entityPropertyInstance instanceof DecimalProperty) {
+                ((DecimalProperty) entityPropertyInstance).setValue(Integer.parseInt(entityPropertyInstance.getValue()) - Integer.parseInt(valueFromExpression));
+            } else if (entityPropertyInstance instanceof FloatProperty) {
+                ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(entityPropertyInstance.getValue()) - Float.parseFloat(valueFromExpression));//TODO: VALIDATE IF INT OR FLOAT
+            }
+        } catch (NumberFormatException e)
         {
-            ((DecimalProperty) entityPropertyInstance).setValue(Integer.parseInt(entityPropertyInstance.getValue()) - Integer.parseInt(valueFromExpression));
-        }
-        else if (entityPropertyInstance instanceof FloatProperty)
-        {
-            ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(entityPropertyInstance.getValue()) - Float.parseFloat(valueFromExpression));//TODO: VALIDATE IF INT OR FLOAT
+            throw new NumberFormatException("can not subtract float to integer in action Decrease" + e.getMessage());
         }
     }
 }

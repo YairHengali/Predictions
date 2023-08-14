@@ -44,19 +44,24 @@ public class SingleCondition extends ConditionImpl implements Condition
         YairExpression valueToCompareAsExpression = new YairExpression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString();
 
-        switch (propertyToEvaluate.getType()) {
-            case BOOLEAN:
-                result = operator.eval( ((BooleanProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
-                break;
-            case DECIMAL:
-                result = operator.eval( ((DecimalProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.DECIMAL);
-                break;
-            case FLOAT:
-                result = operator.eval( ((FloatProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.FLOAT);
-                break;
-            case STRING:
-                result = operator.eval( ((StringProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
-                break;
+        try {
+            switch (propertyToEvaluate.getType()) {
+                case BOOLEAN:
+                    result = operator.eval(((BooleanProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
+                    break;
+                case DECIMAL:
+                    result = operator.eval(((DecimalProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.DECIMAL);
+                    break;
+                case FLOAT:
+                    result = operator.eval(((FloatProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.FLOAT);
+                    break;
+                case STRING:
+                    result = operator.eval(((StringProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
+                    break;
+            }
+        }catch (Exception e)
+        {
+            throw new RuntimeException("not-matching argument to single condition action " + e.getMessage());
         }
 
 //        switch (propertyToEvaluate.getType()) {

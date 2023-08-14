@@ -39,10 +39,10 @@ public class SetAction extends AbstractAction {
             else if (entityPropertyInstance instanceof StringProperty) {
                 ((StringProperty) entityPropertyInstance).setValue(valueFromExpression);
             }
-        } catch (NumberFormatException e) {//IF INTEGER / FLOAT PARSING UNSUCCESSFUL
-            //TODO: HANDLE THE PARSING EXCEPTION
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to a " + entityPropertyInstance.getType() + " property."+ e.getMessage());
         } catch (IllegalArgumentException e) { //IF BOOLEAN PARSING UNSUCCESSFUL
-            //TODO: HANDLE THE PARSING EXCEPTION
+            throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to a boolean property." + e.getMessage());
         }
 
     }

@@ -41,8 +41,13 @@ public class Calculation extends AbstractAction {
                         ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression));
                         break;
                     case DIVIDE:
-                        ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression));
-                        break;
+                        if (Integer.parseInt(value2FromExpression) == 0){
+                            throw new ArithmeticException("Can not divide by zero in action calculation");
+                        }
+                        else{
+                            ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression));
+                        }
+                       break;
                 }
             }
             else if (currentEntityPropertyInstance instanceof FloatProperty)
@@ -52,8 +57,13 @@ public class Calculation extends AbstractAction {
                         ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
                         break;
                     case DIVIDE:
+                    if (Float.parseFloat(value2FromExpression) == 0){
+                        throw new ArithmeticException("Can not divide by zero in action calculation");
+                    }
+                    else{
                         ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression));
-                        break;
+                    }
+                   break;
                 }
             }
     }

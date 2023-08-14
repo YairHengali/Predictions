@@ -41,7 +41,7 @@ public class SystemEngineImpl implements SystemEngine{
     @Override
     public void loadSimulation(String filePath) throws Exception { //TODO: Add Exceptions fo invalid data
         if (!filePath.endsWith(".xml")){
-            throw new Exception("Invalid file format! needs to be a .xml file");
+            throw new Exception("Invalid file format! must be a .xml file");
         }
         try {
             InputStream inputStream = new FileInputStream(new File(filePath));
@@ -52,14 +52,6 @@ public class SystemEngineImpl implements SystemEngine{
             isThereLoadedSimulation = true;
         } catch (JAXBException | FileNotFoundException e) {
             e.printStackTrace();
-        }
-
-        try {
-            worldFactory.insertDataToWorld(this.simulation);
-            isThereLoadedSimulation = true;
-        }
-        catch (Exception e){
-            e.getMessage();
         }
     }
 

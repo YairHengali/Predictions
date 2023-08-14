@@ -73,11 +73,15 @@ public class UserInterface {
     {
         switch (choice){
             case 1:
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("Please enter the .xml file full path:");
+                String filePath = scanner.nextLine();
                 try {
                     systemEngine.loadSimulation(filePath);
                     System.out.println("xml file loaded successfully!");
-                } catch (Exception e) {
-                    //TODO: DEAL WITH EXCEPTION
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
                 break;
             case 2:
@@ -91,12 +95,18 @@ public class UserInterface {
 
                 break;
             case 3:
-                List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
-                letUserChooseEnvVarsValues(envVarDtos);
-                List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
-                printActiveEnvVars(activeEnvVarDtos);
-                EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
-                printEndOfSimulationDetails(endOfSimulationDTO);
+                try{
+                    List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
+                    letUserChooseEnvVarsValues(envVarDtos);
+                    List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
+                    printActiveEnvVars(activeEnvVarDtos);
+                    EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
+                    printEndOfSimulationDetails(endOfSimulationDTO);
+                }catch (Exception e)
+                {
+                    System.out.println(e.getMessage());
+                }
+
                 break;
             case 4:
                 List<pastSimulationDTO> pastSimulationsDetails = systemEngine.getPastSimulationsDetails(); //TODO: GET THEM ORDERED BY DATE! (when we will change it to map or something)
