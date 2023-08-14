@@ -10,10 +10,10 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 
 public class Calculation extends AbstractAction {
-    String propertyName;
-    String arg1Expression;
-    String arg2Expression;
-    ClacType calcType;
+    private String propertyName;
+    private String arg1Expression;
+    private String arg2Expression;
+    private ClacType calcType;
 
     public Calculation(String mainEntityName, String propertyName, String arg1Expression, String arg2Expression, ClacType calcType) {
         super(ActionType.CALCULATION, mainEntityName);

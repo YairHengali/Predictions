@@ -40,7 +40,7 @@ public class WorldFactoryImpl implements WorldFactory{
             addEnvironmentVariables();
             addEntitiesDefinitions();
             addRules();
-            //addTerminationSettings(); //TODO: commented for testing
+            addTerminationSettings();
 
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -11,8 +11,8 @@ import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
 
 public class SetAction extends AbstractAction {
-    String propertyName;
-    String valueExpression;
+    private String propertyName;
+    private String valueExpression;
     public SetAction(String mainEntityName,String propertyName, String valueExpression){
         super(ActionType.SET, mainEntityName);
         this.propertyName = propertyName;

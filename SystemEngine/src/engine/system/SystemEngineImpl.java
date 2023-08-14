@@ -111,22 +111,14 @@ public class SystemEngineImpl implements SystemEngine{
 
     public EndOfSimulationDTO runSimulation() {
         String dateOfRun = simpleDateFormat.format(new Date());
-
-//    initializeEnvVars();
-        //getEnvVarsDefinitionDto();
-        //setEnvVarsFromDto();
-        //tick 0 and show Env values to user
-
-        //create EnvDTO to show values to user
-//    runTheSimulation();
-        //tick 1 and up
-
         TerminationReason terminationReason = simulation.runMainLoop();
 
 
 
 //return ID of simulation and add it to Past Simulations with its date
         currentSimulationID++;
+
+        //TODO: CRREATE PAST SIMULATIONS NOT AS DTO
         List<EntityCountDTO> entityCountDtos = new ArrayList<>();
         for (EntityDefinition entityDefinition :simulation.getEntitiesDefinitions()) {
             int startCount = entityDefinition.getPopulation();
@@ -135,6 +127,7 @@ public class SystemEngineImpl implements SystemEngine{
         }
 
         pastSimulations.add(new pastSimulationDTO(dateOfRun, currentSimulationID, entityCountDtos)); //TODO: add properties histogram to DTO
+        //TODO:^^
 
         return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
@@ -183,7 +176,7 @@ public class SystemEngineImpl implements SystemEngine{
     }
 
     @Override
-    public List<pastSimulationDTO> getPastSimulationsDetails(){return pastSimulations;}
+    public List<pastSimulationDTO> getPastSimulationsDetails(){return pastSimulations;} //TODO - create the DTO Here
 
     @Override
     public Boolean isThereLoadedSimulation() {
