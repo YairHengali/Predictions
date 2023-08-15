@@ -340,7 +340,7 @@ public class UserInterface {
     private void deserializeEngine()
     {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the file path (including the file name) you would like load the system from:");
+        System.out.println("Please enter the file path (including the file name- without suffix) you would like load the system from:");
         String filePath = scanner.nextLine();
         filePath = filePath + ".ser"; // \obj\bin
 

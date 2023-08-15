@@ -42,7 +42,7 @@ public class SingleCondition extends ConditionImpl implements Condition
 
         PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(this.propertyName);
         //figuring value out of expression
-        YairExpression valueToCompareAsExpression = new YairExpression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression valueToCompareAsExpression = new Expression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString();
 
         try {

@@ -2,7 +2,9 @@ package engine.property.api;
 
 import engine.property.PropertyType;
 
-public abstract class PropertyInstance {
+import java.io.Serializable;
+
+public abstract class PropertyInstance implements Serializable {
     protected String value;
     private final String name;
     private final PropertyType type;

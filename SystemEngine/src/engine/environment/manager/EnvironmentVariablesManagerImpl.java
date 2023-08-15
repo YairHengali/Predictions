@@ -4,6 +4,7 @@ import engine.environment.active.ActiveEnvironmentVariables;
 import engine.environment.active.ActiveEnvironmentVariablesImpl;
 import engine.property.PropertyDefinition;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

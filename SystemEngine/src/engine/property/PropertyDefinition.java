@@ -2,7 +2,9 @@ package engine.property;
 
 import engine.range.Range;
 
-public class PropertyDefinition {
+import java.io.Serializable;
+
+public class PropertyDefinition implements Serializable {
     private final String name;
     private final PropertyType type;
     private final Range valueRange;

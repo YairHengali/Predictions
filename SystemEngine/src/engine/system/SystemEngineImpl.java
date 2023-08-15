@@ -123,7 +123,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         currentSimulationID++;
 
         id2pastSimulation.put(currentSimulationID,this.simulation);
-        createNewSimulation();
+        //createNewSimulation(); // now not needed
         return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
     }
 
