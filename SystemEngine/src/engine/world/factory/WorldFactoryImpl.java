@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class WorldFactoryImpl implements WorldFactory{
     private PRDWorld generatedWorld = null;
-    private PRDWorld pastGeneratedWorld = null;
+    //private PRDWorld pastGeneratedWorld = null;
     private World currWorkingWorld;
 
     @Override
@@ -32,7 +32,7 @@ public class WorldFactoryImpl implements WorldFactory{
     }
     @Override
     public void setGeneratedWorld(PRDWorld worldToSet) {
-        pastGeneratedWorld = this.generatedWorld;
+        //pastGeneratedWorld = this.generatedWorld;
         this.generatedWorld = worldToSet;
     }
     @Override
@@ -43,12 +43,12 @@ public class WorldFactoryImpl implements WorldFactory{
             addEnvironmentVariables();
             addEntitiesDefinitions();
             addRules();
-//            addTerminationSettings();
+            addTerminationSettings();
 
         } catch (Exception e) {
-            this.generatedWorld = pastGeneratedWorld;
-            if(this.generatedWorld != null)
-            this.insertDataToWorld(simulation);
+            //this.generatedWorld = pastGeneratedWorld;
+            //if(this.generatedWorld != null)
+            //this.insertDataToWorld(simulation);
             throw new RuntimeException(e);
         }
 
@@ -232,18 +232,18 @@ public class WorldFactoryImpl implements WorldFactory{
                 }
                 else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp()))
                 {
-                    throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getType() + "must be of a numeric type.");
+                    throw new IllegalArgumentException("Invalid xml file! property in " + prdAction.getType() + " must be of a numeric type.");
                 }
 
                 if (prdAction.getPRDMultiply() != null) {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg2()))) {
-                        throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
+                        throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
                     } else {
                         resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
                     }
                 } else if (prdAction.getPRDDivide() != null) {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg2()))) {
-                        throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
+                        throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
                     } else {
                         resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
                     }
@@ -290,11 +290,11 @@ public class WorldFactoryImpl implements WorldFactory{
             throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
         }
         else if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) { //TODO: NEED TO GIVE MORE DETAILS? such as the ARGUMENTS?
-            throw new IllegalArgumentException("Invalid xml file! arguments to" + prdAction.getType() + "action must be numeric.");
+            throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
         }
         else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getProperty()))
         {
-            throw new IllegalArgumentException("Invalid xml file! property in" + prdAction.getType() + "must be of a numeric type."); //TODO: NEED TO GIVE MORE DETAILS? WHAT ARGUMENTS?
+            throw new IllegalArgumentException("Invalid xml file! property in " + prdAction.getType() + " must be of a numeric type."); //TODO: NEED TO GIVE MORE DETAILS? WHAT ARGUMENTS?
         }
     }
 

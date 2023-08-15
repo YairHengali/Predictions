@@ -25,8 +25,8 @@ public class EntityCountDTO {
 
     @Override
     public String toString() {
-        return  "name='" + name + '\'' +
-                ", population at start=" + populationAtStart +
-                ", population at end=" + populationAtEnd;
+        return  "name: '" + name + '\'' +
+                ", population at start: " + populationAtStart +
+                ", population at end: " + populationAtEnd;
     }
 }

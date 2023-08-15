@@ -32,6 +32,7 @@ public class SystemEngineImpl implements SystemEngine{
     int currentSimulationID = 0;
     boolean isThereLoadedSimulation = false;
     private Map<Integer,World> id2pastSimulation = new HashMap<>();
+    PRDWorld currentlyWorkingGeneratedWorld;
 
     @Override
     public World getSimulation() {
@@ -45,14 +46,22 @@ public class SystemEngineImpl implements SystemEngine{
         }
         try {
             InputStream inputStream = new FileInputStream(new File(filePath));
-            PRDWorld generated = deserializeFrom(inputStream);
-            worldFactory.setGeneratedWorld(generated);
+            PRDWorld generatedWorld = deserializeFrom(inputStream);
+            worldFactory.setGeneratedWorld(generatedWorld);
             createNewSimulation();
-            // set engine PRDWorld
+            currentlyWorkingGeneratedWorld = generatedWorld;
             isThereLoadedSimulation = true;
-        } catch (JAXBException | FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (currentlyWorkingGeneratedWorld != null)
+            {
+                worldFactory.setGeneratedWorld(currentlyWorkingGeneratedWorld);
+                createNewSimulation();
+            }
+            throw new RuntimeException(e.getMessage());
         }
+//        } catch (JAXBException | FileNotFoundException e) {
+//            throw new RuntimeException(e.getMessage());
+//        }
     }
 
     @Override
@@ -101,7 +110,6 @@ public class SystemEngineImpl implements SystemEngine{
     private void createNewSimulation()
     {
         simulation = worldFactory.createWorld();
-
         worldFactory.insertDataToWorld(this.simulation);
     }
 

@@ -19,7 +19,9 @@ public class DecimalProperty extends PropertyInstance {
             Random random = new Random();
             if (range != null)
             {
-                this.value = String.valueOf(random.nextInt(range.getTo().intValue() - range.getFrom().intValue() + 1) + range.getFrom().intValue());
+                int from = range.getFrom().intValue();
+                int to = range.getTo().intValue();
+                this.value = String.valueOf(random.nextInt(to - from + 1) + from);
             }
             else
             {

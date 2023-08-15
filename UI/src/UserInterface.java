@@ -44,13 +44,13 @@ public class UserInterface {
     }
     private void buildPastSimulationPresentingMethodMenu(){
         Menu presentingMethod = menuManager.createMenu("PastSimulationPresentingMethod");
-        presentingMethod.addItem("Entity count");
+        presentingMethod.addItem("Entities count");
         presentingMethod.addItem("Histogram of entity's specific property");
         menuManager.addMenu(presentingMethod);
     }
     private void buildPsastSimulationPresentingMethodMenu(){
         Menu presentingMethod = menuManager.createMenu("PastSimulationPresentingMethod");
-        presentingMethod.addItem("Entity count");
+        presentingMethod.addItem("Entities count");
         presentingMethod.addItem("Histogram of entity's specific property");
         menuManager.addMenu(presentingMethod);
     }

@@ -19,7 +19,10 @@ public class FloatProperty extends PropertyInstance {
             Random random = new Random();
             if (range != null)
             {
-                this.value = String.valueOf(random.nextFloat() * (range.getTo().floatValue() - range.getFrom().floatValue() + 1) + range.getFrom().floatValue());
+                float from = range.getFrom().floatValue();
+                float to = range.getTo().floatValue();
+                this.value = String.valueOf(from + random.nextFloat() * (to - from));
+//                this.value = String.valueOf(random.nextFloat() * (range.getTo().floatValue() - range.getFrom().floatValue() + 1) + range.getFrom().floatValue());
             }
             else
             {
