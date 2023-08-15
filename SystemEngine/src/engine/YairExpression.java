@@ -46,7 +46,7 @@ public class YairExpression {
                 return String.valueOf(random.nextInt(val) + 1);
             }
             catch (NumberFormatException e){
-                throw e;
+                throw new RuntimeException(e + "\n Error resolving methode name from expression");
             }
         }
     }

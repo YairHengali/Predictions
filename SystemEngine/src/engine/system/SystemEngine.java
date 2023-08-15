@@ -21,4 +21,5 @@ public interface SystemEngine {
 
     List<EntityDTO> getPastSimulationEntitiesDTO(pastSimulationDTO desiredPastSimulation);
 
+    void clearPastSimulations();
 }

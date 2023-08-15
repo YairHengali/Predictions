@@ -34,9 +34,15 @@ public class HistogramDTO {
 
     @Override
     public String toString() {
-        return  "simulation ID =" + simulationID + '\n' +
-                "entity name =" + entityName + '\n' +
-                "property name =" + propertyName + '\n' +
-                "propertyHistogram: " + '\n' + "==================" + '\n' +  propertyHistogram;
+        StringBuilder res =
+                new StringBuilder("simulation ID = " + simulationID + '\n' +
+                        "entity name = " + entityName + '\n' +
+                        "property name = " + propertyName + '\n' +
+                        "property Histogram: " + '\n' + "==================" + '\n');
+        for(Map.Entry<String, Long> entry : propertyHistogram.entrySet()) {
+            res.append("Value: ").append(entry.getKey()).append("   Num of entities: ").append(entry.getValue()).append('\n');
+        }
+
+        return res.toString();
     }
 }

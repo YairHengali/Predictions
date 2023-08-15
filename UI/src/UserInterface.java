@@ -47,13 +47,6 @@ public class UserInterface {
         presentingMethod.addItem("Histogram of entity's specific property");
         menuManager.addMenu(presentingMethod);
     }
-    private void buildPsastSimulationPresentingMethodMenu(){
-        Menu presentingMethod = menuManager.createMenu("PastSimulationPresentingMethod");
-        presentingMethod.addItem("Entities count");
-        presentingMethod.addItem("Histogram of entity's specific property");
-        menuManager.addMenu(presentingMethod);
-    }
-
     public void printMenu(String menuName){
         menuManager.showMenuByName(menuName);
     }
@@ -78,7 +71,7 @@ public class UserInterface {
                 try {
                     systemEngine.loadSimulation(filePath);
                     System.out.println("xml file loaded successfully!");
-                }
+                    systemEngine.clearPastSimulations();                }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -202,7 +195,7 @@ public class UserInterface {
 
 
     private void printEndOfSimulationDetails(EndOfSimulationDTO endOfSimulationDTO) {
-        System.out.println("The simulation terminated!");
+        System.out.println("The simulation has terminated!");
         System.out.println("Simulation ID: " + endOfSimulationDTO.getSimulationID());
         switch (TerminationReason.valueOf(endOfSimulationDTO.getReasonOfTermination())) {
             case MAXTICKSREACHED:

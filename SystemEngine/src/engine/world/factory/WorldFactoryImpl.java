@@ -46,7 +46,7 @@ public class WorldFactoryImpl implements WorldFactory{
             addEnvironmentVariables();
             addEntitiesDefinitions();
             addRules();
-            addTerminationSettings();
+            //addTerminationSettings();
 
         } catch (Exception e) {
             //this.generatedWorld = pastGeneratedWorld;

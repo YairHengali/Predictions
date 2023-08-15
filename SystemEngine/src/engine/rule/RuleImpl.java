@@ -73,8 +73,12 @@ public class RuleImpl implements Rule {
                 Context context = new ContextImpl(entityInstance, manager, activeEnvironmentVariables);
                 try {
                     action.Run(context);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                }
+                catch (Exception e) {
+                    throw new RuntimeException(e + "\n" +"Error occurred with entity: " +
+                                                            entityInstance.getName() +
+                                                            ", ID: " + entityInstance.getId() +
+                                                            ", in rule: " + this.name);
                 }
             }
             manager.killEntities(); //TODO: MAYBE AFTER THIS LOOP

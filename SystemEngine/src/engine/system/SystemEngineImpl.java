@@ -110,6 +110,14 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
+    public void clearPastSimulations()
+    {
+        id2pastSimulation.clear();
+        currentSimulationID = 0;
+    }
+
+
+    @Override
     public EndOfSimulationDTO runSimulation() {
         String dateOfRun = simpleDateFormat.format(new Date());
         simulation.setDateOfRun(dateOfRun);
@@ -185,16 +193,19 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
         if(!this.id2pastSimulation.containsKey(simulationID))
             throw new RuntimeException("Trying to view simulation with ID:" + simulationID + ", this ID does not exist in the system!");
-
+        long valueCounter = 0;
         World desiredSimulation = this.id2pastSimulation.get(simulationID);
         List<EntityInstance> pastSimulationEntities = desiredSimulation.getEntityInstanceManager().getInstancesListByName(entityName);
-        Map<String, Long> histogram = pastSimulationEntities
-                .stream()
-                .map(entityInstance -> entityInstance.getPropertyByName(propertyName))
-                .collect(Collectors.groupingBy(property -> property.getValue(),Collectors.counting()));
+        Map<String, Long> histogram = new TreeMap<>();
 
+        for(EntityInstance entity : pastSimulationEntities) {
+            valueCounter = 0L;
+            if (histogram.containsKey(entity.getPropertyByName(propertyName).getValue())) {
+                valueCounter = histogram.get(entity.getPropertyByName(propertyName).getValue());
+            }
+            histogram.put(entity.getPropertyByName(propertyName).getValue(), valueCounter + 1   );
+        }
         return new HistogramDTO(simulationID, entityName, propertyName, histogram);
-
     }
 
     @Override
