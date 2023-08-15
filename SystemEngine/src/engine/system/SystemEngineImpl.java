@@ -16,15 +16,12 @@ import jaxb.generated.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SystemEngineImpl implements SystemEngine{
+public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
     private World simulation = null;
     private final WorldFactory worldFactory = new WorldFactoryImpl();
@@ -32,7 +29,7 @@ public class SystemEngineImpl implements SystemEngine{
     int currentSimulationID = 0;
     boolean isThereLoadedSimulation = false;
     private Map<Integer,World> id2pastSimulation = new HashMap<>();
-    PRDWorld currentlyWorkingGeneratedWorld;
+    PRDWorld currentlyWorkingGeneratedWorld = null;
 
 
     @Override
@@ -46,6 +43,9 @@ public class SystemEngineImpl implements SystemEngine{
             worldFactory.setGeneratedWorld(generatedWorld);
             createNewSimulation();
             currentlyWorkingGeneratedWorld = generatedWorld;
+            //TODO: HERE RESET ALL INFORMATION DONT NEEDED (BECAUSE NEW ONE HAS LOADED - EVEN IF OF SAME KIND(E.G 2 cigaretes in a row?) )
+            //CLEAR PAST THAT NOT NEDDED
+            //CLEAR PAST THAT NOT NEDDED
             isThereLoadedSimulation = true;
         } catch (Exception e) {
             if (currentlyWorkingGeneratedWorld != null)

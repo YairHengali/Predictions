@@ -139,6 +139,7 @@ public class UserInterface {
             // Entity count
             List<EntityCountDTO> entityCountList = systemEngine.getPastSimulationEntityCount(desiredPastSimulation);
             entityCountList.forEach(System.out::println);
+            System.out.println();
         }
         else if(userChoice == 2){
             // histogram
@@ -327,7 +328,7 @@ public class UserInterface {
             System.out.println("    Ticks for activation: " + ruleDTO.getTicksForActivation());
             System.out.println("    Probability for activation: " + ruleDTO.getProbabilityForActivation());
             System.out.println("    Number of actions: " + ruleDTO.getActions().size());
-            System.out.println("    Actions name's: ");
+            System.out.println("    Actions names: ");
             for (ActionDTO actionDTO : ruleDTO.getActions()){
                 System.out.println("        Name: " + actionDTO.getName());
             }

@@ -5,7 +5,7 @@ import engineAnswers.*;
 import java.io.Serializable;
 import java.util.List;
 
-public interface SystemEngine extends Serializable {
+public interface SystemEngine {
     void loadSimulation(String filePath) throws Exception;
     SimulationDetailsDTO showSimulationDetails();
     EndOfSimulationDTO runSimulation();
