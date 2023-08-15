@@ -13,6 +13,6 @@ public interface Rule {
     double getProbForActivations();
     Collection<Action> getActions();
     void addAction(Action actionToAdd);
-    public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables);
+    void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables);
 
 }

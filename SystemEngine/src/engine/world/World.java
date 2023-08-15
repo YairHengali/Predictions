@@ -40,13 +40,7 @@ public class World {
     private Integer maxNumberOfTicks = 100; // = null TODO: initialized only for testing
     private Long SecondsToTerminate = 10000L;// = null TODO: initialized only for testing
 
-    //private Set<String> methodsNames;
-
     public World() {
-
-//        methodsNames = new HashSet<>();
-//        methodsNames.add("environment"); //TODO: MAYBE ENUM
-//        methodsNames.add("random"); //TODO: MAYBE ENUM
     }
 
     public int getMaxNumberOfTicks() {
@@ -66,11 +60,6 @@ public class World {
     }
 
 
-
-//    public TerminationReason runMainLoop()
-//    {
-//        return runLoop();
-//    }
     public void runInitIteration() //Tick0
     {
         currentNumberOfTicks = 0;
@@ -148,7 +137,7 @@ public class World {
     public Rule getRuleByName(String ruleName)
     {
         return name2Rule.get(ruleName);
-    }
+    } //TODO: PROBABLY MOVE TO LIST!! and not map
 
     public boolean isTermination(){
         if (this.SecondsToTerminate != null && this.maxNumberOfTicks != null)
@@ -167,26 +156,6 @@ public class World {
 
     }
 
-//    public Object environment(String varName) throws Exception {
-//        try{
-//            return this.activeEnvironmentVariables.getEvnVariable(varName).getValue();
-//        }
-//        catch (IllegalArgumentException e){
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public int random(String argValue) throws NumberFormatException{
-//        try {
-//            int val = Integer.parseInt(argValue);
-//            Random random = new Random();
-//            return random.nextInt(val) + 1;
-//        }
-//        catch (NumberFormatException e){
-//            throw e;
-//        }
-//    }
-
     public Collection<Rule> getRules()
     {
         return name2Rule.values();
@@ -196,7 +165,6 @@ public class World {
     {
         return this.environmentVariablesManager.getEnvironmentVariables();
     }
-
 
     public Collection<EntityDefinition> getEntitiesDefinitions()
     {
@@ -210,35 +178,6 @@ public class World {
     public void setDateOfRun(String dateOfRun) {
         this.dateOfRun = dateOfRun;
     }
-
-
-    //@Override
-//    public String toString() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append("World:\n");
-//        stringBuilder.append("maxNumberOfTicks=").append(maxNumberOfTicks).append("\n");
-//        if (!name2Entities.isEmpty())
-//        {
-//            stringBuilder.append("Entities:\n");
-//            for (Map.Entry<String, List<EntityDef>> entry : name2Entities.entrySet()) {
-//                String EntityName = entry.getKey();
-//                List<EntityDef> entities = entry.getValue();
-//
-//                for (EntityDef entity : entities) {
-//                    stringBuilder.append(entity).append("\n");
-//                }
-//            }
-//        }
-//        if (!name2Rule.isEmpty())
-//        {
-//            stringBuilder.append("Rules:\n");
-//            for (Map.Entry<String, RuleImpl> entry : name2Rule.entrySet()) {
-//                stringBuilder.append(entry.getValue()).append("\n");
-//            }
-//        }
-//        return stringBuilder.toString();
-//    }
-
 
 
 }

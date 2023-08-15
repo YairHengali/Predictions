@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.xml;
 
 public class NotUniqueEnvVarException extends RuntimeException{
 //    private String envVarName;

@@ -1,8 +1,8 @@
 package engine.range;
 
 public class Range {
-    private Number from;
-    private Number to;
+    private final Number from;
+    private final Number to;
 
     public Range(double from, double to)
     {

@@ -15,7 +15,10 @@ import engine.property.PropertyDefinition;
 import engine.property.PropertyType;
 import engine.rule.Rule;
 import engine.rule.RuleImpl;
-import exceptions.*;
+import exceptions.xml.NotExistingEntityException;
+import exceptions.xml.NotExistingPropertyException;
+import exceptions.xml.NotUniqueEnvVarException;
+import exceptions.xml.NotUniquePropertyException;
 import jaxb.generated.*;
 
 import java.util.HashSet;
@@ -214,7 +217,6 @@ public class WorldFactoryImpl implements WorldFactory{
         switch (prdAction.getType()) {
             case "increase":
             case "decrease":
-//TODO: case sensitive???
 
                 checkForValidIncreaseDecreaseArguments(prdAction);
 
@@ -340,6 +342,4 @@ public class WorldFactoryImpl implements WorldFactory{
             return false;
         }
     }
-
-
 }

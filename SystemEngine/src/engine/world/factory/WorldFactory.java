@@ -8,7 +8,4 @@ public interface WorldFactory {
     void insertDataToWorld(World simulation);
     void setGeneratedWorld(PRDWorld worldToSet);
 
-
-
-
 }

@@ -33,15 +33,6 @@ public class DecimalProperty extends PropertyInstance {
         }
     }
 
-    public DecimalProperty(String name, PropertyType type, Range range) {
-        super(name, type);
-        this.range = range;
-    }
-
-//    public int getValue() {
-//        return this.value;
-//    }
-
     public void setValue(Integer value) {
         if (range == null || (value <= range.getTo().intValue() && value >= range.getFrom().intValue()))
             this.value = value.toString();

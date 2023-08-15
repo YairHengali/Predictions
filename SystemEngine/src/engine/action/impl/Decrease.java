@@ -9,13 +9,13 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 
 public class Decrease extends AbstractAction {
-    private String propertyName;
-    private String byExpression; //TODO: Expression????
+    private final String propertyName;
+    private final String byExpression;
 
     public Decrease(String mainEntityName, String propertyName, String byExpression) {
         super(ActionType.DECREASE, mainEntityName);
         this.propertyName = propertyName;
-        this.byExpression = byExpression; //TODO: NEED TO UNDERSTAND IN CASE OF VALUE THAT DEPENDS ENVIRONMENT
+        this.byExpression = byExpression;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Decrease extends AbstractAction {
             if (entityPropertyInstance instanceof DecimalProperty) {
                 ((DecimalProperty) entityPropertyInstance).setValue(Integer.parseInt(entityPropertyInstance.getValue()) - Integer.parseInt(valueFromExpression));
             } else if (entityPropertyInstance instanceof FloatProperty) {
-                ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(entityPropertyInstance.getValue()) - Float.parseFloat(valueFromExpression));//TODO: VALIDATE IF INT OR FLOAT
+                ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(entityPropertyInstance.getValue()) - Float.parseFloat(valueFromExpression));
             }
         } catch (NumberFormatException e)
         {

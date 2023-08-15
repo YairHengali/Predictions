@@ -10,7 +10,6 @@ public interface Context {
     //void removeEntity(EntityInstance entityInstance);
     PropertyInstance getEnvironmentVariable(String name);
 
-    ////
     EntityInstanceManager getEntityInstanceManager();
 
     ActiveEnvironmentVariables getActiveEnvironmentVariables();

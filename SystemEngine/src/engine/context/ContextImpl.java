@@ -29,8 +29,6 @@ public class ContextImpl implements Context{
         return activeEnvironment.getEvnVariable(name);
     }
 
-    //////
-
     @Override
     public EntityInstanceManager getEntityInstanceManager() {
         return entityInstanceManager;

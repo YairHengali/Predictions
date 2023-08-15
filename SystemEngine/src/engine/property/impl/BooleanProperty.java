@@ -20,14 +20,6 @@ public class BooleanProperty extends PropertyInstance {
         }
     }
 
-    public BooleanProperty(String name, PropertyType type) {
-        super(name, type);
-    }
-
-//    public boolean getValue() {
-//        return this.value;
-//    }
-
     public void setValue(Boolean value) {
             this.value = value.toString();
     }

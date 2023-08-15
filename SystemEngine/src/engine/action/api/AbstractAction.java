@@ -5,8 +5,8 @@ import engine.entity.EntityInstance;
 import java.util.List;
 
 public abstract class AbstractAction implements Action {
-    private ActionType actionType;
-    //protected List<EntityInstance> mainEntityList;
+    private final ActionType actionType;
+
     protected String mainEntityName;
 
 

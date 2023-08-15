@@ -19,7 +19,6 @@ public class RuleImpl implements Rule {
     private final String name;
     private int howManyTicksForActivation = 1;
     private double probabilityForActivation = 1;
-    //private final Collection<String> ActionsNames= new ArrayList<>();
     private final Collection<Action> actions = new ArrayList<>();
 
     public RuleImpl(String name, Integer howManyTicksForActivation, Double probabilityForActivation) {
@@ -65,28 +64,9 @@ public class RuleImpl implements Rule {
         actions.add(action);
     }
 
-//    public void addIncreaseAction(List<EntityInstance> mainEntityList, String propertyName, Number amountToIncrease)
-//    {
-//        Action action = new Increase(mainEntityList, propertyName, amountToIncrease);
-//        actions.add(action);
-//    }
-//
-//    public void addCalculationAction(List<EntityInstance> mainEntityList, String propertyName, Number argument1, Number argument2, ClacType calcType)
-//    {
-//        Action action = new Calculation(mainEntityList, propertyName, argument1, argument2, calcType);
-//        actions.add(action);
-//    }
     @Override
     public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables)
     {
-//        for (Action action: actions) {
-//            try {
-//                action.Run(manager);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-
         for (Action action: actions) {
             for (EntityInstance entityInstance : manager.getInstancesListByName(action.getMainEntityName()))
             {

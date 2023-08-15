@@ -64,21 +64,6 @@ public class SingleCondition extends ConditionImpl implements Condition
             throw new RuntimeException("not-matching argument to single condition action " + e.getMessage());
         }
 
-//        switch (propertyToEvaluate.getType()) {
-//            case BOOLEAN:
-//                result = operator.eval( ((BooleanProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.STRING);
-//                break;
-//            case DECIMAL:
-//                result = operator.eval( ((DecimalProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.DECIMAL);
-//                break;
-//            case FLOAT:
-//                result = operator.eval( ((FloatProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.FLOAT);
-//                break;
-//            case STRING:
-//                result = operator.eval( ((StringProperty) propertyToEvaluate).getValue(), valueToCompareExpression, PropertyType.STRING);
-//                break;
-//        }
-
         return result;
     }
 

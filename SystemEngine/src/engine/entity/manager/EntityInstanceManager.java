@@ -13,7 +13,5 @@ public interface EntityInstanceManager {
 
     void killEntities();
 
-    //////////////////////////////// trying run on instances from outside
-
     List<EntityInstance> getInstancesListByName(String entityName);
 }

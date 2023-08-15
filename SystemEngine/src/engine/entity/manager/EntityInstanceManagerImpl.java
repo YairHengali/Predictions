@@ -35,17 +35,6 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager{
         return name2EntInstancesList;
     }
 
-//    @Override
-//    public void killEntity(EntityInstance entityInstance) { //TODO: IF Preffered can change to map of maps by Ids2Instances..
-//        List<EntityInstance> sameEntityInstancesList = name2EntInstancesList.get(entityInstance.getName());
-//        for (int i = 0; i < sameEntityInstancesList.size(); i++) {
-//            if (sameEntityInstancesList.get(i).getId() == entityInstance.getId()) {
-//                name2EntInstancesList.get(entityInstance.getName()).remove(i); //Throws EXCEPTION BECAUSE WE ITERRATE THIS.
-//                break;
-//            }
-//        };
-//    }
-
     @Override
     public void killEntity(EntityInstance entityInstance) { //TODO: IF Preffered can change to map of maps by Ids2Instances..
         EntitiesToKill.add(entityInstance);
@@ -59,9 +48,6 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager{
         }
         EntitiesToKill.clear();
     }
-
-    ///////////////////////////
-
 
     @Override
     public List<EntityInstance> getInstancesListByName(String entityName) {

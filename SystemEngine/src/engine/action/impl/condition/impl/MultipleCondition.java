@@ -49,55 +49,6 @@ public class MultipleCondition extends ConditionImpl implements Condition {
         return res;
     }
 
-//    @Override
-//    public void addActionToThen(Action actionToAdd) {
-//        this.thenActions.add(actionToAdd);
-//    }
-//
-//    @Override
-//    public void addActionToElse(Action actionToAdd) {
-//        this.elseActions.add(actionToAdd);
-//    }
-
-//    private void invokeThenActions(EntityInstanceManager manager){
-//        thenActions.forEach(action -> {
-//            try {
-//                action.Run(manager);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-//    }
-//    private void invokeElseActions(EntityInstanceManager manager){
-//        elseActions.forEach(action -> {
-//            try {
-//                action.Run(manager);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-//    }
-
-//    void invokeThenActions(Context context){
-//        for (Action action: thenActions) {
-//            try {
-//                action.Run(context);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//
-//    }
-//    void invokeElseActions(Context context){
-//        for (Action action: elseActions) {
-//            try {
-//                action.Run(context);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//    }
-
     public void addCondition(Condition conditionToAdd){
         this.conditionList.add(conditionToAdd);
     }

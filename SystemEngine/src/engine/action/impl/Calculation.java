@@ -10,10 +10,10 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 
 public class Calculation extends AbstractAction {
-    private String propertyName;
-    private String arg1Expression;
-    private String arg2Expression;
-    private ClacType calcType;
+    private final String propertyName;
+    private final String arg1Expression;
+    private final String arg2Expression;
+    private final ClacType calcType;
 
     public Calculation(String mainEntityName, String propertyName, String arg1Expression, String arg2Expression, ClacType calcType) {
         super(ActionType.CALCULATION, mainEntityName);
@@ -54,7 +54,7 @@ public class Calculation extends AbstractAction {
             {
                 switch (calcType) {
                     case MULTIPLY:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression));//TODO: VALIDATE IF ARGUMENTS INT OR FLOAT
+                        ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression));
                         break;
                     case DIVIDE:
                     if (Float.parseFloat(value2FromExpression) == 0){

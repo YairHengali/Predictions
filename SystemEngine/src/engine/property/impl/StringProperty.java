@@ -27,15 +27,6 @@ public class StringProperty extends PropertyInstance {
         else{
             this.value = propertyDefinition.getInitValue();
         }
-
-    }
-
-    public StringProperty(String name, PropertyType type) {
-        super(name, type);
-    }
-
-    public String getValue() {
-        return this.value;
     }
 
     public void setValue(String value) {

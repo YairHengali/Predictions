@@ -22,7 +22,6 @@ public class FloatProperty extends PropertyInstance {
                 float from = range.getFrom().floatValue();
                 float to = range.getTo().floatValue();
                 this.value = String.valueOf(from + random.nextFloat() * (to - from));
-//                this.value = String.valueOf(random.nextFloat() * (range.getTo().floatValue() - range.getFrom().floatValue() + 1) + range.getFrom().floatValue());
             }
             else
             {
@@ -33,15 +32,6 @@ public class FloatProperty extends PropertyInstance {
             this.value = String.valueOf(Float.parseFloat(propertyDefinition.getInitValue()));
         }
     }
-
-    public FloatProperty(String name, PropertyType type, Range range) {
-        super(name, type);
-        this.range = range;
-    }
-
-//    public float getValue() {
-//        return this.value;
-//    }
 
     public void setValue(Float value) {
         if (range == null || (value <= range.getTo().floatValue() && value >= range.getFrom().floatValue()))

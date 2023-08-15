@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.xml;
 
 public class NotUniquePropertyException extends RuntimeException{
 //    private String propertyName;

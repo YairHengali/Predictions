@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.xml;
 
 public class NotExistingEntityException extends RuntimeException{
 //    PRDAction prdAction;

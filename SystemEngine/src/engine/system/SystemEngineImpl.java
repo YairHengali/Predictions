@@ -34,10 +34,6 @@ public class SystemEngineImpl implements SystemEngine{
     private Map<Integer,World> id2pastSimulation = new HashMap<>();
     PRDWorld currentlyWorkingGeneratedWorld;
 
-    @Override
-    public World getSimulation() {
-        return simulation;
-    }
 
     @Override
     public void loadSimulation(String filePath) throws Exception { //TODO: Add Exceptions fo invalid data
@@ -185,7 +181,7 @@ public class SystemEngineImpl implements SystemEngine{
     }
 
     @Override
-    public HistogramDTO getHistoram (int simulationID, String entityName, String propertyName){
+    public HistogramDTO getHistogram(int simulationID, String entityName, String propertyName){
 
         if(!this.id2pastSimulation.containsKey(simulationID))
             throw new RuntimeException("Trying to view simulation with ID:" + simulationID + ", this ID does not exist in the system!");

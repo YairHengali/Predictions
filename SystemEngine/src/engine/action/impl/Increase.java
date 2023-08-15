@@ -12,15 +12,14 @@ import engine.property.impl.FloatProperty;
 import java.util.List;
 
 public class Increase extends AbstractAction {
-    private String propertyName;
-    private String byExpression; //TODO: Expression instead of string????
+    private final String propertyName;
+    private final String byExpression; //TODO: Expression instead of string????
 
     public Increase(String mainEntityName, String propertyName, String byExpression) {
         super(ActionType.INCREASE, mainEntityName);
         this.propertyName = propertyName;
         this.byExpression = byExpression;
     }
-
 
     @Override
     public void Run(Context context) throws Exception { //TODO: ADD EXCEPTIONS WHERE NEEDED
