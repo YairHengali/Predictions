@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
 
 
 /**
@@ -45,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "prdTermination"
 })
 @XmlRootElement(name = "PRD-world")
-public class PRDWorld {
+public class PRDWorld implements Serializable {
 
     @XmlElement(name = "PRD-evironment", required = true)
     protected PRDEvironment prdEvironment;

@@ -1,9 +1,9 @@
 package engine.action.impl;
 
-import engine.YairExpression;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.context.Context;
+import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
@@ -21,7 +21,7 @@ public class SetAction extends AbstractAction {
 
     @Override
     public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type
-        YairExpression valueAsExpression = new YairExpression(valueExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression valueAsExpression = new Expression(valueExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueFromExpression = valueAsExpression.praseExpressionToValueString();
 
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);

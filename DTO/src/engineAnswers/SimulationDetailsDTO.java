@@ -1,14 +1,15 @@
 package engineAnswers;
 
 import java.util.List;
+import java.util.Locale;
 
 public class SimulationDetailsDTO {
     private final List <EntityDTO> entities;
     private final List <RuleDTO> rules;
-    private final int maxNumberOfTicks;
-    private final long SecondsToTerminate;
+    private final Integer maxNumberOfTicks;
+    private final Long SecondsToTerminate;
 
-    public SimulationDetailsDTO(List<EntityDTO> entities, List<RuleDTO> rules, int maxNumberOfTicks, long secondsToTerminate) {
+    public SimulationDetailsDTO(List<EntityDTO> entities, List<RuleDTO> rules, Integer maxNumberOfTicks, Long secondsToTerminate) {
         this.entities = entities;
         this.rules = rules;
         this.maxNumberOfTicks = maxNumberOfTicks;
@@ -23,11 +24,11 @@ public class SimulationDetailsDTO {
         return rules;
     }
 
-    public int getMaxNumberOfTicks() {
+    public Integer getMaxNumberOfTicks() {
         return maxNumberOfTicks;
     }
 
-    public long getSecondsToTerminate() {
+    public Long getSecondsToTerminate() {
         return SecondsToTerminate;
     }
 }

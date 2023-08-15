@@ -5,7 +5,7 @@ import engine.property.PropertyType;
 
 import java.lang.reflect.Type;
 
-public class Expression {
+public class Expression implements Serializable {
     protected String rawExpression;
 
     public Expression(String rawExpression) {

@@ -1,10 +1,11 @@
 package engine.action.impl.condition.impl;
 
-import engine.YairExpression;
+
 import engine.action.api.ActionType;
 import engine.action.impl.condition.ConditionOp;
 import engine.action.impl.condition.api.Condition;
 import engine.context.Context;
+import engine.expression.Expression;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.BooleanProperty;

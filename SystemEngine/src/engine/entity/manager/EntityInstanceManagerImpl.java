@@ -3,9 +3,10 @@ package engine.entity.manager;
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class EntityInstanceManagerImpl implements EntityInstanceManager{
+public class EntityInstanceManagerImpl implements EntityInstanceManager, Serializable {
     private int count;
     private Map<String, List<EntityInstance>> name2EntInstancesList;
 

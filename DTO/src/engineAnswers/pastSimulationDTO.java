@@ -6,7 +6,7 @@ public class pastSimulationDTO {
     private final String dateOfRun;
     private final int id;
 
-    public pastSimulationDTO(String dateOfRun, int id) {//TODO: add properties histogram and entities counts
+    public pastSimulationDTO(String dateOfRun, int id) {
         this.dateOfRun = dateOfRun;
         this.id = id;
     }

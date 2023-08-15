@@ -1,10 +1,9 @@
 package engine.action.impl;
 
-import engine.YairExpression;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.context.Context;
-import engine.entity.EntityInstance;
+import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -23,7 +22,7 @@ public class Increase extends AbstractAction {
 
     @Override
     public void Run(Context context) throws Exception { //TODO: ADD EXCEPTIONS WHERE NEEDED
-        YairExpression expression = new YairExpression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueFromExpression = expression.praseExpressionToValueString();
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
 

@@ -7,7 +7,8 @@ import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
 import engine.world.TerminationReason;
-import engine.world.World;
+import engine.world.WorldDefinition;
+import engine.world.WorldInstance;
 import engine.world.factory.WorldFactory;
 import engine.world.factory.WorldFactoryImpl;
 import engineAnswers.*;
@@ -19,45 +20,40 @@ import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
-    private World simulation = null;
+    private WorldInstance simulation = null;
+    private WorldDefinition simulationDef = null;
     private final WorldFactory worldFactory = new WorldFactoryImpl();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
     int currentSimulationID = 0;
-    boolean isThereLoadedSimulation = false;
-    private Map<Integer,World> id2pastSimulation = new HashMap<>();
-    PRDWorld currentlyWorkingGeneratedWorld = null;
+    private Map<Integer, WorldInstance> id2pastSimulation = new HashMap<>();
+    private boolean isThereLoadedSimulation = false;
 
 
     @Override
-    public void loadSimulation(String filePath) throws Exception { //TODO: Add Exceptions fo invalid data
+    public void loadSimulation(String filePath) throws Exception {
+        final WorldDefinition currentlyWorkingWorldDef = this.simulationDef;
+
         if (!filePath.endsWith(".xml")){
             throw new Exception("Invalid file format! must be a .xml file");
         }
         try {
             InputStream inputStream = new FileInputStream(new File(filePath));
             PRDWorld generatedWorld = deserializeFrom(inputStream);
-            worldFactory.setGeneratedWorld(generatedWorld);
-            createNewSimulation();
-            currentlyWorkingGeneratedWorld = generatedWorld;
-            //TODO: HERE RESET ALL INFORMATION DONT NEEDED (BECAUSE NEW ONE HAS LOADED - EVEN IF OF SAME KIND(E.G 2 cigaretes in a row?) )
-            //CLEAR PAST THAT NOT NEDDED
-            //CLEAR PAST THAT NOT NEDDED
+
+            simulationDef = new WorldDefinition();
+            worldFactory.insertDataToWorldDefinition(this.simulationDef, generatedWorld);
+
             isThereLoadedSimulation = true;
         } catch (Exception e) {
-            if (currentlyWorkingGeneratedWorld != null)
+            if (currentlyWorkingWorldDef != null)
             {
-                worldFactory.setGeneratedWorld(currentlyWorkingGeneratedWorld);
-                createNewSimulation();
+                this.simulationDef = currentlyWorkingWorldDef;
             }
             throw new RuntimeException(e.getMessage());
         }
-//        } catch (JAXBException | FileNotFoundException e) {
-//            throw new RuntimeException(e.getMessage());
-//        }
     }
 
     @Override
@@ -66,7 +62,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         List<EntityDTO> entitiesDetails = new ArrayList<>();
         List<RuleDTO> rulesDetails = new ArrayList<>();
 
-        for (EntityDefinition entityDefinition: simulation.getEntitiesDefinitions()) {
+        for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
 
             List<PropertyDTO> propertiesDetails = new ArrayList<>();
             for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
@@ -75,7 +71,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
         }
 
-        for (Rule rule: simulation.getRules()) {
+        for (Rule rule: simulationDef.getRules()) {
             List<ActionDTO> actionsDetails = new ArrayList<>();
             for (Action action: rule.getActions()){
                 actionsDetails.add(new ActionDTO(action.getActionType().toString()));
@@ -83,7 +79,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
         }
 
-        simulationDetails = new SimulationDetailsDTO(entitiesDetails, rulesDetails, simulation.getMaxNumberOfTicks(), simulation.getSecondsToTerminate());
+        simulationDetails = new SimulationDetailsDTO(entitiesDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate());
         return simulationDetails;
     }
 
@@ -103,10 +99,11 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
 
-    private void createNewSimulation()
+    @Override
+    public void createNewSimulation()
     {
-        simulation = worldFactory.createWorld();
-        worldFactory.insertDataToWorld(this.simulation);
+        simulation = new WorldInstance(this.simulationDef);
+        simulation.runInitIteration(this.simulationDef);
     }
 
     @Override
@@ -131,9 +128,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
-    public List<ActiveEnvVarDTO> getActiveEnvVarsDto() { //TODO: getActiveEnvironmentVariables return COLLECTION, so the order might change! if relevant - we can change by get by name for each one by the original list
+    public List<ActiveEnvVarDTO> getActiveEnvVarsDto() {
         List<ActiveEnvVarDTO> activeEnvVarDtos = new ArrayList<>();
-        simulation.runInitIteration();
 
         for (PropertyInstance activeEnvVar : simulation.getActiveEnvironmentVariables()) {
             activeEnvVarDtos.add(new ActiveEnvVarDTO(activeEnvVar.getName(), activeEnvVar.getValue()));
@@ -144,48 +140,36 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public List<PropertyDTO> getEnvVarsDefinitionDto() {
         List<PropertyDTO> environmentVariablesDetails = new ArrayList<>();
-        for (PropertyDefinition environmentVariableDefinition: simulation.getEnvironmentVariablesDefinitions()) {
+        for (PropertyDefinition environmentVariableDefinition: simulationDef.getEnvironmentVariablesDefinitions()) {
             addPropertyToDtoList(environmentVariablesDetails, environmentVariableDefinition);
         }
         return environmentVariablesDetails;
     }
 
-//    @Override
-//    public void setEnvVarsFromDto(List<PropertyDTO> envVarsDto)
-//    {
-//        for (PropertyDTO envVarDto :envVarsDto) {
-//            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
-//            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
-//        }
-//
-//        //After:
-//            //runInitIteration();
-//            //return dto with value, so the manu could print it
-//    }
-
     @Override
     public void setEnvVarFromDto(PropertyDTO envVarDto) {
-        simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
+        simulationDef.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
 
         if(!(envVarDto.isInitialisedRandomly()))
         {
-            simulation.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
+            simulationDef.getEnvironmentVariableDefByName(envVarDto.getName()).setInitValue(envVarDto.getInitValue());
         }
     }
 
     @Override
     public List<pastSimulationDTO> getPastSimulationsDetails(){
-        List <pastSimulationDTO> pastSimulations = new ArrayList<>(); //TODO: maybe need to order by date somehow, in case changing clock
-        for(Map.Entry<Integer, World> entry : id2pastSimulation.entrySet()){
+        List <pastSimulationDTO> pastSimulations = new ArrayList<>();
+        for(Map.Entry<Integer, WorldInstance> entry : id2pastSimulation.entrySet()){
             pastSimulations.add(new pastSimulationDTO(entry.getValue().getDateOfRun(), entry.getKey().intValue()));
         }
 
+        pastSimulations.sort(Comparator.comparing(pastSimulationDTO::getDateOfRun));
         return pastSimulations;
     }
 
     @Override
     public Boolean isThereLoadedSimulation() {
-        return isThereLoadedSimulation; //TODO: maybe more complex tesing
+        return this.isThereLoadedSimulation;
     }
 
     @Override
@@ -194,7 +178,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         if(!this.id2pastSimulation.containsKey(simulationID))
             throw new RuntimeException("Trying to view simulation with ID:" + simulationID + ", this ID does not exist in the system!");
         long valueCounter = 0;
-        World desiredSimulation = this.id2pastSimulation.get(simulationID);
+        WorldInstance desiredSimulation = this.id2pastSimulation.get(simulationID);
         List<EntityInstance> pastSimulationEntities = desiredSimulation.getEntityInstanceManager().getInstancesListByName(entityName);
         Map<String, Long> histogram = new TreeMap<>();
 
@@ -212,8 +196,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     public List<EntityCountDTO> getPastSimulationEntityCount(pastSimulationDTO desiredPastSimulation) {
 
         List<EntityCountDTO> entityCountDtos = new ArrayList<>();
-        World pastSimulation = this.id2pastSimulation.get(desiredPastSimulation.getId());
-        for (EntityDefinition entityDefinition :pastSimulation.getEntitiesDefinitions()) {
+        WorldInstance pastSimulation = this.id2pastSimulation.get(desiredPastSimulation.getId());
+        for (EntityDefinition entityDefinition : simulationDef.getEntitiesDefinitions()) {
             int startCount = entityDefinition.getPopulation();
             int endCount = pastSimulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size();
             entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
@@ -225,7 +209,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     public List<EntityDTO> getPastSimulationEntitiesDTO(pastSimulationDTO desiredPastSimulation) {
         List<EntityDTO> entitiesDetails = new ArrayList<>();
 
-        for (EntityDefinition entityDefinition: simulation.getEntitiesDefinitions()) {
+        for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
             List<PropertyDTO> propertiesDetails = new ArrayList<>();
             for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
                 addPropertyToDtoList(propertiesDetails, propertyDefinition);

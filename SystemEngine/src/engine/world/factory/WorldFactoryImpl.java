@@ -1,7 +1,8 @@
 package engine.world.factory;
 
 import engine.range.Range;
-import engine.world.World;
+import engine.world.WorldDefinition;
+import engine.world.WorldInstance;
 import engine.action.api.Action;
 import engine.action.api.ClacType;
 import engine.action.impl.*;
@@ -21,45 +22,30 @@ import exceptions.xml.NotUniqueEnvVarException;
 import exceptions.xml.NotUniquePropertyException;
 import jaxb.generated.*;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class WorldFactoryImpl implements WorldFactory{
-    private PRDWorld generatedWorld = null;
-    //private PRDWorld pastGeneratedWorld = null;
-    private World currWorkingWorld;
+public class WorldFactoryImpl implements WorldFactory, Serializable {
+
+    private WorldDefinition currWorkingWorld;
 
     @Override
-    public World createWorld() {
-        return new World();
-    }
-    @Override
-    public void setGeneratedWorld(PRDWorld worldToSet) {
-        //pastGeneratedWorld = this.generatedWorld;
-        this.generatedWorld = worldToSet;
-    }
-    @Override
-    public void insertDataToWorld(World simulation) {
-        this.currWorkingWorld = simulation;
+    public void insertDataToWorldDefinition(WorldDefinition simulationDef, PRDWorld generatedWorld) {
+        this.currWorkingWorld = simulationDef;
 
-        try {
-            addEnvironmentVariables();
-            addEntitiesDefinitions();
-            addRules();
-            //addTerminationSettings();
-
-        } catch (Exception e) {
-            //this.generatedWorld = pastGeneratedWorld;
-            //if(this.generatedWorld != null)
-            //this.insertDataToWorld(simulation);
+        try{
+            addEnvironmentVariables(generatedWorld);
+            addEntitiesDefinitions(generatedWorld);
+            addRules(generatedWorld);
+            addTerminationSettings(generatedWorld);
+        }
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
 
-
-
-    private void addEnvironmentVariables() throws Exception {
+    private void addEnvironmentVariables(PRDWorld generatedWorld) throws Exception {
         int environmentVariablesCount = generatedWorld.getPRDEvironment().getPRDEnvProperty().size();
         Set<String> EnvVarsNames = new HashSet<>();
 
@@ -88,7 +74,8 @@ public class WorldFactoryImpl implements WorldFactory{
             currWorkingWorld.addEnvironmentVariableDef(newEnvVarDef);
         }
     }
-    private void addEntitiesDefinitions() throws Exception {
+
+    private void addEntitiesDefinitions(PRDWorld generatedWorld) throws Exception {
         int entitiesCount = generatedWorld.getPRDEntities().getPRDEntity().size();
         for (int i = 0; i < entitiesCount; i++) {
             PRDEntity prdEntity = generatedWorld.getPRDEntities().getPRDEntity().get(i);
@@ -132,7 +119,7 @@ public class WorldFactoryImpl implements WorldFactory{
         return resPropertyDef;
     }
 
-    private void addTerminationSettings()
+    private void addTerminationSettings(PRDWorld generatedWorld)
     {
         for (Object obj: generatedWorld.getPRDTermination().getPRDByTicksOrPRDBySecond()) {
             if (obj instanceof PRDByTicks) {
@@ -145,7 +132,7 @@ public class WorldFactoryImpl implements WorldFactory{
         }
     }
 
-    private void addRules() throws Exception {
+    private void addRules(PRDWorld generatedWorld) {
         for (PRDRule prdRule : generatedWorld.getPRDRules().getPRDRule()) {
 
             Rule currentRule;
@@ -157,16 +144,13 @@ public class WorldFactoryImpl implements WorldFactory{
             }
 
             // Adding Rule Actions
-            for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()) { //UNFINISHED! TODO: ALL THE EDGE CASES OF PROPERTIES Existing check. (5, 6 in the XML Checks)
+            for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()) {
                 Action newAction = createActionFromPrd(prdAction);
                 currentRule.addAction(newAction);
             }
             currWorkingWorld.addRule(currentRule);
         }
-    } //TODO: DEAL WITH EXCEPTIONS
-
-    // TODO: REARRANGE THE METHODS BELLOW
-
+    }
 
     private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
     {
@@ -192,7 +176,7 @@ public class WorldFactoryImpl implements WorldFactory{
                     break;
             }
 
-            resCondition = new SingleCondition(prdCondition.getEntity(), prdCondition.getProperty(), conditionOp, prdCondition.getValue());//TODO: IN the next version there might be entity of action and entity of rule
+            resCondition = new SingleCondition(prdCondition.getEntity(), prdCondition.getProperty(), conditionOp, prdCondition.getValue());
         }
         else //singularity: multiple
         {
@@ -254,8 +238,8 @@ public class WorldFactoryImpl implements WorldFactory{
                 }
                 break;
 
-            case "condition": //TODO: add an checks for condition action
-                ConditionImpl resCondition = createConditionAction(prdAction.getEntity(), prdAction.getPRDCondition()); //TODO make abstract father
+            case "condition":
+                ConditionImpl resCondition = createConditionAction(prdAction.getEntity(), prdAction.getPRDCondition());
 
                 for (PRDAction prdActionInThen : prdAction.getPRDThen().getPRDAction()) {
                     resCondition.addActionToThen(createActionFromPrd(prdActionInThen));
@@ -291,12 +275,12 @@ public class WorldFactoryImpl implements WorldFactory{
         if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
             throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
         }
-        else if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) { //TODO: NEED TO GIVE MORE DETAILS? such as the ARGUMENTS?
-            throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
+        else if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) {
+            throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getBy() + ", to action " + prdAction.getType() + " - expected to be numerical!");
         }
         else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getProperty()))
         {
-            throw new IllegalArgumentException("Invalid xml file! property in " + prdAction.getType() + " must be of a numeric type."); //TODO: NEED TO GIVE MORE DETAILS? WHAT ARGUMENTS?
+            throw new IllegalArgumentException("Invalid xml file! property: " + prdAction.getProperty() + ", in action " + prdAction.getType() + " - expected to be numerical!");
         }
     }
 
@@ -320,7 +304,7 @@ public class WorldFactoryImpl implements WorldFactory{
             try {
                 Integer.parseInt(value);
                 return true;
-            } catch (NumberFormatException e) { //TODO: MAYBE THROW THE EXCEPTION OUTSIDE
+            } catch (NumberFormatException e) {
                 return false;
             }
         }
@@ -338,7 +322,7 @@ public class WorldFactoryImpl implements WorldFactory{
         try {
             Double.parseDouble(str);
             return true;
-        } catch (NumberFormatException e) { //TODO: MAYBE THROW THE EXCEPTION OUTSIDE
+        } catch (NumberFormatException e) {
             return false;
         }
     }

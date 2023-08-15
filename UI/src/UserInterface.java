@@ -16,14 +16,14 @@ public class UserInterface {
     private SimulationDetailsDTO simulationDetailsDTO;
     private boolean exit = false;
 
-    private MenuManager menuManager = new MenuManagerImpl();
+    private final MenuManager menuManager = new MenuManagerImpl();
 
     void buildMainMenu(){
         Menu mainMenu = menuManager.createMenu("mainMenu");
-        mainMenu.addItem("Load simulation");
+        mainMenu.addItem("Load simulation from xml file");
         mainMenu.addItem("Show loaded simulation details");
         mainMenu.addItem("Run simulation");
-        mainMenu.addItem("Show full details of a previous simulation");
+        mainMenu.addItem("Show details of a previous simulation");
         mainMenu.addItem("Save system state to file");
         mainMenu.addItem("Load system state from file");
         mainMenu.addItem("Exit");
@@ -52,7 +52,6 @@ public class UserInterface {
     }
     public MenuManager getMenuManager(){return this.menuManager;}
     public boolean isExit(){return this.exit;}
-
     public void decodeUserChoice(String menuName, int choice){
         switch(menuName){
             case "mainMenu":
@@ -60,9 +59,7 @@ public class UserInterface {
                 break;
         }
     }
-
-    private void decodeMainMenu(int choice)
-    {
+    private void decodeMainMenu(int choice){
         switch (choice){
             case 1:
                 Scanner scanner = new Scanner(System.in);
@@ -71,13 +68,14 @@ public class UserInterface {
                 try {
                     systemEngine.loadSimulation(filePath);
                     System.out.println("xml file loaded successfully!");
-                    systemEngine.clearPastSimulations();                }
+                    systemEngine.clearPastSimulations();
+                }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
                 break;
             case 2:
-                if(systemEngine.isThereLoadedSimulation()) {//TODO: TEMPORARY TESTING, PROBABLY NEEDED MORE COMPLEX ONE
+                if(systemEngine.isThereLoadedSimulation()) {
                     simulationDetailsDTO = systemEngine.showSimulationDetails();
                     printSimulationDetails();
                 }
@@ -90,6 +88,8 @@ public class UserInterface {
                 try{
                     List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
                     letUserChooseEnvVarsValues(envVarDtos);
+
+                    systemEngine.createNewSimulation();
                     List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
                     printActiveEnvVars(activeEnvVarDtos);
                     EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
@@ -101,13 +101,13 @@ public class UserInterface {
 
                 break;
             case 4:
-                List<pastSimulationDTO> pastSimulationsDetails = systemEngine.getPastSimulationsDetails(); //TODO: GET THEM ORDERED BY DATE! (when we will change it to map or something)
-                if (pastSimulationsDetails.size() == 0){
+                List<pastSimulationDTO> pastSimulationsDetails = systemEngine.getPastSimulationsDetails();
+                if (pastSimulationsDetails.isEmpty()){
                     System.out.println("There are no past simulations in the system!");
                 }
                 else {
                     pastSimulationDTO desiredPastSimulation = letUserChoosePastSimulation(pastSimulationsDetails);
-                    letUserChooseAndPrintDestails(desiredPastSimulation); //TODO: the name is only for description for us to the inside - will need to choose counts or diagram
+                    letUserChooseAndPrintDestails(desiredPastSimulation);
                 }
 
                 break;
@@ -122,7 +122,6 @@ public class UserInterface {
                 break;
         }
     }
-
     private void letUserChooseAndPrintDestails(pastSimulationDTO desiredPastSimulation) {
         buildPastSimulationPresentingMethodMenu();
         menuManager.showMenuByName("PastSimulationPresentingMethod");
@@ -160,7 +159,6 @@ public class UserInterface {
         // get DTO
         // print the desired data
     }
-
     private void buildPastSimulationEntitysPropertiesMenu(EntityDTO entityDTO) {
         Menu pastSimulationEntitysPropertiesMenu = menuManager.createMenu("PastSimulationEntitysPropertiesMenu");
         for(PropertyDTO property : entityDTO.getProperties()){
@@ -168,7 +166,6 @@ public class UserInterface {
         }
         menuManager.addMenu(pastSimulationEntitysPropertiesMenu);
     }
-
     private void buildPastSimulationEntitiesMenu(List<EntityDTO> pastSimulationEntitiesDTO) {
             Menu pastSimulationEntitiesMenu = menuManager.createMenu("PastSimulationEntitiesMenu");
         for(EntityDTO entity : pastSimulationEntitiesDTO){
@@ -177,7 +174,6 @@ public class UserInterface {
 
         menuManager.addMenu(pastSimulationEntitiesMenu);
     }
-
     private pastSimulationDTO letUserChoosePastSimulation(List<pastSimulationDTO> pastSimulationsDetails) {
         Menu pastSimulationsMenu = menuManager.createMenu("pastSimulations");
         for (pastSimulationDTO pastSimulationDetails : pastSimulationsDetails) {
@@ -186,14 +182,12 @@ public class UserInterface {
         menuManager.addMenu(pastSimulationsMenu);
         System.out.println("Past simulations:");
         System.out.println("====================================");
-        int userChoice = 0;
+        int userChoice;
         menuManager.showMenuByName("pastSimulations");
         userChoice = menuManager.getMenuByName("pastSimulations").getValidInput();
 
         return pastSimulationsDetails.get(userChoice - 1);
     }
-
-
     private void printEndOfSimulationDetails(EndOfSimulationDTO endOfSimulationDTO) {
         System.out.println("The simulation has terminated!");
         System.out.println("Simulation ID: " + endOfSimulationDTO.getSimulationID());
@@ -208,7 +202,6 @@ public class UserInterface {
         System.out.println();
 
     }
-
     private void printActiveEnvVars(List<ActiveEnvVarDTO> activeEnvVarDtos) {
         System.out.println("The values that determined for environment variables are:");
         for (ActiveEnvVarDTO activeEnvVarDto: activeEnvVarDtos) {
@@ -216,10 +209,9 @@ public class UserInterface {
         }
         System.out.println(System.lineSeparator() + "Running the simulation!" + System.lineSeparator());
     }
-
     private void letUserChooseEnvVarsValues(List<PropertyDTO> envVarsDto) {
         buildEnvironmentVariablesInitiationMenu();
-        buildBooleanChoiceForUserMenu(); //TODO Move inside?
+        buildBooleanChoiceForUserMenu();
         System.out.println("Environment variables initialization:");
         System.out.println("====================================");
         for (PropertyDTO envVarDto : envVarsDto) {
@@ -239,20 +231,16 @@ public class UserInterface {
             letUserChooseEnvVarValue(envVarDto);
         }
     }
-
     private PropertyDTO letUserChooseBooleanEnvVarValue(PropertyDTO envVarDto) {
-        //boolean isValidInput = false;
         String value = "true";
         int userChoice = 0;
 
         menuManager.showMenuByName("booleanChoice");
-        //while(!isValidInput) {
         userChoice = menuManager.getMenuByName("booleanChoice").getValidInput();
         if (userChoice == 2)
             value = "false";
         return new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, value);
     }
-
     private void letUserChooseEnvVarValue(PropertyDTO envVarDto) {
         PropertyDTO resPropertyDto;
         String userInputValue;
@@ -272,7 +260,7 @@ public class UserInterface {
                 else{
                     System.out.println("Please insert a valid value:");
                     scanner = new Scanner(System.in);
-                    userInputValue = scanner.next(); // TODO: need to validate here or at the set property???
+                    userInputValue = scanner.next();
                     resPropertyDto = new PropertyDTO(envVarDto.getName(), envVarDto.getType(), envVarDto.getFrom(), envVarDto.getTo(), false, userInputValue);
                 }
             }
@@ -289,9 +277,7 @@ public class UserInterface {
             }
         }
     }
-
-    private void printSimulationDetails()
-    {
+    private void printSimulationDetails(){
         System.out.println("Currently loaded simulation details:");
         System.out.println("Entities:");
         for (EntityDTO entityDTO : simulationDetailsDTO.getEntities()) {
@@ -327,15 +313,17 @@ public class UserInterface {
             }
             System.out.println();
         }
-        System.out.println("Termination conditions: "); //TODO: NOT ALL CONDITIONS MUST BE SET! NEED TO DEAL WITH NULLS
-        System.out.println("Number of ticks: " + simulationDetailsDTO.getMaxNumberOfTicks());
-        System.out.println("Number of seconds: " + simulationDetailsDTO.getSecondsToTerminate());
-    }
+        System.out.println("Termination conditions: ");
 
-    private void serializeEngine() //TODO, make all Serielizable at the end and check
-    {
+        if(simulationDetailsDTO.getMaxNumberOfTicks() != null)
+            System.out.println("Number of ticks: " + simulationDetailsDTO.getMaxNumberOfTicks());
+        if(simulationDetailsDTO.getSecondsToTerminate() != null)
+            System.out.println("Number of seconds: " + simulationDetailsDTO.getSecondsToTerminate());
+    }
+    private void serializeEngine(){
+
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the file path (including the file name) you would like to save to:");
+        System.out.println("Please enter the file path (including the file name- without suffix) you would like load the system from:");
         String filePath = scanner.nextLine();
         filePath = filePath + ".ser"; // \obj\bin
 
@@ -344,11 +332,11 @@ public class UserInterface {
 
             out.writeObject(systemEngine);
             System.out.println("System saved successfully!");
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        catch (IOException e) {
+            System.out.println(e.getMessage());
         }
     }
-
     private void deserializeEngine()
     {
         Scanner scanner = new Scanner(System.in);
@@ -364,7 +352,7 @@ public class UserInterface {
             System.out.println("System loaded successfully!");
 
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 }

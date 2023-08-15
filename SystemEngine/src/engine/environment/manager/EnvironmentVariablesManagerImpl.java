@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnvironmentVariablesManagerImpl implements EnvironmentVariablesManager {
+public class EnvironmentVariablesManagerImpl implements EnvironmentVariablesManager, Serializable {
 
     private Map<String, PropertyDefinition> name2PropertyDef;
 

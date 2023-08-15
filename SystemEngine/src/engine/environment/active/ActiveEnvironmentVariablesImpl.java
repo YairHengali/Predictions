@@ -7,12 +7,13 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActiveEnvironmentVariablesImpl implements ActiveEnvironmentVariables {
+public class ActiveEnvironmentVariablesImpl implements ActiveEnvironmentVariables, Serializable {
     private final Map<String, PropertyInstance> envVariables;
 
     public ActiveEnvironmentVariablesImpl(){

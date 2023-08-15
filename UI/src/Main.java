@@ -11,9 +11,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        SystemEngine systemEngine = new SystemEngineImpl();
         UserInterface UI = new UserInterface();
-        boolean exit = false;
         UI.buildMainMenu();
 
         do {

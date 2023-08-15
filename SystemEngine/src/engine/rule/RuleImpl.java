@@ -10,12 +10,13 @@ import engine.entity.EntityInstance;
 import engine.entity.manager.EntityInstanceManager;
 import engine.environment.active.ActiveEnvironmentVariables;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-public class RuleImpl implements Rule {
+public class RuleImpl implements Rule, Serializable {
     private final String name;
     private int howManyTicksForActivation = 1;
     private double probabilityForActivation = 1;
@@ -28,6 +29,12 @@ public class RuleImpl implements Rule {
         }
         if (probabilityForActivation != null) {
             this.probabilityForActivation = probabilityForActivation;
+        }
+    }
+    public RuleImpl(Rule ruleToCopy){
+        this(ruleToCopy.getName(),ruleToCopy.getTicksForActivations(),ruleToCopy.getProbForActivations());
+        for(Action act : ruleToCopy.getActions()){
+            this.actions.add(act);
         }
     }
 

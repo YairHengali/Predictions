@@ -7,10 +7,11 @@ import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EntityInstance {
+public class EntityInstance implements Serializable {
 
     private final int id;
     private final String name;

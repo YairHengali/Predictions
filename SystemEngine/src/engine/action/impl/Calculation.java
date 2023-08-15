@@ -1,10 +1,10 @@
 package engine.action.impl;
 
-import engine.YairExpression;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.action.api.ClacType;
 import engine.context.Context;
+import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -26,8 +26,8 @@ public class Calculation extends AbstractAction {
     @Override
     public void Run(Context context) throws Exception {//TODO: ADD EXCEPTIONS WHERE NEEDED (for example dividing by zero and unmatching type)
 
-            YairExpression arg1AsExpression = new YairExpression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-            YairExpression arg2AsExpression = new YairExpression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression arg1AsExpression = new Expression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression arg2AsExpression = new Expression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
 
             String value1FromExpression = arg1AsExpression.praseExpressionToValueString();
             String value2FromExpression = arg2AsExpression.praseExpressionToValueString();

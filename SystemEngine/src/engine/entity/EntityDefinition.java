@@ -1,9 +1,10 @@
 package engine.entity;
 import engine.property.PropertyDefinition;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class EntityDefinition {
+public class EntityDefinition implements Serializable {
     private final String name;
     private final int population;
     private final Map<String, PropertyDefinition> name2propertyDef = new HashMap<>();

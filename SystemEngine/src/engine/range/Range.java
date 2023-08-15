@@ -1,6 +1,8 @@
 package engine.range;
 
-public class Range {
+import java.io.Serializable;
+
+public class Range implements Serializable {
     private final Number from;
     private final Number to;
 

@@ -5,7 +5,9 @@ import engine.entity.manager.EntityInstanceManager;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.property.api.PropertyInstance;
 
-public class ContextImpl implements Context{
+import java.io.Serializable;
+
+public class ContextImpl implements Context, Serializable {
     private EntityInstance primaryEntityInstance;
     private EntityInstanceManager entityInstanceManager;
     private ActiveEnvironmentVariables activeEnvironment;
