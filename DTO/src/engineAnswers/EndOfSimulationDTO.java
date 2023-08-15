@@ -1,8 +1,8 @@
 package engineAnswers;
 
 public class EndOfSimulationDTO {
-    int simulationID;
-    String reasonOfTermination;
+    final int simulationID;
+    final String reasonOfTermination;
 
     public EndOfSimulationDTO(int simulationID, String reasonOfTermination) {
         this.simulationID = simulationID;

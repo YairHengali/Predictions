@@ -63,11 +63,11 @@ public class UserInterface {
         switch (choice){
             case 1:
                 Scanner scanner = new Scanner(System.in);
-                System.out.println("Please enter the .xml file full path:");
+                System.out.println("Please enter the xml file full path:");
                 String filePath = scanner.nextLine();
                 try {
                     systemEngine.loadSimulation(filePath);
-                    System.out.println("xml file loaded successfully!");
+                    System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
                     systemEngine.clearPastSimulations();
                 }
                 catch (Exception e) {
@@ -80,30 +80,33 @@ public class UserInterface {
                     printSimulationDetails();
                 }
                 else{
-                    throw new RuntimeException("there is no simulation to show, please load one first");
+                    System.out.println("There is no simulation to show, please load a valid xml file first." + System.lineSeparator());
                 }
 
                 break;
             case 3:
-                try{
-                    List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
-                    letUserChooseEnvVarsValues(envVarDtos);
+                if(systemEngine.isThereLoadedSimulation()) {
+                    try {
+                        List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
+                        letUserChooseEnvVarsValues(envVarDtos);
 
-                    systemEngine.createNewSimulation();
-                    List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
-                    printActiveEnvVars(activeEnvVarDtos);
-                    EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
-                    printEndOfSimulationDetails(endOfSimulationDTO);
-                }catch (Exception e)
-                {
-                    System.out.println(e.getMessage());
+                        systemEngine.createNewSimulation();
+                        List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
+                        printActiveEnvVars(activeEnvVarDtos);
+                        EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
+                        printEndOfSimulationDetails(endOfSimulationDTO);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
-
+                else{
+                    System.out.println("Please load a valid xml file before trying to run a simulation." + System.lineSeparator());
+                }
                 break;
             case 4:
                 List<pastSimulationDTO> pastSimulationsDetails = systemEngine.getPastSimulationsDetails();
                 if (pastSimulationsDetails.isEmpty()){
-                    System.out.println("There are no past simulations in the system!");
+                    System.out.println("There are no past simulations in the system." + System.lineSeparator());
                 }
                 else {
                     pastSimulationDTO desiredPastSimulation = letUserChoosePastSimulation(pastSimulationsDetails);

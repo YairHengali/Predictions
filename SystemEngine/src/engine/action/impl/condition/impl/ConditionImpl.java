@@ -11,11 +11,11 @@ import java.util.List;
 
 public abstract class ConditionImpl extends AbstractAction implements Condition {
 
-    protected List<Action> thenActions;
-    protected List<Action> elseActions;
+    protected final List<Action> thenActions;
+    protected final List<Action> elseActions;
 
-    protected ConditionImpl(ActionType actionType, String mainEntityName) {
-        super(actionType, mainEntityName);
+    protected ConditionImpl(String mainEntityName) {
+        super(ActionType.CONDITION, mainEntityName);
         thenActions = new ArrayList<>();
         elseActions = new ArrayList<>();
     }

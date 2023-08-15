@@ -1,14 +1,12 @@
 package engineAnswers;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class HistogramDTO {
-    private int simulationID;
-    private String entityName;
-    private String propertyName;
-    private Map<String, Long> propertyHistogram;
+    private final int simulationID;
+    private final String entityName;
+    private final String propertyName;
+    private final Map<String, Long> propertyHistogram;
 
     public HistogramDTO(int simulationID, String entityName, String propertyName, Map<String, Long> propertyHistogram) {
         this.simulationID = simulationID;

@@ -3,9 +3,9 @@ package menu.impl;
 import menu.api.MenuItem;
 
 public class MenuItemImpl implements MenuItem {
-    private int id = -1;
-    private int serial;
-    private String title;
+    private final int id = -1;
+    private final int serial;
+    private final String title;
 
     public MenuItemImpl(int serial, String title) {
         this.serial = serial;

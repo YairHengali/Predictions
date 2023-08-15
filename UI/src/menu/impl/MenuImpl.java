@@ -6,8 +6,8 @@ import menu.api.MenuItem;
 import java.util.*;
 
 public class MenuImpl implements Menu {
-    String menuName;
-    List<MenuItem> items;
+    final String menuName;
+    final List<MenuItem> items;
     int itemsCounter;
 
     public MenuImpl(String menuName) {

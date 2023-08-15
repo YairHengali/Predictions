@@ -1,7 +1,5 @@
 package engineAnswers;
 
-import java.util.List;
-
 public class pastSimulationDTO {
     private final String dateOfRun;
     private final int id;

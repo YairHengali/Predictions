@@ -7,7 +7,7 @@ import engine.property.api.PropertyInstance;
 
 public interface Context {
     EntityInstance getPrimaryEntityInstance();
-    //void removeEntity(EntityInstance entityInstance);
+
     PropertyInstance getEnvironmentVariable(String name);
 
     EntityInstanceManager getEntityInstanceManager();

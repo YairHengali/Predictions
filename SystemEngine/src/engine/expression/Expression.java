@@ -7,9 +7,9 @@ import java.io.Serializable;
 import java.util.Random;
 
 public class Expression implements Serializable {
-    protected String rawExpression;
-    private ActiveEnvironmentVariables environmentVariables;
-    private EntityInstance mainEntity;
+    protected final String rawExpression;
+    private final ActiveEnvironmentVariables environmentVariables;
+    private final EntityInstance mainEntity;
 
     public Expression(String rawExpression, ActiveEnvironmentVariables environmentVariables, EntityInstance mainEntity) {
         this.rawExpression = rawExpression;

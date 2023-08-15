@@ -26,11 +26,9 @@ public class RuleImpl implements Rule, Serializable {
             this.probabilityForActivation = probabilityForActivation;
         }
     }
-    public RuleImpl(Rule ruleToCopy){
+    public RuleImpl(Rule ruleToCopy){//TODO: NEED OR NOT?
         this(ruleToCopy.getName(),ruleToCopy.getTicksForActivations(),ruleToCopy.getProbForActivations());
-        for(Action act : ruleToCopy.getActions()){
-            this.actions.add(act);
-        }
+        this.actions.addAll(ruleToCopy.getActions());
     }
 
     @Override

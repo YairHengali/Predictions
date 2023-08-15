@@ -6,7 +6,7 @@ public class PropertyDTO {
     private final Number from;
     private final Number to;
     private final boolean isInitialisedRandomly;
-    private String initValue;
+    private final String initValue;
 
     public PropertyDTO(String name, String type, Number from, Number to, boolean isInitialisedRandomly, String initValue) {
         this.name = name;

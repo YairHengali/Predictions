@@ -2,7 +2,6 @@ package engine.world.factory;
 
 import engine.range.Range;
 import engine.world.WorldDefinition;
-import engine.world.WorldInstance;
 import engine.action.api.Action;
 import engine.action.api.ClacType;
 import engine.action.impl.*;
@@ -45,7 +44,7 @@ public class WorldFactoryImpl implements WorldFactory, Serializable {
         }
     }
 
-    private void addEnvironmentVariables(PRDWorld generatedWorld) throws Exception {
+    private void addEnvironmentVariables(PRDWorld generatedWorld) {
         int environmentVariablesCount = generatedWorld.getPRDEvironment().getPRDEnvProperty().size();
         Set<String> EnvVarsNames = new HashSet<>();
 
@@ -75,7 +74,7 @@ public class WorldFactoryImpl implements WorldFactory, Serializable {
         }
     }
 
-    private void addEntitiesDefinitions(PRDWorld generatedWorld) throws Exception {
+    private void addEntitiesDefinitions(PRDWorld generatedWorld) {
         int entitiesCount = generatedWorld.getPRDEntities().getPRDEntity().size();
         for (int i = 0; i < entitiesCount; i++) {
             PRDEntity prdEntity = generatedWorld.getPRDEntities().getPRDEntity().get(i);

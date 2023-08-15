@@ -8,8 +8,6 @@ import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 
-import java.util.List;
-
 public class Increase extends AbstractAction {
     private final String propertyName;
     private final String byExpression;
@@ -21,7 +19,7 @@ public class Increase extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) throws Exception { //TODO: ADD EXCEPTIONS WHERE NEEDED
+    public void Run(Context context) { //TODO: ADD EXCEPTIONS WHERE NEEDED
         Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueFromExpression = expression.praseExpressionToValueString();
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);

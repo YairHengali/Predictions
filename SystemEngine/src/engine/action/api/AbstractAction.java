@@ -1,13 +1,10 @@
 package engine.action.api;
 
-import engine.entity.EntityInstance;
-
 import java.io.Serializable;
-import java.util.List;
 
 public abstract class AbstractAction implements Action, Serializable {
     private final ActionType actionType;
-    protected String mainEntityName;
+    protected final String mainEntityName;
 
 
     protected AbstractAction(ActionType actionType, String mainEntityName) {

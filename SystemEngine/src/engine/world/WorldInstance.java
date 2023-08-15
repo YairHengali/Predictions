@@ -1,18 +1,14 @@
 package engine.world;
 
-import engine.action.api.Action;
 import engine.entity.EntityDefinition;
 import engine.entity.manager.EntityInstanceManager;
 import engine.entity.manager.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.environment.active.ActiveEnvironmentVariablesImpl;
-import engine.environment.manager.EnvironmentVariablesManager;
-//import engine.environment.manager.EnvironmentVariablesManager;
-import engine.environment.manager.EnvironmentVariablesManagerImpl;
+//import engine.environment.manager.EnvironmentVariablesDefManager;
 import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
-import engine.rule.RuleImpl;
 
 import java.io.Serializable;
 import java.util.*;
@@ -36,14 +32,11 @@ public class WorldInstance implements Serializable {
         return activeEnvironmentVariables.getEvnVariables();
     }
 
-    ///////// Termination conditions:
-
     public WorldInstance(WorldDefinition worldDef) {
         this.secondsToTerminate = worldDef.getSecondsToTerminate();
         this.maxNumberOfTicks = worldDef.getMaxNumberOfTicks();
         this.rules.addAll(worldDef.getRules());
     }
-
 
     public void runInitIteration(WorldDefinition simulationDef){//Tick0
         currentNumberOfTicks = 0;

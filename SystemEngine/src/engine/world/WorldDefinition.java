@@ -1,10 +1,8 @@
 package engine.world;
 
 import engine.entity.EntityDefinition;
-import engine.entity.manager.EntityInstanceManager;
-import engine.environment.active.ActiveEnvironmentVariables;
-import engine.environment.manager.EnvironmentVariablesManager;
-import engine.environment.manager.EnvironmentVariablesManagerImpl;
+import engine.environment.manager.EnvironmentVariablesDefManager;
+import engine.environment.manager.EnvironmentVariablesDefManagerImpl;
 import engine.property.PropertyDefinition;
 import engine.rule.Rule;
 
@@ -16,10 +14,10 @@ public class WorldDefinition implements Serializable {
     private Long SecondsToTerminate = null;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
     private final List<Rule> rules = new ArrayList<>();
-    EnvironmentVariablesManager environmentVariablesManager = new EnvironmentVariablesManagerImpl();
+    final EnvironmentVariablesDefManager environmentVariablesDefManager = new EnvironmentVariablesDefManagerImpl();
 
     public void addEnvironmentVariableDef(PropertyDefinition envVarDefinitionToAdd)    {
-        this.environmentVariablesManager.addEnvironmentVariable(envVarDefinitionToAdd);
+        this.environmentVariablesDefManager.addEnvironmentVariable(envVarDefinitionToAdd);
     }
     public void addEntityDefinition(EntityDefinition entityDefinitionToAdd){
         name2EntitiesDef.put(entityDefinitionToAdd.getName(), entityDefinitionToAdd);
@@ -44,7 +42,7 @@ public class WorldDefinition implements Serializable {
 
     public PropertyDefinition getEnvironmentVariableDefByName(String name)    {
         try {
-            return this.environmentVariablesManager.getEnvironmentVariableByName(name);
+            return this.environmentVariablesDefManager.getEnvironmentVariableByName(name);
         }
         catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
@@ -62,7 +60,7 @@ public class WorldDefinition implements Serializable {
     }
 
     public Collection<PropertyDefinition> getEnvironmentVariablesDefinitions(){
-        return this.environmentVariablesManager.getEnvironmentVariables();
+        return this.environmentVariablesDefManager.getEnvironmentVariables();
     }
 
     public Integer getMaxNumberOfTicks() {

@@ -1,7 +1,5 @@
 package engine.environment.manager;
 
-import engine.environment.active.ActiveEnvironmentVariables;
-import engine.environment.active.ActiveEnvironmentVariablesImpl;
 import engine.property.PropertyDefinition;
 
 import java.io.Serializable;
@@ -9,22 +7,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EnvironmentVariablesManagerImpl implements EnvironmentVariablesManager, Serializable {
+public class EnvironmentVariablesDefManagerImpl implements EnvironmentVariablesDefManager, Serializable {
 
-    private Map<String, PropertyDefinition> name2PropertyDef;
+    private final Map<String, PropertyDefinition> name2PropertyDef;
 
-    public EnvironmentVariablesManagerImpl() {
+    public EnvironmentVariablesDefManagerImpl() {
         this.name2PropertyDef = new HashMap<>();
     }
 
     @Override
     public void addEnvironmentVariable(PropertyDefinition propertyDefinition) {
         name2PropertyDef.put(propertyDefinition.getName(), propertyDefinition);
-    }
-
-    @Override
-    public ActiveEnvironmentVariables createActiveEnvironment() {
-        return new ActiveEnvironmentVariablesImpl();
     }
 
     @Override

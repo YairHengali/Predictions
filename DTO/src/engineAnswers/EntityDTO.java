@@ -1,7 +1,6 @@
 package engineAnswers;
 
 import java.util.List;
-import java.util.Properties;
 
 public class EntityDTO {
     private final String Name;

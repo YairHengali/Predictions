@@ -26,9 +26,9 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     private WorldInstance simulation = null;
     private WorldDefinition simulationDef = null;
     private final WorldFactory worldFactory = new WorldFactoryImpl();
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
+    final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
     int currentSimulationID = 0;
-    private Map<Integer, WorldInstance> id2pastSimulation = new HashMap<>();
+    private final Map<Integer, WorldInstance> id2pastSimulation = new HashMap<>();
     private boolean isThereLoadedSimulation = false;
 
 
@@ -206,7 +206,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
-    public List<EntityDTO> getPastSimulationEntitiesDTO(pastSimulationDTO desiredPastSimulation) {
+    public List<EntityDTO> getPastSimulationEntitiesDTO(pastSimulationDTO desiredPastSimulation) {//TODO: WHY DOES desiredPastSimulation sent here?
         List<EntityDTO> entitiesDetails = new ArrayList<>();
 
         for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {

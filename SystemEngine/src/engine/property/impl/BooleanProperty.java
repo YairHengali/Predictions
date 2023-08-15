@@ -1,7 +1,6 @@
 package engine.property.impl;
 
 import engine.property.PropertyDefinition;
-import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 
 import java.util.Random;

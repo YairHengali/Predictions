@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MenuManagerImpl implements MenuManager {
-    private Map<String, Menu> name2menu;
+    private final Map<String, Menu> name2menu;
 
     public MenuManagerImpl() {
         this.name2menu = new HashMap<>();

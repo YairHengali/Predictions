@@ -8,9 +8,9 @@ import java.util.*;
 
 public class EntityInstanceManagerImpl implements EntityInstanceManager, Serializable {
     private int count;
-    private Map<String, List<EntityInstance>> name2EntInstancesList;
+    private final Map<String, List<EntityInstance>> name2EntInstancesList;
 
-    private Set<EntityInstance>  EntitiesToKill;
+    private final Set<EntityInstance>  EntitiesToKill;
 
     public EntityInstanceManagerImpl() {
         count = 0;
@@ -29,11 +29,6 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
             }
             name2EntInstancesList.get(entityDefinition.getName()).add(newEntityInstance);
         }
-    }
-
-    @Override
-    public Map<String, List<EntityInstance>> getInstancesLists() {
-        return name2EntInstancesList;
     }
 
     @Override

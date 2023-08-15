@@ -1,30 +1,24 @@
 package engine.action.impl.condition.impl;
 
-import engine.action.api.AbstractAction;
-import engine.action.api.Action;
-import engine.action.api.ActionType;
 import engine.action.impl.condition.LogicalOperator;
 import engine.action.impl.condition.api.Condition;
 import engine.context.Context;
-import engine.context.ContextImpl;
-import engine.entity.EntityInstance;
-import engine.entity.manager.EntityInstanceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleCondition extends ConditionImpl implements Condition {
-    List<Condition> conditionList;
-    LogicalOperator logicalOperator;
+    final List<Condition> conditionList;
+    final LogicalOperator logicalOperator;
 
     public MultipleCondition(String mainEntityName, LogicalOperator logicalOperator){
-        super(ActionType.CONDITION,mainEntityName);
+        super(mainEntityName);
         this.conditionList = new ArrayList<>();
         this.logicalOperator = logicalOperator;
     }
 
     @Override
-    public void Run(Context context) throws Exception {
+    public void Run(Context context) {
         if (evaluateCondition(context)) {
             invokeThenActions(context);
         } else {

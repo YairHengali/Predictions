@@ -8,9 +8,9 @@ import engine.property.api.PropertyInstance;
 import java.io.Serializable;
 
 public class ContextImpl implements Context, Serializable {
-    private EntityInstance primaryEntityInstance;
-    private EntityInstanceManager entityInstanceManager;
-    private ActiveEnvironmentVariables activeEnvironment;
+    private final EntityInstance primaryEntityInstance;
+    private final EntityInstanceManager entityInstanceManager;
+    private final ActiveEnvironmentVariables activeEnvironment;
 
     public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, ActiveEnvironmentVariables activeEnvironment) {
         this.primaryEntityInstance = primaryEntityInstance;
@@ -23,9 +23,6 @@ public class ContextImpl implements Context, Serializable {
         return this.primaryEntityInstance;
     }
 
-//    @Override
-//    public void removeEntity(EntityInstance entityInstance) {
-//    }
     @Override
     public PropertyInstance getEnvironmentVariable(String name) {
         return activeEnvironment.getEvnVariable(name);

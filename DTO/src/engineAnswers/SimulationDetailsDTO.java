@@ -1,7 +1,6 @@
 package engineAnswers;
 
 import java.util.List;
-import java.util.Locale;
 
 public class SimulationDetailsDTO {
     private final List <EntityDTO> entities;

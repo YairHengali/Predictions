@@ -1,8 +1,8 @@
 package engineAnswers;
 
 public class ActiveEnvVarDTO {
-    String name;
-    String value;
+    final String name;
+    final String value;
 
     public ActiveEnvVarDTO(String name, String value) {
         this.name = name;
