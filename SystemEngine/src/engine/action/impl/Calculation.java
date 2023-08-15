@@ -42,7 +42,6 @@ public class Calculation extends AbstractAction {
                         break;
                     case DIVIDE:
                         if (Integer.parseInt(value2FromExpression) == 0){
-                            System.out.println("im trying to divide by 0!!!!!!!!!");
                             throw new ArithmeticException("Can not divide by zero in action calculation");
                         }
                         else{

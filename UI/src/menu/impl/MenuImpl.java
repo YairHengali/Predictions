@@ -1,7 +1,7 @@
-package ofir.menu.impl;
+package menu.impl;
 
-import ofir.menu.api.Menu;
-import ofir.menu.api.MenuItem;
+import menu.api.Menu;
+import menu.api.MenuItem;
 
 import java.util.*;
 

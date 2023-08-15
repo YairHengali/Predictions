@@ -1,7 +1,7 @@
-package ofir.menu.impl;
+package menu.impl;
 
-import ofir.menu.api.Menu;
-import ofir.menu.api.MenuManager;
+import menu.api.Menu;
+import menu.api.MenuManager;
 
 import java.util.Collection;
 import java.util.HashMap;

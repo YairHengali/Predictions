@@ -37,7 +37,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     }
 
     @Override
-    public void killEntity(EntityInstance entityInstance) { //TODO: IF Preffered can change to map of maps by Ids2Instances..
+    public void killEntity(EntityInstance entityInstance) {
         EntitiesToKill.add(entityInstance);
     }
 

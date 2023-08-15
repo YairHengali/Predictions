@@ -20,7 +20,7 @@ public class SetAction extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type
+    public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type -does it enough?
         Expression valueAsExpression = new Expression(valueExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueFromExpression = valueAsExpression.praseExpressionToValueString();
 

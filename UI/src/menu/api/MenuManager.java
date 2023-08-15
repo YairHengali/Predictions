@@ -1,4 +1,4 @@
-package ofir.menu.api;
+package menu.api;
 
 import java.util.Collection;
 

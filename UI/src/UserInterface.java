@@ -3,9 +3,9 @@ import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engine.world.TerminationReason;
 import engineAnswers.*;
-import ofir.menu.api.Menu;
-import ofir.menu.api.MenuManager;
-import ofir.menu.impl.MenuManagerImpl;
+import menu.api.Menu;
+import menu.api.MenuManager;
+import menu.impl.MenuManagerImpl;
 
 import java.io.*;
 import java.util.List;

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Increase extends AbstractAction {
     private final String propertyName;
-    private final String byExpression; //TODO: Expression instead of string????
+    private final String byExpression;
 
     public Increase(String mainEntityName, String propertyName, String byExpression) {
         super(ActionType.INCREASE, mainEntityName);

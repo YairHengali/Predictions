@@ -1,19 +1,14 @@
 package engine.rule;
 
 import engine.action.api.Action;
-import engine.action.api.ClacType;
-import engine.action.impl.Calculation;
-import engine.action.impl.Increase;
 import engine.context.Context;
 import engine.context.ContextImpl;
 import engine.entity.EntityInstance;
 import engine.entity.manager.EntityInstanceManager;
 import engine.environment.active.ActiveEnvironmentVariables;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Random;
 
 public class RuleImpl implements Rule, Serializable {
@@ -45,7 +40,7 @@ public class RuleImpl implements Rule, Serializable {
 
     @Override
     public boolean isActive(int currTick) {
-        if(currTick % howManyTicksForActivation == 0){ // TODO: need to check the first tick number (0 or 1)
+        if(currTick % howManyTicksForActivation == 0){
             Random random = new Random();
             return random.nextDouble() < this.probabilityForActivation;
         }
@@ -88,12 +83,12 @@ public class RuleImpl implements Rule, Serializable {
                                                             ", in rule: " + this.name);
                 }
             }
-            manager.killEntities(); //TODO: MAYBE AFTER THIS LOOP
+            manager.killEntities();
         }
     }
 
     @Override
-    public String toString() {
+    public String toString() {// TODO: NEED?
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("RuleImpl:\n");
         stringBuilder.append("name='").append(name).append("'\n");
@@ -104,7 +99,7 @@ public class RuleImpl implements Rule, Serializable {
         if(!actions.isEmpty()) {
             stringBuilder.append("actions names:").append("\n");
             for (Action action : actions) {
-                stringBuilder.append(action.getClass().getSimpleName()).append("\n");// TODO: actions names (?? Increase, Decrease ??)
+                stringBuilder.append(action.getClass().getSimpleName()).append("\n");
             }
         }
 

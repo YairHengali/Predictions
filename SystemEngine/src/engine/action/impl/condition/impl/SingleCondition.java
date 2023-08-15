@@ -27,7 +27,7 @@ public class SingleCondition extends ConditionImpl implements Condition
     }
 
     @Override
-    public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type
+    public void Run(Context context) throws Exception {//TODO: EXCEPTION IF property from unmatching type -Vaildate that done correctly
         if (evaluateCondition(context)) {
             invokeThenActions(context);
         }
@@ -48,16 +48,16 @@ public class SingleCondition extends ConditionImpl implements Condition
         try {
             switch (propertyToEvaluate.getType()) {
                 case BOOLEAN:
-                    result = operator.eval(((BooleanProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
+                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.BOOLEAN);
                     break;
                 case DECIMAL:
-                    result = operator.eval(((DecimalProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.DECIMAL);
+                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.DECIMAL);
                     break;
                 case FLOAT:
-                    result = operator.eval(((FloatProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.FLOAT);
+                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.FLOAT);
                     break;
                 case STRING:
-                    result = operator.eval(((StringProperty) propertyToEvaluate).getValue(), valueToCompare, PropertyType.STRING);
+                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.STRING);
                     break;
             }
         }catch (Exception e)

@@ -1,6 +1,6 @@
-package ofir.menu.impl;
+package menu.impl;
 
-import ofir.menu.api.MenuItem;
+import menu.api.MenuItem;
 
 public class MenuItemImpl implements MenuItem {
     private int id = -1;
