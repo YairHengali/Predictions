@@ -38,7 +38,7 @@ public class SingleCondition extends ConditionImpl implements Condition
         PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(this.propertyName);
         //figuring value out of expression
         Expression valueToCompareAsExpression = new Expression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString();
+        String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString(propertyToEvaluate.getType());
 
         try {
             switch (propertyToEvaluate.getType()) {
@@ -57,7 +57,7 @@ public class SingleCondition extends ConditionImpl implements Condition
             }
         }catch (Exception e)
         {
-            throw new RuntimeException("not-matching argument to single condition action " + e.getMessage());
+            throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + valueToCompare);
         }
 
         return result;

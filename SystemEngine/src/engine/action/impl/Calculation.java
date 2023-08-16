@@ -29,10 +29,12 @@ public class Calculation extends AbstractAction {
         Expression arg1AsExpression = new Expression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         Expression arg2AsExpression = new Expression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
 
-            String value1FromExpression = arg1AsExpression.praseExpressionToValueString();
-            String value2FromExpression = arg2AsExpression.praseExpressionToValueString();
+        PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
 
-            PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        String value1FromExpression = arg1AsExpression.praseExpressionToValueString(currentEntityPropertyInstance.getType());
+        String value2FromExpression = arg2AsExpression.praseExpressionToValueString(currentEntityPropertyInstance.getType());
+
+
 
             if (currentEntityPropertyInstance instanceof DecimalProperty)
             {

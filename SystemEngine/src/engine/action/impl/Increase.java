@@ -21,8 +21,9 @@ public class Increase extends AbstractAction {
     @Override
     public void Run(Context context) { //TODO: ADD EXCEPTIONS WHERE NEEDED
         Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        String valueFromExpression = expression.praseExpressionToValueString();
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        String valueFromExpression = expression.praseExpressionToValueString(entityPropertyInstance.getType());
+
 
         try {
             if (entityPropertyInstance instanceof DecimalProperty) {

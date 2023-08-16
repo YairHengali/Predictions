@@ -22,9 +22,10 @@ public class SetAction extends AbstractAction {
     @Override
     public void Run(Context context) {//TODO: EXCEPTION IF property from unmatching type -does it enough?
         Expression valueAsExpression = new Expression(valueExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        String valueFromExpression = valueAsExpression.praseExpressionToValueString();
 
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+
+        String valueFromExpression = valueAsExpression.praseExpressionToValueString(entityPropertyInstance.getType());
 
         try {
             if (entityPropertyInstance instanceof DecimalProperty) {
@@ -34,15 +35,19 @@ public class SetAction extends AbstractAction {
                 ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(valueFromExpression));
             }
             else if (entityPropertyInstance instanceof BooleanProperty) {
-                ((BooleanProperty) entityPropertyInstance).setValue(Boolean.valueOf(valueFromExpression));
+                if (valueFromExpression.equals("true") || valueFromExpression.equals("false"))
+                {
+                    ((BooleanProperty) entityPropertyInstance).setValue(Boolean.valueOf(valueFromExpression));
+                }
+                else{
+                    throw new IllegalArgumentException("Error in Set action! Can not set the value " + valueFromExpression + " to the boolean property: " + entityPropertyInstance.getName());
+                }
             }
             else if (entityPropertyInstance instanceof StringProperty) {
                 ((StringProperty) entityPropertyInstance).setValue(valueFromExpression);
             }
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to a " + entityPropertyInstance.getType() + " property."+ e.getMessage());
-        } catch (IllegalArgumentException e) { //IF BOOLEAN PARSING UNSUCCESSFUL
-            throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to a boolean property." + e.getMessage());
+            throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to the " + entityPropertyInstance.getType() + " property: " + entityPropertyInstance.getName());
         }
 
     }

@@ -11,7 +11,7 @@ public enum ConditionOp {
                 switch (propertyType) {
                     case BOOLEAN:
                         if (!(value.equals("true") || value.equals("false"))) {
-                            throw new ClassCastException("Cannot cast" + value + "to boolean");
+                            throw new ClassCastException("Cannot compare" + value + "to boolean");
                         }
                         return Boolean.valueOf(propertyValue) == Boolean.valueOf(value);
                     case DECIMAL:
@@ -32,7 +32,7 @@ public enum ConditionOp {
                     case BOOLEAN:
                         if(!(value.equals("true") || value.equals("false")))
                         {
-                            throw new ClassCastException("Cannot cast" + value + "to boolean");
+                            throw new ClassCastException("Cannot compare" + value + "to boolean");
                         }
                         return Boolean.valueOf(propertyValue) != Boolean.valueOf(value);
                     case DECIMAL:

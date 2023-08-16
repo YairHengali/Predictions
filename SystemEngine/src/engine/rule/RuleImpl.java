@@ -75,7 +75,7 @@ public class RuleImpl implements Rule, Serializable {
                     action.Run(context);
                 }
                 catch (Exception e) {
-                    throw new RuntimeException(e + "\n" +"Error occurred with entity: " +
+                    throw new RuntimeException(e.getMessage() + "\n" +"Error occurred with entity: " +
                                                             entityInstance.getName() +
                                                             ", in rule: " + this.name);
                 }
