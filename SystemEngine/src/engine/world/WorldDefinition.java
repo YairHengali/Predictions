@@ -17,7 +17,7 @@ public class WorldDefinition implements Serializable {
     final EnvironmentVariablesDefManager environmentVariablesDefManager = new EnvironmentVariablesDefManagerImpl();
 
     public void addEnvironmentVariableDef(PropertyDefinition envVarDefinitionToAdd)    {
-        this.environmentVariablesDefManager.addEnvironmentVariable(envVarDefinitionToAdd);
+        this.environmentVariablesDefManager.addEnvironmentVariableDef(envVarDefinitionToAdd);
     }
     public void addEntityDefinition(EntityDefinition entityDefinitionToAdd){
         name2EntitiesDef.put(entityDefinitionToAdd.getName(), entityDefinitionToAdd);
@@ -42,7 +42,7 @@ public class WorldDefinition implements Serializable {
 
     public PropertyDefinition getEnvironmentVariableDefByName(String name)    {
         try {
-            return this.environmentVariablesDefManager.getEnvironmentVariableByName(name);
+            return this.environmentVariablesDefManager.getEnvironmentVariableDefByName(name);
         }
         catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
@@ -60,7 +60,7 @@ public class WorldDefinition implements Serializable {
     }
 
     public Collection<PropertyDefinition> getEnvironmentVariablesDefinitions(){
-        return this.environmentVariablesDefManager.getEnvironmentVariables();
+        return this.environmentVariablesDefManager.getEnvironmentVariablesDefinitions();
     }
 
     public Integer getMaxNumberOfTicks() {

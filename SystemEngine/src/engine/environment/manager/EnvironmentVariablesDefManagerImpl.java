@@ -16,17 +16,17 @@ public class EnvironmentVariablesDefManagerImpl implements EnvironmentVariablesD
     }
 
     @Override
-    public void addEnvironmentVariable(PropertyDefinition propertyDefinition) {
+    public void addEnvironmentVariableDef(PropertyDefinition propertyDefinition) {
         name2PropertyDef.put(propertyDefinition.getName(), propertyDefinition);
     }
 
     @Override
-    public Collection<PropertyDefinition> getEnvironmentVariables() {
+    public Collection<PropertyDefinition> getEnvironmentVariablesDefinitions() {
         return this.name2PropertyDef.values();
     }
 
     @Override
-    public PropertyDefinition getEnvironmentVariableByName(String name) throws IllegalArgumentException {
+    public PropertyDefinition getEnvironmentVariableDefByName(String name) throws IllegalArgumentException {
         if(this.name2PropertyDef.containsKey(name)){
             return this.name2PropertyDef.get(name);
         }

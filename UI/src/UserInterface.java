@@ -272,7 +272,7 @@ public class UserInterface {
             }
 
             try {
-                systemEngine.setEnvVarFromDto(resPropertyDto);
+                systemEngine.setEnvVarDefFromDto(resPropertyDto);
                 isValidInput = true;
             }
             catch (Exception e) {
@@ -350,7 +350,6 @@ public class UserInterface {
         try (FileInputStream fileIn = new FileInputStream(filePath);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
 
-//            return (SystemEngineImpl) in.readObject();
             this.systemEngine = (SystemEngineImpl) in.readObject();
             System.out.println("System loaded successfully!");
 

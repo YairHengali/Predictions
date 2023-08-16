@@ -5,7 +5,7 @@ import engine.property.PropertyDefinition;
 import java.util.Collection;
 
 public interface EnvironmentVariablesDefManager {
-    void addEnvironmentVariable(PropertyDefinition propertyDefinition);
-    Collection<PropertyDefinition> getEnvironmentVariables();
-    PropertyDefinition getEnvironmentVariableByName(String name) throws IllegalArgumentException;
+    void addEnvironmentVariableDef(PropertyDefinition propertyDefinition);
+    Collection<PropertyDefinition> getEnvironmentVariablesDefinitions();
+    PropertyDefinition getEnvironmentVariableDefByName(String name) throws IllegalArgumentException;
 }

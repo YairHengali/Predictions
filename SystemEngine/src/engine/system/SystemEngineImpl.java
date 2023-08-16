@@ -9,8 +9,8 @@ import engine.rule.Rule;
 import engine.world.TerminationReason;
 import engine.world.WorldDefinition;
 import engine.world.WorldInstance;
-import engine.world.factory.WorldFactory;
-import engine.world.factory.WorldFactoryImpl;
+import engine.world.factory.WorldDefFactory;
+import engine.world.factory.WorldDefFactoryImpl;
 import engineAnswers.*;
 import jaxb.generated.*;
 
@@ -25,7 +25,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
     private WorldInstance simulation = null;
     private WorldDefinition simulationDef = null;
-    private final WorldFactory worldFactory = new WorldFactoryImpl();
+    private final WorldDefFactory worldDefFactory = new WorldDefFactoryImpl();
     final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy | hh.mm.ss");
     int currentSimulationID = 0;
     private final Map<Integer, WorldInstance> id2pastSimulation = new HashMap<>();
@@ -44,7 +44,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             PRDWorld generatedWorld = deserializeFrom(inputStream);
 
             simulationDef = new WorldDefinition();
-            worldFactory.insertDataToWorldDefinition(this.simulationDef, generatedWorld);
+            worldDefFactory.insertDataToWorldDefinition(this.simulationDef, generatedWorld);
 
             isThereLoadedSimulation = true;
         } catch (Exception e) {
@@ -63,7 +63,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         List<RuleDTO> rulesDetails = new ArrayList<>();
 
         for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
-
             List<PropertyDTO> propertiesDetails = new ArrayList<>();
             for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
                 addPropertyToDtoList(propertiesDetails, propertyDefinition);
@@ -147,7 +146,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
-    public void setEnvVarFromDto(PropertyDTO envVarDto) {
+    public void setEnvVarDefFromDto(PropertyDTO envVarDto) {
         simulationDef.getEnvironmentVariableDefByName(envVarDto.getName()).setInitializedRandomly(envVarDto.isInitialisedRandomly());
 
         if(!(envVarDto.isInitialisedRandomly()))
