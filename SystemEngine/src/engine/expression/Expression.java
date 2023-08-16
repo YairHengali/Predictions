@@ -46,7 +46,7 @@ public class Expression implements Serializable {
                 return String.valueOf(random.nextInt(val) + 1);
             }
             catch (NumberFormatException e){
-                throw new RuntimeException(e + "\n Error resolving methode name from expression");
+                throw new RuntimeException(e + "\n random function must get a decimal number as argument");
             }
         }
     }

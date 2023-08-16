@@ -36,19 +36,26 @@ public class Calculation extends AbstractAction {
 
             if (currentEntityPropertyInstance instanceof DecimalProperty)
             {
-                switch (calcType) {
-                    case MULTIPLY:
-                        ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression));
-                        break;
-                    case DIVIDE:
-                        if (Integer.parseInt(value2FromExpression) == 0){
-                            throw new ArithmeticException("Can not divide by zero in action calculation");
-                        }
-                        else{
-                            ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression));
-                        }
-                       break;
+                try {
+                    switch (calcType) {
+                        case MULTIPLY:
+                            ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression));
+                            break;
+                        case DIVIDE:
+                            if (Integer.parseInt(value2FromExpression) == 0) {
+                                throw new ArithmeticException("Can not divide by zero in action calculation");
+                            } else {
+                                ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression));
+                            }
+                            break;
+
+                    }
                 }
+                catch(NumberFormatException e)
+                {
+                    throw new IllegalArgumentException("Cannot receive float argument: " + value1FromExpression + ", to action Calculation with decimal property: " + currentEntityPropertyInstance.getName());
+                }
+
             }
             else if (currentEntityPropertyInstance instanceof FloatProperty)
             {

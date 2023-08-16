@@ -30,6 +30,6 @@ public class EnvironmentVariablesDefManagerImpl implements EnvironmentVariablesD
         if(this.name2PropertyDef.containsKey(name)){
             return this.name2PropertyDef.get(name);
         }
-        throw new IllegalArgumentException("Environment variable: " + name + "does not exist!");
+        throw new IllegalArgumentException("Environment variable: " + name + " does not exist!");
     }
 }

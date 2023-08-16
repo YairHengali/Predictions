@@ -299,13 +299,14 @@ public class WorldFactoryImpl implements WorldFactory, Serializable {
                     || this.currWorkingWorld.getEnvironmentVariableDefByName(envVarName).getType() == PropertyType.FLOAT);
         }
         else if(arg.startsWith("random")){
-            String value = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
-            try {
-                Integer.parseInt(value);
-                return true;
-            } catch (NumberFormatException e) {
-                return false;
-            }
+            return true;
+//            String value = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
+//            try {
+//                Integer.parseInt(value);
+//                return true;
+//            } catch (NumberFormatException e) {
+//                return false;
+//            }
         }
         else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg))
         {

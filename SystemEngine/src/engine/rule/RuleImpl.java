@@ -26,7 +26,7 @@ public class RuleImpl implements Rule, Serializable {
             this.probabilityForActivation = probabilityForActivation;
         }
     }
-    public RuleImpl(Rule ruleToCopy){//TODO: NEED OR NOT?
+    public RuleImpl(Rule ruleToCopy){
         this(ruleToCopy.getName(),ruleToCopy.getTicksForActivations(),ruleToCopy.getProbForActivations());
         this.actions.addAll(ruleToCopy.getActions());
     }
@@ -77,7 +77,6 @@ public class RuleImpl implements Rule, Serializable {
                 catch (Exception e) {
                     throw new RuntimeException(e + "\n" +"Error occurred with entity: " +
                                                             entityInstance.getName() +
-                                                            ", ID: " + entityInstance.getId() +
                                                             ", in rule: " + this.name);
                 }
             }
@@ -86,7 +85,7 @@ public class RuleImpl implements Rule, Serializable {
     }
 
     @Override
-    public String toString() {// TODO: NEED?
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("RuleImpl:\n");
         stringBuilder.append("name='").append(name).append("'\n");

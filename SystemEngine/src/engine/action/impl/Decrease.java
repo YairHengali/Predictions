@@ -32,7 +32,7 @@ public class Decrease extends AbstractAction {
             }
         } catch (NumberFormatException e)
         {
-            throw new NumberFormatException("can not subtract float to integer in action Decrease" + e.getMessage());
+            throw new NumberFormatException("can not subtract float to integer in action Decrease\n" + e.getMessage());
         }
     }
 }

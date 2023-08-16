@@ -32,7 +32,7 @@ public class Increase extends AbstractAction {
             }
         }catch (NumberFormatException e)
         {
-            throw new NumberFormatException("can not add float to integer in action Increase" + e.getMessage());
+            throw new NumberFormatException("can not add float to integer in action Increase\n" + e.getMessage());
         }
     }
 }
