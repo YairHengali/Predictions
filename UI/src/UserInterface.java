@@ -71,7 +71,7 @@ public class UserInterface {
                     systemEngine.clearPastSimulations();
                 }
                 catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    System.out.println(e.getMessage() + System.lineSeparator());
                 }
                 break;
             case 2:
@@ -96,7 +96,7 @@ public class UserInterface {
                         EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
                         printEndOfSimulationDetails(endOfSimulationDTO);
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        System.out.println(e.getMessage() + System.lineSeparator());
                     }
                 }
                 else{
@@ -158,9 +158,6 @@ public class UserInterface {
             String propertyName = pastSimulationEntitiesDTO.get(chosenEntityIndex).getProperties().get(chosenPropertyIndex).getName();
             System.out.println(systemEngine.getHistogram(desiredPastSimulation.getId(),entityName, propertyName));
         }
-        // build menu histogram or count
-        // get DTO
-        // print the desired data
     }
     private void buildPastSimulationEntitysPropertiesMenu(EntityDTO entityDTO) {
         Menu pastSimulationEntitysPropertiesMenu = menuManager.createMenu("PastSimulationEntitysPropertiesMenu");
@@ -326,9 +323,9 @@ public class UserInterface {
     private void serializeEngine(){
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the file path (including the file name- without suffix) you would like load the system from:");
+        System.out.println("Please enter the file path (including the file name - without suffix) you would like load the system from:");
         String filePath = scanner.nextLine();
-        filePath = filePath + ".ser"; // \obj\bin
+        filePath = filePath + ".ser"; //TODO: \obj\bin to change to like aviad ??
 
         try (FileOutputStream fileOut = new FileOutputStream(filePath);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
@@ -343,9 +340,9 @@ public class UserInterface {
     private void deserializeEngine()
     {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the file path (including the file name- without suffix) you would like load the system from:");
+        System.out.println("Please enter the file path (including the file name - without suffix) you would like load the system from:");
         String filePath = scanner.nextLine();
-        filePath = filePath + ".ser"; // \obj\bin
+        filePath = filePath + ".ser"; //TODO: \obj\bin to change to like aviad ??
 
         try (FileInputStream fileIn = new FileInputStream(filePath);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
