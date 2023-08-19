@@ -19,7 +19,7 @@ public class Increase extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) { //TODO: ADD EXCEPTIONS WHERE NEEDED
+    public void Run(Context context) {
         Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         String valueFromExpression = expression.praseExpressionToValueString(entityPropertyInstance.getType());

@@ -22,7 +22,7 @@ public class SingleCondition extends ConditionImpl implements Condition
     }
 
     @Override
-    public void Run(Context context) {//TODO: EXCEPTION IF property from unmatching type -Vaildate that done correctly
+    public void Run(Context context) {
         if (evaluateCondition(context)) {
             invokeThenActions(context);
         }

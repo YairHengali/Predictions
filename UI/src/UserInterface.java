@@ -32,7 +32,7 @@ public class UserInterface {
     }
     private void buildEnvironmentVariablesInitiationMenu(List<PropertyDTO> envVarsDto){
         Menu EnvVarMenu = menuManager.createMenu("EnvVarMenu");
-        EnvVarMenu.addItem("Exit");
+        EnvVarMenu.addItem("Exit - Start simulation");
         envVarsDto.forEach(menuItem -> EnvVarMenu.addItem(menuItem.getName()));
         menuManager.addMenu(EnvVarMenu);
     }
@@ -220,7 +220,7 @@ public class UserInterface {
 
         System.out.println("Environment variables initialization:");
         System.out.println("====================================");
-        System.out.println("Choose the number of the variable you wish to initiate (variables you wont initiate will get a random value):");
+        System.out.println("Choose 1 to start simulation, or the number of the variable you wish to initiate " + System.lineSeparator() + "(variables you wont initiate will get a random value):");
         buildEnvironmentVariablesInitiationMenu(envVarsDto);
         menuManager.showMenuByName("EnvVarMenu");
         variableNumChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
@@ -332,7 +332,6 @@ public class UserInterface {
                 System.out.println("        Is initialized randomly: " + propertyDTO.isInitialisedRandomly());
                 System.out.println();
             }
-            System.out.println();
         }
         System.out.println("Rules:");
         for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {

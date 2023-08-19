@@ -24,7 +24,7 @@ public class Calculation extends AbstractAction {
     }
 
     @Override
-    public void Run(Context context) {//TODO: ADD EXCEPTIONS WHERE NEEDED (for example dividing by zero and unmatching type)
+    public void Run(Context context) {
 
         Expression arg1AsExpression = new Expression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         Expression arg2AsExpression = new Expression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());

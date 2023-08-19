@@ -37,10 +37,15 @@ public class HistogramDTO {
                         "entity name = " + entityName + '\n' +
                         "property name = " + propertyName + '\n' +
                         "property Histogram: " + '\n' + "==================" + '\n');
-        for(Map.Entry<String, Long> entry : propertyHistogram.entrySet()) {
-            res.append("Value: ").append(entry.getKey()).append("   Num of entities: ").append(entry.getValue()).append('\n');
+        if(propertyHistogram.isEmpty())
+        {
+            res.append("No instances of this entity left in this simulation - no histogram to show").append(System.lineSeparator());
         }
-
+        else {
+            for (Map.Entry<String, Long> entry : propertyHistogram.entrySet()) {
+                res.append("Value: ").append(entry.getKey()).append("   Num of entities: ").append(entry.getValue()).append('\n');
+            }
+        }
         return res.toString();
     }
 }
