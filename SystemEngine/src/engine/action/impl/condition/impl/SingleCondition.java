@@ -55,11 +55,18 @@ public class SingleCondition extends ConditionImpl implements Condition
                     result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.STRING);
                     break;
             }
-        }catch (Exception e)
+        }catch (ClassCastException | NumberFormatException e)
         {
             throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + valueToCompare);
         }
-
+        catch (IllegalArgumentException e)
+        {
+            throw new IllegalArgumentException("not-matching argument to single condition action, cannot perform bt or lt comparison on the property " + propertyToEvaluate.getName() + " because it is of type: " + propertyToEvaluate.getType());
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + valueToCompare);
+        }
         return result;
     }
 }

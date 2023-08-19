@@ -54,7 +54,7 @@ public enum ConditionOp {
                 case FLOAT:
                     return Float.parseFloat(propertyValue) > Float.parseFloat(value);
                 default:
-                    throw new IllegalArgumentException(); //TODO: Another exception massage for this https://mama.mta.ac.il/mod/forum/discuss.php?d=362#p562
+                    throw new IllegalArgumentException(); //TODO:Probably done Another exception massage for this https://mama.mta.ac.il/mod/forum/discuss.php?d=362#p562
             }
 
         }
