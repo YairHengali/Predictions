@@ -28,7 +28,16 @@ public class DecimalProperty extends PropertyInstance {
             }
         }
         else {
-            this.value = propertyDefinition.getInitValue(); //TODO: MAYBE TRYPARSE HERE OR NOT NEEDED (ANYWAY WILL FIND OUT?)
+
+            int valueAsInt = Integer.parseInt(propertyDefinition.getInitValue());
+            if (range == null || valueAsInt <= range.getTo().intValue() && valueAsInt >= range.getFrom().intValue())
+            {
+                this.value = propertyDefinition.getInitValue();
+            }
+            else
+            {
+                throw new RuntimeException();
+            }
         }
     }
 

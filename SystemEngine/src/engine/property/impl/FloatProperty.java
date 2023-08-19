@@ -28,7 +28,15 @@ public class FloatProperty extends PropertyInstance {
             }
         }
         else {
-            this.value = String.valueOf(Float.parseFloat(propertyDefinition.getInitValue()));
+            float valueAsFloat = Float.parseFloat(propertyDefinition.getInitValue());
+            if (range == null || (valueAsFloat <= range.getTo().floatValue() && valueAsFloat >= range.getFrom().floatValue()))
+            {
+                this.value = propertyDefinition.getInitValue();
+            }
+            else
+            {
+                throw new RuntimeException();
+            }
         }
     }
 
