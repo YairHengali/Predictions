@@ -1,11 +1,13 @@
+package console;
+
 import engine.property.PropertyType;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engine.world.TerminationReason;
 import engineAnswers.*;
-import menu.api.Menu;
-import menu.api.MenuManager;
-import menu.impl.MenuManagerImpl;
+import console.menu.api.Menu;
+import console.menu.api.MenuManager;
+import console.menu.impl.MenuManagerImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class UserInterface {
 
     private final MenuManager menuManager = new MenuManagerImpl();
 
-    void buildMainMenu(){
+    public void buildMainMenu(){
         Menu mainMenu = menuManager.createMenu("mainMenu");
         mainMenu.addItem("Load simulation from xml file");
         mainMenu.addItem("Show loaded simulation details");

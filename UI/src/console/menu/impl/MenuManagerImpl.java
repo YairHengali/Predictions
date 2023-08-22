@@ -1,7 +1,7 @@
-package menu.impl;
+package console.menu.impl;
 
-import menu.api.Menu;
-import menu.api.MenuManager;
+import console.menu.api.Menu;
+import console.menu.api.MenuManager;
 
 import java.util.Collection;
 import java.util.HashMap;

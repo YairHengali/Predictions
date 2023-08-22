@@ -1,4 +1,4 @@
-package menu.api;
+package console.menu.api;
 
 import java.util.Collection;
 
