@@ -24,7 +24,7 @@
    </rowConstraints>
    <children>
       <TreeView fx:id="simulationTV" prefHeight="200.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="3" />
-      <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+      <TextArea fx:id="detailsTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3" />
    </children>
    <opaqueInsets>
       <Insets />

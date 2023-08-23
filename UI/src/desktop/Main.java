@@ -15,7 +15,7 @@ public class Main extends Application {
         primaryStage.setTitle("predictions");
 
         Parent load = FXMLLoader.load(getClass().getResource("Predictions-Ex2-FXML.fxml"));
-        Scene scene = new Scene(load, 600, 400);
+        Scene scene = new Scene(load);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

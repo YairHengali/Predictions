@@ -70,6 +70,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
         }
 
+        List<PropertyDTO> envVarsDetails = getEnvVarsDefinitionDto();
+
         for (Rule rule: simulationDef.getRules()) {
             List<ActionDTO> actionsDetails = new ArrayList<>();
             for (Action action: rule.getActions()){
@@ -78,7 +80,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
         }
 
-        simulationDetails = new SimulationDetailsDTO(entitiesDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate());
+        simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate());
         return simulationDetails;
     }
 

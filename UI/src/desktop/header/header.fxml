@@ -13,7 +13,10 @@
       <HBox prefWidth="200.0">
          <children>
             <Button fx:id="loadFileBTN" mnemonicParsing="false" onAction="#loadFileButtonActionListener" text="Load XML File" />
-            <TextField fx:id="loadFileTF" prefHeight="25.0" prefWidth="200.0" />
+            <TextField fx:id="loadFileTF" editable="false" minWidth="300.0" prefHeight="25.0" text="No file Loaded">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin></TextField>
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" top="10.0" />
