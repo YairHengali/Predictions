@@ -30,13 +30,89 @@ public class DetailsController {
         );
     }
 
-    private void showDetails(TreeItem<String> selectedNode) {
+    private void showDetails(TreeItem<String> selectedNode) { //TODO: can change in simulationDetailsDTO to maps but for now tried like that
         if (selectedNode != null && selectedNode.isLeaf()) {
-            String nodeName = selectedNode.getValue();
-            String details = "Details for " + nodeName; // Replace with actual details retrieval
+            String selectedNodeValue = selectedNode.getValue();
+            String details = "";
+            if (selectedNodeValue.equals("Termination Conditions"))
+            {
+                if (simulationDetailsDTO.getMaxNumberOfTicks() != null) {
+                    details = "Number Of Ticks: " + simulationDetailsDTO.getMaxNumberOfTicks();
+                }
+                if (simulationDetailsDTO.getSecondsToTerminate() != null){
+                    details = "Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate();
+                }
+            }
+            else{
+                switch (selectedNode.getParent().getValue()){
+                    case "Properties":
+                        String selectedNodeEntityName = selectedNode.getParent().getParent().getValue(); //TODO: I have name name of Property AND this is the name of entity. get the property details from there!
+                        for (EntityDTO entityDTO :simulationDetailsDTO.getEntities())
+                        {
+                            if(entityDTO.getName().equals(selectedNodeEntityName))
+                            {
+                                for (PropertyDTO propertyDTO :entityDTO.getProperties())//TODO: better change in entityDTO to maps but for now tried like that
+                                {
+                                    if(propertyDTO.getName().equals(selectedNodeValue)){
+                                        //TODO: make it a component
+                                        details = ("Name: " + propertyDTO.getName() + System.lineSeparator() +
+                                                "Type: " + propertyDTO.getType() + System.lineSeparator());
+                                        if (propertyDTO.getFrom() != null){
+                                            if (propertyDTO.getType().equals("DECIMAL"))
+                                            {
+                                                details += ("Range: " + propertyDTO.getFrom().intValue() + " to " + propertyDTO.getTo().intValue() + System.lineSeparator());
+                                            }
+                                            else
+                                            {
+                                                details += ("Range: " + propertyDTO.getFrom() + " to " + propertyDTO.getTo() + System.lineSeparator());
+                                            }
+                                        }
+                                        details += ("Is initialized randomly: " + propertyDTO.isInitialisedRandomly());
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "Environment Variables":
+                        for (PropertyDTO envVarDTO :simulationDetailsDTO.getEnvironmentVariables()) {
+                            if (envVarDTO.getName().equals(selectedNodeValue))
+                            {
+                                //TODO: make it a component
+                                details = ("Name: " + envVarDTO.getName() + System.lineSeparator() +
+                                        "Type: " + envVarDTO.getType() + System.lineSeparator());
+                                if (envVarDTO.getFrom() != null){
+                                    if (envVarDTO.getType().equals("DECIMAL"))
+                                    {
+                                        details += ("Range: " + envVarDTO.getFrom().intValue() + " to " + envVarDTO.getTo().intValue());
+                                    }
+                                    else
+                                    {
+                                        details += ("Range: " + envVarDTO.getFrom() + " to " + envVarDTO.getTo());
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "Rules": //TODO: Deal with actions details inside
+                        for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
+                            if (ruleDTO.getName().equals(selectedNodeValue))
+                            {
+                                //TODO: make it a component
+                                details = ("Name: " + ruleDTO.getName() + System.lineSeparator() +
+                                        "Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
+                                        "Probability for activation: " + ruleDTO.getProbabilityForActivation()+ System.lineSeparator() +
+                                        "Number of actions: " + ruleDTO.getActions().size());
+                            }
+                        }
+                        break;
+                    default:
+                        details = "";
+                        break;
+                }
+            }
 
             detailsTextArea.setText(details);
-        } else {
+        } else { //FOR CLEANUP WHEN NOT LEAF
 
             detailsTextArea.setText("");
         }
@@ -64,7 +140,7 @@ public class DetailsController {
             entitiesItem.getChildren().add(entityItem);
         }
 
-        TreeItem<String> envVarsItem = new TreeItem<>("Environment Variables:");
+        TreeItem<String> envVarsItem = new TreeItem<>("Environment Variables");
         for (PropertyDTO envVarDTO : simulationDetailsDTO.getEnvironmentVariables()) {
             envVarsItem.getChildren().add(new TreeItem<>(envVarDTO.getName()));
         }
