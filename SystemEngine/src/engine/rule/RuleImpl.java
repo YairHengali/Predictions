@@ -65,12 +65,12 @@ public class RuleImpl implements Rule, Serializable {
     }
 
     @Override
-    public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables)
+    public void runRule(EntityInstanceManager manager, ActiveEnvironmentVariables activeEnvironmentVariables, int currentTick)
     {
         for (Action action: actions) {
             for (EntityInstance entityInstance : manager.getInstancesListByName(action.getMainEntityName()))
             {
-                Context context = new ContextImpl(entityInstance, manager, activeEnvironmentVariables);
+                Context context = new ContextImpl(entityInstance, manager, activeEnvironmentVariables, currentTick);
                 try {
                     action.Run(context);
                 }
