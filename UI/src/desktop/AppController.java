@@ -30,6 +30,8 @@ public class AppController {
     private GridPane resultsComponent;
     @FXML
     private ResultsController resultsComponentController;
+    @FXML
+    private TabPane tabPane;
 
     @FXML
     private Tab detailsTab;
@@ -57,5 +59,9 @@ public class AppController {
 
     public SystemEngine getSystemEngine() {
         return systemEngine;
+    }
+
+    public void moveToResultsTab(){
+        tabPane.getSelectionModel().select(resultsTab);
     }
 }

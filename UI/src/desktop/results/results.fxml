@@ -26,6 +26,6 @@
       <Insets />
    </opaqueInsets>
    <children>
-      <ListView prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+      <ListView fx:id="executionList" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="3" />
    </children>
 </GridPane>
