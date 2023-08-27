@@ -37,10 +37,10 @@ public class DetailsController {
             if (selectedNodeValue.equals("Termination Conditions"))
             {
                 if (simulationDetailsDTO.getMaxNumberOfTicks() != null) {
-                    details = "Number Of Ticks: " + simulationDetailsDTO.getMaxNumberOfTicks();
+                    details += "Number Of Ticks: " + simulationDetailsDTO.getMaxNumberOfTicks() + System.lineSeparator();
                 }
                 if (simulationDetailsDTO.getSecondsToTerminate() != null){
-                    details = "Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate();
+                    details += "Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate() + System.lineSeparator();
                 }
             }
             else{
