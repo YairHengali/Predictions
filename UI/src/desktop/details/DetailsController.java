@@ -24,6 +24,10 @@ public class DetailsController {
     private SimulationDetailsDTO simulationDetailsDTO = null;
     Map<TreeItem<String>, String> treeItem2Details = new HashMap<>(); //TODO: HOW TO IMPLEMENT THE MASTER DETAILS??
 
+    public SimulationDetailsDTO getSimulationDetailsDTO()
+    {
+        return simulationDetailsDTO;
+    }
     public void initialize() {
         simulationTV.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showDetails(newValue)

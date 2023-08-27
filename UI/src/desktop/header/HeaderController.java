@@ -30,7 +30,6 @@ public class HeaderController {
     @FXML
     void loadFileButtonActionListener(ActionEvent event) {
         try {
-//            systemEngine.loadSimulation(loadFileTF.getText()); //TODO FILE BROWSER
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Select Simulation File");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
@@ -49,6 +48,7 @@ public class HeaderController {
                 System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
                 mainController.getSystemEngine().clearPastSimulations();
                 mainController.addDataToSimulationTreeView();
+                mainController.addDataToEntitiesTable();
             }
         }
         catch (Exception e) {

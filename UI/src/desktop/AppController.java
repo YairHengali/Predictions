@@ -6,6 +6,7 @@ import desktop.header.HeaderController;
 import desktop.results.ResultsController;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
+import engineAnswers.SimulationDetailsDTO;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -63,5 +64,15 @@ public class AppController {
 
     public void moveToResultsTab(){
         tabPane.getSelectionModel().select(resultsTab);
+    }
+
+    public SimulationDetailsDTO getSimulationDetailsDTO()
+    {
+        return detailsComponentController.getSimulationDetailsDTO();
+    }
+
+    public void addDataToEntitiesTable()
+    {
+        executionComponentController.addDataToEntitiesTable();
     }
 }
