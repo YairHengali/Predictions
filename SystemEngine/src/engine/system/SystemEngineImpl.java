@@ -108,6 +108,31 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
+    public void updateEntityDefPopulation(EntityDTO newEntityDTO) {
+        this.simulationDef.getEntityDefinitionByName(newEntityDTO.getName()).setPopulation(newEntityDTO.getPopulation());
+    }
+
+    @Override
+    public void setAllPopulationToZero() {
+        simulationDef.getEntitiesDefinitions().forEach(entity -> entity.setPopulation(0));
+    }
+
+    @Override
+    public Collection<EntityDTO> getEntitiesListDTO() {
+        List<EntityDTO> entitiesDetails = new ArrayList<>();
+
+        for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
+            List<PropertyDTO> propertiesDetails = new ArrayList<>();
+            for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
+                addPropertyToDtoList(propertiesDetails, propertyDefinition);
+            }
+            entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
+        }
+
+        return entitiesDetails;
+    }
+
+    @Override
     public void clearPastSimulations()
     {
         id2pastSimulation.clear();

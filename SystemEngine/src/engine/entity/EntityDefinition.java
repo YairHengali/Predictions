@@ -6,7 +6,7 @@ import java.util.*;
 
 public class EntityDefinition implements Serializable {
     private final String name;
-    private final int population;
+    private int population;
     private final Map<String, PropertyDefinition> name2propertyDef = new HashMap<>();
 
     public EntityDefinition(String name, int population) {
@@ -28,6 +28,9 @@ public class EntityDefinition implements Serializable {
 
     public int getPopulation() {
         return population;
+    }
+    public void setPopulation(int population) {
+        this.population = population;
     }
 
     public Map<String, PropertyDefinition> getName2propertyDef() {

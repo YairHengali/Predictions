@@ -8,6 +8,7 @@ import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engineAnswers.SimulationDetailsDTO;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -74,5 +75,13 @@ public class AppController {
     public void addDataToEntitiesTable()
     {
         executionComponentController.addDataToEntitiesTable();
+    }
+
+    public void addDataToEnvVarsTable() {
+        executionComponentController.addDataToEnvVarsTable();
+    }
+
+    public void addEnvVarComponentToExecutionGrid(Node component1) {
+        executionComponentController.addEnvVarComponentToGrid(component1);
     }
 }

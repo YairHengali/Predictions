@@ -2,6 +2,7 @@ package engine.system;
 
 import engineAnswers.*;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface SystemEngine {
@@ -23,4 +24,10 @@ public interface SystemEngine {
     void clearPastSimulations();
 
     void createNewSimulation();
+
+    void updateEntityDefPopulation(EntityDTO newEntityDTO);
+
+    void setAllPopulationToZero();
+
+    Collection<EntityDTO> getEntitiesListDTO();
 }

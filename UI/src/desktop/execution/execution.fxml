@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.execution.ExecutionController">
+<GridPane fx:id="executionGrid" hgap="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.execution.ExecutionController">
   <columnConstraints>
       <ColumnConstraints hgrow="NEVER" minWidth="20.0" prefWidth="20.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -24,25 +28,34 @@
       <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
   </rowConstraints>
    <children>
-      <Button fx:id="startBTN" mnemonicParsing="false" onAction="#startButtonActionListener" text="Start!" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <children>
-            <Button fx:id="clearBTN" mnemonicParsing="false" text="Clear" />
-         </children>
-      </HBox>
-      <TableView fx:id="entityPopulationTable" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Button fx:id="startBTN" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#startButtonActionListener" prefHeight="25.0" prefWidth="49.0" text="Start!" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <TableView fx:id="entityPopulationTable" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
         <columns>
           <TableColumn fx:id="entityCol" prefWidth="75.0" text="Entity" />
           <TableColumn fx:id="populationCol" prefWidth="75.0" text="Population" />
         </columns>
       </TableView>
-      <TableView GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1">
-        <columns>
-          <TableColumn prefWidth="78.3333740234375" text="Name" />
-          <TableColumn prefWidth="63.6666259765625" text="Random" />
-            <TableColumn prefWidth="83.66668701171875" text="Range" />
-            <TableColumn prefWidth="83.66668701171875" text="Value" />
-        </columns>
-      </TableView>
+      <Button fx:id="clearBTN" mnemonicParsing="false" onAction="#clrButtonActionListener" text="Clear" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <ListView fx:id="envListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+      <VBox prefHeight="200.0" prefWidth="100.0" spacing="6.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+         <children>
+            <TextField />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="6.0" VBox.vgrow="NEVER">
+               <children>
+                  <Button mnemonicParsing="false" text="submit" />
+                  <Button mnemonicParsing="false" text="clear" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="6.0" />
+         </padding>
+      </VBox>
+      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Button fx:id="stamButton" mnemonicParsing="false" onAction="#stamButtonClicked" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="3" />
    </children>
 </GridPane>
