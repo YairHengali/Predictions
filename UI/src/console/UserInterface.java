@@ -79,7 +79,7 @@ public class UserInterface {
                 break;
             case 2:
                 if(systemEngine.isThereLoadedSimulation()) {
-                    simulationDetailsDTO = systemEngine.showSimulationDetails();
+                    simulationDetailsDTO = systemEngine.getSimulationDetails();
                     printSimulationDetails();
                 }
                 else{

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SystemEngine {
     void loadSimulation(String filePath) throws Exception;
-    SimulationDetailsDTO showSimulationDetails();
+    SimulationDetailsDTO getSimulationDetails();
     EndOfSimulationDTO runSimulation();
     List<pastSimulationDTO> getPastSimulationsDetails();
     Boolean isThereLoadedSimulation();

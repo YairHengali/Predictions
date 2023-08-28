@@ -57,7 +57,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
-    public SimulationDetailsDTO showSimulationDetails() {
+    public SimulationDetailsDTO getSimulationDetails() {
         SimulationDetailsDTO simulationDetails;
         List<EntityDTO> entitiesDetails = new ArrayList<>();
         List<RuleDTO> rulesDetails = new ArrayList<>();

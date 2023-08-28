@@ -1,10 +1,7 @@
 package desktop.details;
 
 import desktop.AppController;
-import engineAnswers.EntityDTO;
-import engineAnswers.PropertyDTO;
-import engineAnswers.RuleDTO;
-import engineAnswers.SimulationDetailsDTO;
+import engineAnswers.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
@@ -19,15 +16,10 @@ public class DetailsController {
     private TreeView<String> simulationTV;
     @FXML
     private TextArea detailsTextArea;
-
     private AppController mainController;
-    private SimulationDetailsDTO simulationDetailsDTO = null;
+
     Map<TreeItem<String>, String> treeItem2Details = new HashMap<>(); //TODO: HOW TO IMPLEMENT THE MASTER DETAILS??
 
-    public SimulationDetailsDTO getSimulationDetailsDTO()
-    {
-        return simulationDetailsDTO;
-    }
     public void initialize() {
         simulationTV.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> showDetails(newValue)
@@ -35,6 +27,7 @@ public class DetailsController {
     }
 
     private void showDetails(TreeItem<String> selectedNode) { //TODO: can change in simulationDetailsDTO to maps but for now tried like that
+        SimulationDetailsDTO simulationDetailsDTO = mainController.getSystemEngine().getSimulationDetails();
         if (selectedNode != null && selectedNode.isLeaf()) {
             String selectedNodeValue = selectedNode.getValue();
             String details = "";
@@ -128,7 +121,7 @@ public class DetailsController {
 
     public void addDataToSimulationTreeView() {
 
-        this.simulationDetailsDTO = mainController.getSystemEngine().showSimulationDetails();
+        SimulationDetailsDTO simulationDetailsDTO = mainController.getSystemEngine().getSimulationDetails();
         TreeItem<String> rootItem = new TreeItem<>("Loaded Simulation Data");
 
         TreeItem<String> entitiesItem = new TreeItem<>("Entities");
@@ -153,6 +146,20 @@ public class DetailsController {
         for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
             rulesItem.getChildren().add(new TreeItem<>(ruleDTO.getName()));
         }
+
+//      IF WANT ACTIONS OF RULE TO BE IN THE TREE
+//        for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
+//            TreeItem<String> ruleItem = new TreeItem<>(ruleDTO.getName());
+//
+//            TreeItem<String> actionsItem = new TreeItem<>("Actions");
+//            for (ActionDTO actionDTO: ruleDTO.getActions()) {
+//                actionsItem.getChildren().add(new TreeItem<>(actionDTO.getName()));
+//            };
+//
+//            ruleItem.getChildren().add(actionsItem);
+//            rulesItem.getChildren().add(ruleItem);
+//        }
+
 
         TreeItem<String> terminationItem = new TreeItem<>("Termination Conditions");
 

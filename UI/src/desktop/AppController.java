@@ -67,11 +67,6 @@ public class AppController {
         tabPane.getSelectionModel().select(resultsTab);
     }
 
-    public SimulationDetailsDTO getSimulationDetailsDTO()
-    {
-        return detailsComponentController.getSimulationDetailsDTO();
-    }
-
     public void addDataToEntitiesTable()
     {
         executionComponentController.addDataToEntitiesTable();
