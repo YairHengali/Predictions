@@ -1,11 +1,13 @@
+package console;
+
 import engine.property.PropertyType;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engine.world.TerminationReason;
 import engineAnswers.*;
-import menu.api.Menu;
-import menu.api.MenuManager;
-import menu.impl.MenuManagerImpl;
+import console.menu.api.Menu;
+import console.menu.api.MenuManager;
+import console.menu.impl.MenuManagerImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ public class UserInterface {
 
     private final MenuManager menuManager = new MenuManagerImpl();
 
-    void buildMainMenu(){
+    public void buildMainMenu(){
         Menu mainMenu = menuManager.createMenu("mainMenu");
         mainMenu.addItem("Load simulation from xml file");
         mainMenu.addItem("Show loaded simulation details");
@@ -239,7 +241,6 @@ public class UserInterface {
             variableNumChoice = menuManager.getMenuByName("EnvVarMenu").getValidInput();
         }
 
-        // TODO: init randomly all the rest
         for (int i = 0; i < envVarsDto.size(); i++) {
             if(randomInitiationEnvVars.get(i)){
                 randomInitEnvVar(envVarsDto.get(i));
@@ -357,7 +358,7 @@ public class UserInterface {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the file path (including the file name - without suffix) you would like load the system from:");
         String filePath = scanner.nextLine();
-        filePath = filePath + ".ser"; //TODO: \obj\bin to change to like aviad ??
+        filePath = filePath + ".ser";
 
         try (FileOutputStream fileOut = new FileOutputStream(filePath);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
@@ -374,7 +375,7 @@ public class UserInterface {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the file path (including the file name - without suffix) you would like load the system from:");
         String filePath = scanner.nextLine();
-        filePath = filePath + ".ser"; //TODO: \obj\bin to change to like aviad ??
+        filePath = filePath + ".ser";
 
         try (FileInputStream fileIn = new FileInputStream(filePath);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {

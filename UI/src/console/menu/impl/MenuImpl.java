@@ -1,7 +1,7 @@
-package menu.impl;
+package console.menu.impl;
 
-import menu.api.Menu;
-import menu.api.MenuItem;
+import console.menu.api.Menu;
+import console.menu.api.MenuItem;
 
 import java.util.*;
 

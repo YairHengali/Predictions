@@ -64,7 +64,7 @@ public class WorldInstance implements Serializable {
             for (Rule rule: rules) {
                 if (rule.isActive(this.currentNumberOfTicks))
                 {
-                    rule.runRule(this.entityInstanceManager, this.activeEnvironmentVariables);
+                    rule.runRule(this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks);
                 }
             }
             currentNumberOfTicks++;

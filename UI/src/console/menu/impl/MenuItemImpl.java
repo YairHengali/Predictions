@@ -1,6 +1,6 @@
-package menu.impl;
+package console.menu.impl;
 
-import menu.api.MenuItem;
+import console.menu.api.MenuItem;
 
 public class MenuItemImpl implements MenuItem {
     private final int id = -1;

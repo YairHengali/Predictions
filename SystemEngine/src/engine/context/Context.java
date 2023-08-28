@@ -13,4 +13,7 @@ public interface Context {
     EntityInstanceManager getEntityInstanceManager();
 
     ActiveEnvironmentVariables getActiveEnvironmentVariables();
+
+    EntityInstance getSecondaryEntityInstance();
+    int getCurrentTick();
 }

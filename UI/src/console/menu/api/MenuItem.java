@@ -1,4 +1,4 @@
-package menu.api;
+package console.menu.api;
 
 public interface MenuItem {
     String getTitle();

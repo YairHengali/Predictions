@@ -40,7 +40,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             addTerminationSettings(generatedWorld);
         }
         catch (Exception e) {
-            throw new RuntimeException(e.getMessage()); //TODO: Changed to e.getMessage, better to be: e ??
+            throw new RuntimeException(e.getMessage());
         }
     }
 

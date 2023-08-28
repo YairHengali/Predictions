@@ -15,6 +15,9 @@ public class BooleanProperty extends PropertyInstance {
             this.value = String.valueOf(random.nextBoolean());
         }
         else {
+            if (!(propertyDefinition.getInitValue().equals("true") || propertyDefinition.getInitValue().equals("false"))) {
+                throw new IllegalArgumentException("Error, cannot insert: " + propertyDefinition.getInitValue() + " to a boolean property");
+            }
             this.value = propertyDefinition.getInitValue();
         }
     }

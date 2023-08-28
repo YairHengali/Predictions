@@ -9,13 +9,16 @@ import java.io.Serializable;
 
 public class ContextImpl implements Context, Serializable {
     private final EntityInstance primaryEntityInstance;
+    private final EntityInstance secondaryEntityInstance = null;//TODO: implement, deal with nulls and so on
+    private final int currentTick;
     private final EntityInstanceManager entityInstanceManager;
     private final ActiveEnvironmentVariables activeEnvironment;
 
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, ActiveEnvironmentVariables activeEnvironment) {
+    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, ActiveEnvironmentVariables activeEnvironment, int currentTick) {
         this.primaryEntityInstance = primaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.activeEnvironment = activeEnvironment;
+        this.currentTick = currentTick;
     }
 
     @Override
@@ -36,4 +39,15 @@ public class ContextImpl implements Context, Serializable {
     @Override
     public ActiveEnvironmentVariables getActiveEnvironmentVariables()
     {return activeEnvironment;}
+
+    @Override
+    public EntityInstance getSecondaryEntityInstance() {
+        return secondaryEntityInstance;
+    }
+
+    @Override
+    public int getCurrentTick() {
+        return currentTick;
+    }
+
 }

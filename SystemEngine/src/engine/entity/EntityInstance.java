@@ -22,20 +22,28 @@ public class EntityInstance implements Serializable {
         this.name = entityDefinition.getName();
 
         for (PropertyDefinition def : entityDefinition.getName2propertyDef().values()) {
-
-            switch (def.getType()){
-                case BOOLEAN:
-                    this.name2property.put(def.getName(), new BooleanProperty(def));
-                    break;
-                case DECIMAL:
-                    this.name2property.put(def.getName(), new DecimalProperty(def));
-                    break;
-                case FLOAT:
-                    this.name2property.put(def.getName(), new FloatProperty(def));
-                    break;
-                case STRING:
-                    this.name2property.put(def.getName(), new StringProperty(def));
-                    break;
+            try {
+                switch (def.getType()) {
+                    case BOOLEAN:
+                        this.name2property.put(def.getName(), new BooleanProperty(def));
+                        break;
+                    case DECIMAL:
+                        this.name2property.put(def.getName(), new DecimalProperty(def));
+                        break;
+                    case FLOAT:
+                        this.name2property.put(def.getName(), new FloatProperty(def));
+                        break;
+                    case STRING:
+                        this.name2property.put(def.getName(), new StringProperty(def));
+                        break;
+                }
+            }catch(IllegalArgumentException e)
+            {
+                throw new IllegalArgumentException("Error, cannot assign the value: " + def.getInitValue() + " to the property: "+ def.getName() + " which is of type: " + def.getType() + " in the entity: " + entityDefinition.getName());
+            }
+            catch(RuntimeException e)
+            {
+                throw new IllegalArgumentException("Error, the init value of the property: " + def.getName() + ", in the entity " + entityDefinition.getName() + " is out of range");
             }
         }
     }
