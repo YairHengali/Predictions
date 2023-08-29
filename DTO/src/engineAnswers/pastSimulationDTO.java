@@ -16,4 +16,9 @@ public class pastSimulationDTO {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Date: " + dateOfRun + "    ID: " + id;
+    }
 }
