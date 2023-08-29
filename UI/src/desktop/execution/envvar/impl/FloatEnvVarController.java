@@ -42,7 +42,7 @@ public class FloatEnvVarController implements EnvVarControllerAPI {
     @Override
     public PropertyDTO createEnvVarDTO(){
 
-        return new PropertyDTO(nameLabel.getText(), typeLabel.getText(), from, to, valueTextField.getText().equals(""), valueTextField.getText());
+        return new PropertyDTO(nameLabel.getText(), typeLabel.getText(), from, to, valueTextField.getText().isEmpty(), valueTextField.getText());
 
     }
 }

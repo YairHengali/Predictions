@@ -36,7 +36,7 @@ public class StringEnvVarController implements EnvVarControllerAPI {
     @Override
     public PropertyDTO createEnvVarDTO(){
 
-        return new PropertyDTO(nameLabel.getText(), typeLabel.getText(), null, null, valueTextField.getText().equals(""), valueTextField.getText());
+        return new PropertyDTO(nameLabel.getText(), typeLabel.getText(), null, null, valueTextField.getText().isEmpty(), valueTextField.getText());
 
     }
 }
