@@ -58,7 +58,10 @@ public class ExecutionController {
     private AppController mainController;
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
+        clearBTN.disableProperty().bind(mainController.isFileLoadedProperty().not());//TODO: IS GOOD PRACTICE THAT IS HERE? (GPT SAID YES)
     }
+
+
 
     @FXML
     void startButtonActionListener(ActionEvent event) {
@@ -98,8 +101,14 @@ public class ExecutionController {
 //
 //        envVarsTable.setItems(data);
     }
+    public ExecutionController(){
+
+    }
+
     public void initialize()
     {
+//        clearBTN.disableProperty().bind(mainController.isFileLoadedProperty().not());// MOOVED TO SETTER OF MAIN
+
         entityCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         populationCol.setCellValueFactory(new PropertyValueFactory<>("population"));
         populationCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));

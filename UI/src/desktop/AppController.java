@@ -6,7 +6,8 @@ import desktop.header.HeaderController;
 import desktop.results.ResultsController;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
-import engineAnswers.SimulationDetailsDTO;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -44,6 +45,20 @@ public class AppController {
     @FXML
     private Tab resultsTab;
 
+    private SimpleBooleanProperty isFileLoaded;
+
+    public boolean getIsFileLoaded() {
+        return isFileLoaded.get();
+    }
+
+    public SimpleBooleanProperty isFileLoadedProperty() {
+        return isFileLoaded;
+    }
+
+    public void setIsFileLoaded(boolean isFileLoaded) {
+        this.isFileLoaded.set(isFileLoaded);
+    }
+
     @FXML
     public void initialize() {
         if (headerComponentController != null && detailsComponentController != null && executionComponentController != null && resultsComponentController != null) {
@@ -52,6 +67,10 @@ public class AppController {
             executionComponentController.setMainController(this);
             resultsComponentController.setMainController(this);
         }
+    }
+
+    public AppController(){
+        isFileLoaded = new SimpleBooleanProperty(false);
     }
 
     public void addDataToSimulationTreeView()
