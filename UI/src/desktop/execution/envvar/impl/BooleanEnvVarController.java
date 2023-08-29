@@ -1,14 +1,12 @@
-package desktop.execution;
+package desktop.execution.envvar.impl;
 
+import desktop.execution.envvar.api.EnvVarControllerAPI;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
 import engineAnswers.PropertyDTO;
 
-import javax.naming.InitialContext;
-
-public class BooleanEnvVarController implements EnvVarControllerAPI{
+public class BooleanEnvVarController implements EnvVarControllerAPI {
 
 
     @FXML private Label nameLabel;
@@ -26,6 +24,7 @@ public class BooleanEnvVarController implements EnvVarControllerAPI{
     @FXML
     private void initialize(){
         valueComboBox.getItems().addAll("Random", "True", "False");
+        valueComboBox.setValue("Random");
     }
 
     @Override
