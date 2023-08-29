@@ -7,9 +7,7 @@ import desktop.results.ResultsController;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -92,10 +90,6 @@ public class AppController {
     }
 
     public void addDataToEnvVarsTable() {
-        executionComponentController.addDataToEnvVarsTable();
-    }
-
-    public void addEnvVarComponentToExecutionGrid(Node component1) {
-        executionComponentController.addEnvVarComponentToGrid(component1);
+        executionComponentController.addDataToEnvVarsListView();
     }
 }

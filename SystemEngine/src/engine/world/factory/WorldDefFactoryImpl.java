@@ -63,11 +63,11 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             if (prdEnvProperty.getPRDRange() != null) {
                 newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
                         new Range(prdEnvProperty.getPRDRange().getFrom(), prdEnvProperty.getPRDRange().getTo()),
-                        false, "");
+                        true, "");
             }
             else{
                 newEnvVarDef = new PropertyDefinition(prdEnvProperty.getPRDName(), PropertyType.valueOf(prdEnvProperty.getType().toUpperCase()),
-                        null, false, "");
+                        null, true, "");
             }
 
             currWorkingWorld.addEnvironmentVariableDef(newEnvVarDef);

@@ -55,7 +55,7 @@
             <Insets top="6.0" />
          </padding>
       </VBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <HBox fx:id="currentEnvVarDetails" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <Button fx:id="stamButton" mnemonicParsing="false" onAction="#stamButtonClicked" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="3" />
    </children>
 </GridPane>

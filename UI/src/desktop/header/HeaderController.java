@@ -71,30 +71,11 @@ public class HeaderController {
             mainController.addDataToSimulationTreeView();
             mainController.addDataToEntitiesTable();
             mainController.addDataToEnvVarsTable();
-
-            loadEnvVarComponents();
-
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + System.lineSeparator());
         }
     }
 
-    void loadEnvVarComponents(){
-        FXMLLoader loaderComponent1 = new FXMLLoader(getClass().getResource("BooleanEnvVar.fxml"));
-//        FXMLLoader loaderComponent2 = new FXMLLoader(getClass().getResource("component2.fxml"));
-        try {
-            Node component1 = loaderComponent1.load();
-            component1.setVisible(false);
-            mainController.addEnvVarComponentToExecutionGrid(component1);
 
-//            Node component2 = loaderComponent2.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-
-
-    }
 }
