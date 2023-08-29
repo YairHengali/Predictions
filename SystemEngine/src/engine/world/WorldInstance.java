@@ -13,7 +13,7 @@ import engine.rule.Rule;
 import java.io.Serializable;
 import java.util.*;
 
-public class WorldInstance implements Serializable {
+public class WorldInstance implements Serializable, Runnable {
     private String dateOfRun = "";
     private int currentNumberOfTicks = 0;
     private long startTime;
@@ -71,10 +71,12 @@ public class WorldInstance implements Serializable {
         }
         if(currentNumberOfTicks >= maxNumberOfTicks)
         {
+            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             return TerminationReason.MAXTICKSREACHED;
         }
         else
         {
+            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             return TerminationReason.SECONDSREACHED;
         }
     }
@@ -106,4 +108,8 @@ public class WorldInstance implements Serializable {
     }
 
 
+    @Override
+    public void run() {
+        runMainLoop();
+    }
 }

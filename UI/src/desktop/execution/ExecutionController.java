@@ -80,8 +80,10 @@ public class ExecutionController {
             }
 
         mainController.moveToResultsTab();
-        mainController.getSystemEngine().createNewSimulation();
-        EndOfSimulationDTO endOfSimulationDTO = mainController.getSystemEngine().runSimulation();
+        //mainController.getSystemEngine().createNewSimulation();
+        mainController.getSystemEngine().runSimulation(); //TODO: stopped here!
+
+
         }catch (Exception e) {
             System.out.println("Error: " + e.getMessage() + " try again!");
         }

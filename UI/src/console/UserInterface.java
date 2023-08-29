@@ -93,7 +93,7 @@ public class UserInterface {
                         List<PropertyDTO> envVarDtos = systemEngine.getEnvVarsDefinitionDto();
                         letUserChooseEnvVarsValues(envVarDtos);
 
-                        systemEngine.createNewSimulation();
+                        //systemEngine.createNewSimulation();
                         List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
                         printActiveEnvVars(activeEnvVarDtos);
                         EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();

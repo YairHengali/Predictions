@@ -23,7 +23,7 @@ public interface SystemEngine {
 
     void clearPastSimulations();
 
-    void createNewSimulation();
+//    void createNewSimulation();
 
     void updateEntityDefPopulation(EntityDTO newEntityDTO);
 

@@ -20,6 +20,8 @@ import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
@@ -30,6 +32,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     int currentSimulationID = 0;
     private final Map<Integer, WorldInstance> id2pastSimulation = new HashMap<>();
     private boolean isThereLoadedSimulation = false;
+    ExecutorService threadExecutor = Executors.newFixedThreadPool(3);
 
 
     @Override
@@ -55,7 +58,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             throw new RuntimeException(e.getMessage());
         }
     }
-
     @Override
     public SimulationDetailsDTO getSimulationDetails() {
         SimulationDetailsDTO simulationDetails;
@@ -83,7 +85,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate());
         return simulationDetails;
     }
-
     private void addPropertyToDtoList(List<PropertyDTO> propertiesDtoList, PropertyDefinition propertyDefinition) {
         if (propertyDefinition.getValueRange() != null) {
             propertiesDtoList.add( new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), propertyDefinition.getValueRange().getFrom(),propertyDefinition.getValueRange().getTo(), propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));
@@ -92,31 +93,29 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             propertiesDtoList.add(new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), null,null, propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));
         }
     }
-
     private static PRDWorld deserializeFrom(InputStream in) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller u = jc.createUnmarshaller();
         return (PRDWorld) u.unmarshal(in);
     }
 
-
-    @Override
-    public void createNewSimulation()
+    private WorldInstance createNewSimulation()
     {
-        simulation = new WorldInstance(this.simulationDef);
-        simulation.runInitIteration(this.simulationDef);
-    }
+        WorldInstance resSimulation = new WorldInstance(this.simulationDef);
+        resSimulation.runInitIteration(this.simulationDef);
+        String dateOfRun = simpleDateFormat.format(new Date());
+        resSimulation.setDateOfRun(dateOfRun);
 
+        return resSimulation;
+    }
     @Override
     public void updateEntityDefPopulation(EntityDTO newEntityDTO) {
         this.simulationDef.getEntityDefinitionByName(newEntityDTO.getName()).setPopulation(newEntityDTO.getPopulation());
     }
-
     @Override
     public void setAllPopulationToZero() {
         simulationDef.getEntitiesDefinitions().forEach(entity -> entity.setPopulation(0));
     }
-
     @Override
     public Collection<EntityDTO> getEntitiesListDTO() {
         List<EntityDTO> entitiesDetails = new ArrayList<>();
@@ -142,15 +141,15 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
     @Override
     public EndOfSimulationDTO runSimulation() {
-        String dateOfRun = simpleDateFormat.format(new Date());
-        simulation.setDateOfRun(dateOfRun);
+        WorldInstance currSimulation = this.createNewSimulation();
+        id2pastSimulation.put(currentSimulationID++, currSimulation);
+        threadExecutor.execute(currSimulation);
 
-        TerminationReason terminationReason = simulation.runMainLoop();
-        currentSimulationID++;
+//        TerminationReason terminationReason = simulation.runMainLoop();
+//        currentSimulationID++;
 
-        id2pastSimulation.put(currentSimulationID,this.simulation);
-        //createNewSimulation(); // now not needed
-        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
+//        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
+        return null;
     }
 
     @Override
