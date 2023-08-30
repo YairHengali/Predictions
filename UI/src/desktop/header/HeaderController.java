@@ -27,6 +27,7 @@ public class HeaderController {
     @FXML private TextField loadFileTF;
 
     private AppController mainController;
+    private String lastAccessedFolderPath = "";
     private SimpleStringProperty selectedFileProperty;
 
     public void setMainController(AppController mainController) {
@@ -49,6 +50,11 @@ public class HeaderController {
             fileChooser.setTitle("Select Simulation File");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("XML Files", "*.xml"));
 
+            // Set the initial directory to the last accessed folder
+            if (!lastAccessedFolderPath.isEmpty()) {
+                fileChooser.setInitialDirectory(new File(lastAccessedFolderPath));
+            }
+
             // Show the file dialog and get the selected file
             File selectedFile = fileChooser.showOpenDialog(loadFileBTN.getScene().getWindow());
 
@@ -56,13 +62,15 @@ public class HeaderController {
                 return;
             }
 
+            // Update the last accessed folder's path
+            lastAccessedFolderPath = selectedFile.getParent();
+
 
             // Load the selected file using the systemEngine
             mainController.getSystemEngine().loadSimulation(selectedFile.getAbsolutePath());
             mainController.setIsFileLoaded(true);
 
             // Update the text field with the selected file path
-//            loadFileTF.setText(selectedFile.getAbsolutePath()); //BEFORE BINDING
             selectedFileProperty.set(selectedFile.getAbsolutePath());
 
 

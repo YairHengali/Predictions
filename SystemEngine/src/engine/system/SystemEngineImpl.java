@@ -223,7 +223,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         List<EntityCountDTO> entityCountDtos = new ArrayList<>();
         WorldInstance pastSimulation = this.id2pastSimulation.get(desiredPastSimulation.getId());
         for (EntityDefinition entityDefinition : simulationDef.getEntitiesDefinitions()) {
-            int startCount = entityDefinition.getPopulation();
+            int startCount = entityDefinition.getPopulation(); //TODO: CHANGE! DEF CHANGES EVERY TIME - maybe each instance will hold its def?
             int endCount = pastSimulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size();
             entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
         }
