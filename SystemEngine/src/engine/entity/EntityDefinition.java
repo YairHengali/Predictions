@@ -14,6 +14,13 @@ public class EntityDefinition implements Serializable {
         this.name = name;
     }
 
+    public EntityDefinition(EntityDefinition copy){
+        this.name = copy.name;
+        this.population = copy.population;
+
+        copy.name2propertyDef.values().forEach(propertyDef -> this.name2propertyDef.put(propertyDef.getName(), new PropertyDefinition(propertyDef)));
+    }
+
     public void addPropertyDefinition(PropertyDefinition propertyDefinitionToAdd){
         name2propertyDef.put(propertyDefinitionToAdd.getName(), propertyDefinitionToAdd);
     }

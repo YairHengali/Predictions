@@ -6,6 +6,7 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
+import engineAnswers.EntityDTO;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -17,9 +18,12 @@ public class EntityInstance implements Serializable {
     private final String name;
     private final Map<String, PropertyInstance> name2property = new HashMap<>();
 
+    private final EntityDefinition definition;
+
     public EntityInstance(EntityDefinition entityDefinition, int id) {
         this.id = id;
         this.name = entityDefinition.getName();
+        this.definition = new EntityDefinition(entityDefinition);
 
         for (PropertyDefinition def : entityDefinition.getName2propertyDef().values()) {
             try {
@@ -49,7 +53,7 @@ public class EntityInstance implements Serializable {
     }
 
     public String getName() {
-        return name;
+        return definition.getName();
     }
 
     public int getId() {

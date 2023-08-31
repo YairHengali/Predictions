@@ -19,6 +19,14 @@ public class PropertyDefinition implements Serializable {
         this.initValue = initValue;
     }
 
+    public PropertyDefinition(PropertyDefinition copy){
+        name = copy.name;
+        type = copy.type;
+        valueRange = copy.valueRange;
+        isInitializedRandomly = copy.isInitializedRandomly;
+        initValue = copy.initValue;
+            }
+
     public String getName() {
         return name;
     }
