@@ -1,6 +1,7 @@
 package desktop.execution;
 
 import desktop.execution.envvar.api.EnvVarControllerAPI;
+import desktop.execution.tasks.SimulationTask;
 import engine.property.PropertyType;
 import engineAnswers.EndOfSimulationDTO;
 import engineAnswers.EntityDTO;
@@ -65,7 +66,12 @@ public class ExecutionController {
             }
 
         mainController.moveToResultsTab();
-        //mainController.getSystemEngine().createNewSimulation();
+
+            /*                      NEED TO FIGURE OUT HOW TASKS WORKING
+            SimulationTask simulationTask = new SimulationTask(mainController.getSystemEngine());
+            this.bindTaskToUIComponents();
+            mainController.getSystemEngine().addTaskToThreadPool(simulationTask);*/
+
         mainController.getSystemEngine().runSimulation(); //TODO: stopped here!
 
 

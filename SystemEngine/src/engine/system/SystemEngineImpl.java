@@ -32,7 +32,10 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     int currentSimulationID = 0;
     private final Map<Integer, WorldInstance> id2pastSimulation = new HashMap<>();
     private boolean isThereLoadedSimulation = false;
+
+    private int numOfThreads = 1;
     ExecutorService threadExecutor = Executors.newFixedThreadPool(3);
+
 
 
     @Override
@@ -48,6 +51,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
             simulationDef = new WorldDefinition();
             worldDefFactory.insertDataToWorldDefinition(this.simulationDef, generatedWorld);
+
 
             isThereLoadedSimulation = true;
         } catch (Exception e) {
