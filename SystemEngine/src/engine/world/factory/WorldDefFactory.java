@@ -1,7 +1,7 @@
 package engine.world.factory;
 
 import engine.world.WorldDefinition;
-import jaxb.generated.PRDWorld;
+import jaxb.generated2.PRDWorld;
 
 public interface WorldDefFactory {
 

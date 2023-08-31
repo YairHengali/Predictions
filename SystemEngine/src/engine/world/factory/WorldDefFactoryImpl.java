@@ -19,7 +19,7 @@ import exceptions.xml.NotExistingEntityException;
 import exceptions.xml.NotExistingPropertyException;
 import exceptions.xml.NotUniqueEnvVarException;
 import exceptions.xml.NotUniquePropertyException;
-import jaxb.generated.*;
+import jaxb.generated2.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -34,8 +34,8 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         this.currWorkingWorld = simulationDef;
 
         try{
-            addEnvironmentVariables(generatedWorld);
-            addEntitiesDefinitions(generatedWorld);
+            addEnvironmentVariables(generatedWorld); // done
+            addEntitiesDefinitions(generatedWorld); // done
             addRules(generatedWorld);
             addTerminationSettings(generatedWorld);
         }
@@ -45,11 +45,11 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
     }
 
     private void addEnvironmentVariables(PRDWorld generatedWorld) {
-        int environmentVariablesCount = generatedWorld.getPRDEvironment().getPRDEnvProperty().size();
+        int environmentVariablesCount = generatedWorld.getPRDEnvironment().getPRDEnvProperty().size();
         Set<String> EnvVarsNames = new HashSet<>();
 
         for (int i = 0; i < environmentVariablesCount; i++) {
-            PRDEnvProperty prdEnvProperty = generatedWorld.getPRDEvironment().getPRDEnvProperty().get(i);
+            PRDEnvProperty prdEnvProperty = generatedWorld.getPRDEnvironment().getPRDEnvProperty().get(i);
             if (EnvVarsNames.contains(prdEnvProperty.getPRDName())) {
                 throw new NotUniqueEnvVarException(prdEnvProperty.getPRDName());
             }
@@ -79,7 +79,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         for (int i = 0; i < entitiesCount; i++) {
             PRDEntity prdEntity = generatedWorld.getPRDEntities().getPRDEntity().get(i);
 
-            EntityDefinition newEntityDef = new EntityDefinition(prdEntity.getName(), prdEntity.getPRDPopulation());
+            EntityDefinition newEntityDef = new EntityDefinition(prdEntity.getName(), 0);
 
             int entityPropertiesCount = prdEntity.getPRDProperties().getPRDProperty().size();
             Set<String> entityPropertiesNames = new HashSet<>();

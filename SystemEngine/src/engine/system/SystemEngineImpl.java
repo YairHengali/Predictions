@@ -12,7 +12,7 @@ import engine.world.WorldInstance;
 import engine.world.factory.WorldDefFactory;
 import engine.world.factory.WorldDefFactoryImpl;
 import engineAnswers.*;
-import jaxb.generated.*;
+import jaxb.generated2.*;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -34,7 +34,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     private boolean isThereLoadedSimulation = false;
 
     private int numOfThreads = 1;
-    ExecutorService threadExecutor = Executors.newFixedThreadPool(3);
+    ExecutorService threadExecutor;
 
 
 
@@ -51,6 +51,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
             simulationDef = new WorldDefinition();
             worldDefFactory.insertDataToWorldDefinition(this.simulationDef, generatedWorld);
+            this.numOfThreads = generatedWorld.getPRDThreadCount();
+            threadExecutor = Executors.newFixedThreadPool(this.numOfThreads);
 
 
             isThereLoadedSimulation = true;
