@@ -1,5 +1,7 @@
 package engine.world.factory;
 
+import engine.action.impl.replace.CreationMode;
+import engine.action.impl.replace.Replace;
 import engine.range.Range;
 import engine.world.WorldDefinition;
 import engine.action.api.Action;
@@ -154,53 +156,33 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         }
     }
 
-    private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition, SecondaryEntityDetails secondaryEntityDetails) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
-    {
-        ConditionImpl resCondition;
-        if (prdCondition.getSingularity().equals("single")) {
-            if (!isExistingPropertyInEntity(prdCondition.getEntity(), prdCondition.getProperty())) {
-                throw new NotExistingPropertyException(prdCondition.getProperty(),"Condition", prdCondition.getEntity());
-            }
-
-            ConditionOp conditionOp = null;
-            switch (prdCondition.getOperator()) {
-                case "=":
-                    conditionOp = ConditionOp.EQUALS;
-                    break;
-                case "!=":
-                    conditionOp = ConditionOp.NOTEQUALS;
-                    break;
-                case "bt":
-                    conditionOp = ConditionOp.BT;
-                    break;
-                case "lt":
-                    conditionOp = ConditionOp.LT;
-                    break;
-            }
-
-            resCondition = new SingleCondition(prdCondition.getEntity(),secondaryEntityDetails, prdCondition.getProperty(), conditionOp, prdCondition.getValue());
-        }
-        else //singularity: multiple
-        {
-            MultipleCondition multipleCondition = new MultipleCondition(actionEntityName,secondaryEntityDetails, LogicalOperator.valueOf(prdCondition.getLogical().toUpperCase()));
-            for (PRDCondition prdSubCondition : prdCondition.getPRDCondition()) {
-                multipleCondition.addCondition(createConditionAction(actionEntityName, prdSubCondition, secondaryEntityDetails));
-            }
-
-            resCondition = multipleCondition;
-        }
-
-        return resCondition;
-    }
 
     private Action createActionFromPrd(PRDAction prdAction)
     {
         Action resAction = null;
-        if (prdAction.getType().equals("proximity") || prdAction.getType().equals("replace")) //TODO: IMPLEMENT THE METHODS
-            return resAction;
+        if (prdAction.getType().equals("proximity"))//IN PROXIMITY, THE ENTITIES ARE: SOURCE AND TARGET TODO: DOES IT THE SECONDARY? because doesnt have count or conditions
+        {
+            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getSourceEntity()) == null) {
+                throw new NotExistingEntityException(prdAction.getPRDBetween().getSourceEntity(), prdAction.getType());
+            }
+            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getTargetEntity()) == null) {
+                throw new NotExistingEntityException(prdAction.getPRDBetween().getTargetEntity(), prdAction.getType());
+            }
 
-        if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
-            throw new NotExistingEntityException(prdAction.getEntity(), prdAction.getType());
+            return resAction;//TODO: IMPLEMENT THE METHODS
+        }
+        else if (prdAction.getType().equals("replace")){ //IN REPLACE, THE ENTITIES ARE: KILL AND CREATE
+            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getKill()) == null) {
+                throw new NotExistingEntityException(prdAction.getKill(), prdAction.getType());
+            }
+            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getCreate()) == null) {
+                throw new NotExistingEntityException(prdAction.getCreate(), prdAction.getType());
+            }
+        }
+        else {
+            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
+                throw new NotExistingEntityException(prdAction.getEntity(), prdAction.getType());
+            }
         }
 
         SecondaryEntityDetails secondaryEntityDetails;
@@ -276,6 +258,9 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             case "kill":
                 resAction = new Kill(prdAction.getEntity(), secondaryEntityDetails);
                 break;
+
+            case "replace":
+                resAction = new Replace(prdAction.getKill(), prdAction.getCreate(), secondaryEntityDetails, CreationMode.valueOf(prdAction.getMode().toUpperCase()));
         }
 
         return resAction;
@@ -306,6 +291,45 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         }
 
         return res;
+    }
+
+    private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition, SecondaryEntityDetails secondaryEntityDetails) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
+    {
+        ConditionImpl resCondition;
+        if (prdCondition.getSingularity().equals("single")) {
+//            if (!isExistingPropertyInEntity(prdCondition.getEntity(), prdCondition.getProperty())) { //DOESNT NEEDED BECAUSE PROPERTY IS NOW EXPRESSION
+//                throw new NotExistingPropertyException(prdCondition.getProperty(),"Condition", prdCondition.getEntity());
+//            }
+
+            ConditionOp conditionOp = null;
+            switch (prdCondition.getOperator()) {
+                case "=":
+                    conditionOp = ConditionOp.EQUALS;
+                    break;
+                case "!=":
+                    conditionOp = ConditionOp.NOTEQUALS;
+                    break;
+                case "bt":
+                    conditionOp = ConditionOp.BT;
+                    break;
+                case "lt":
+                    conditionOp = ConditionOp.LT;
+                    break;
+            }
+
+            resCondition = new SingleCondition(prdCondition.getEntity(),secondaryEntityDetails, prdCondition.getProperty(), conditionOp, prdCondition.getValue());
+        }
+        else //singularity: multiple
+        {
+            MultipleCondition multipleCondition = new MultipleCondition(actionEntityName,secondaryEntityDetails, LogicalOperator.valueOf(prdCondition.getLogical().toUpperCase()));
+            for (PRDCondition prdSubCondition : prdCondition.getPRDCondition()) {
+                multipleCondition.addCondition(createConditionAction(actionEntityName, prdSubCondition, secondaryEntityDetails));
+            }
+
+            resCondition = multipleCondition;
+        }
+
+        return resCondition;
     }
 
     private void checkForValidIncreaseDecreaseArguments(PRDAction prdAction)

@@ -17,4 +17,14 @@ public interface EntityInstanceManager {
     void createAnInstance(String name); //TODO!!!
 
     EntityDefinition getEntityDefByName(String entityName);
+
+
+    /////FOR REPLACE:
+    void createScratchEntity(String entityName);
+
+    void createScratchEntities();
+
+    void createDerivedEntity(EntityInstance entityInstance, String EntityToCreate);
+
+    void createDerivedEntities();
 }

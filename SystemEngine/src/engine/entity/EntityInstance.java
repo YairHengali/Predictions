@@ -6,9 +6,9 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
-import engineAnswers.EntityDTO;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,5 +62,9 @@ public class EntityInstance implements Serializable {
 
     public PropertyInstance getPropertyByName(String propertyName) {
         return name2property.get(propertyName);
+    }
+
+    public Collection<PropertyInstance> getProperties() {
+        return name2property.values();
     }
 }
