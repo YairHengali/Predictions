@@ -12,6 +12,7 @@ import java.util.*;
 public class WorldDefinition implements Serializable {
     private Integer maxNumberOfTicks = null;
     private Long SecondsToTerminate = null;
+    private boolean terminationByUser = false;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
     private final List<Rule> rules = new ArrayList<>();
     final EnvironmentVariablesDefManager environmentVariablesDefManager = new EnvironmentVariablesDefManagerImpl();
@@ -70,4 +71,11 @@ public class WorldDefinition implements Serializable {
         return SecondsToTerminate;
     }
 
+    public void setTerminationByUser(boolean terminationByUser) {
+        this.terminationByUser = terminationByUser;
+    }
+
+    public boolean isTerminationByUser() {
+        return terminationByUser;
+    }
 }

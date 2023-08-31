@@ -8,6 +8,7 @@ import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
+import engine.world.factory.SecondaryEntityDetails;
 
 public class Calculation extends AbstractAction {
     private final String propertyName;
@@ -15,8 +16,8 @@ public class Calculation extends AbstractAction {
     private final String arg2Expression;
     private final ClacType calcType;
 
-    public Calculation(String mainEntityName, String propertyName, String arg1Expression, String arg2Expression, ClacType calcType) {
-        super(ActionType.CALCULATION, mainEntityName);
+    public Calculation(String mainEntityName, SecondaryEntityDetails secondaryEntityDetails, String propertyName, String arg1Expression, String arg2Expression, ClacType calcType) {
+        super(ActionType.CALCULATION, mainEntityName, secondaryEntityDetails);
         this.propertyName = propertyName;
         this.arg1Expression = arg1Expression;
         this.arg2Expression = arg2Expression;

@@ -7,16 +7,17 @@ import engine.context.Context;
 import engine.expression.Expression;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
+import engine.world.factory.SecondaryEntityDetails;
 
 public class SingleCondition extends ConditionImpl implements Condition
 {
-    final String propertyName;
+    final String propertyNameExpression; //TODO: DOES IT CAN BY PF ANY TYPE? OR ONLY PROPERTY
     final ConditionOp operator;
     final String valueToCompareExpression;
 
-    public SingleCondition(String mainEntityName, String propertyName, ConditionOp conditionOperator, String valueToCompareExpression) {
-        super(mainEntityName);
-        this.propertyName = propertyName;
+    public SingleCondition(String mainEntityName, SecondaryEntityDetails secondaryEntityDetails, String propertyNameExpression, ConditionOp conditionOperator, String valueToCompareExpression) {
+        super(mainEntityName, secondaryEntityDetails);
+        this.propertyNameExpression = propertyNameExpression;
         this.operator = conditionOperator;
         this.valueToCompareExpression = valueToCompareExpression;
     }
@@ -35,7 +36,10 @@ public class SingleCondition extends ConditionImpl implements Condition
     public boolean evaluateCondition(Context context) {
         boolean result = false;
 
-        PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(this.propertyName);
+        Expression propertyNameAsExpression = new Expression(propertyNameExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        String propertyName = propertyNameAsExpression.praseExpressionToValueString(PropertyType.STRING);
+
+        PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         //figuring value out of expression
         Expression valueToCompareAsExpression = new Expression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
         String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString(propertyToEvaluate.getType());

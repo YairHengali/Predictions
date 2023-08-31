@@ -9,12 +9,13 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
+import engine.world.factory.SecondaryEntityDetails;
 
 public class SetAction extends AbstractAction {
     private final String propertyName;
     private final String valueExpression;
-    public SetAction(String mainEntityName,String propertyName, String valueExpression){
-        super(ActionType.SET, mainEntityName);
+    public SetAction(String mainEntityName, SecondaryEntityDetails secondaryEntityDetails, String propertyName, String valueExpression){
+        super(ActionType.SET, mainEntityName, secondaryEntityDetails);
         this.propertyName = propertyName;
         this.valueExpression = valueExpression;
     }

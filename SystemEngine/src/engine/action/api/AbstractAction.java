@@ -1,25 +1,32 @@
 package engine.action.api;
 
+import engine.action.impl.condition.api.Condition;
+import engine.world.factory.SecondaryEntityDetails;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractAction implements Action, Serializable {
     private final ActionType actionType;
     protected final String mainEntityName;
-    protected final String secondaryEntityName;
+    protected final SecondaryEntityDetails secondaryEntityDetails;
 
 
-    protected AbstractAction(ActionType actionType, String mainEntityName, String secondaryEntityName) {
+
+    protected AbstractAction(ActionType actionType, String mainEntityName, SecondaryEntityDetails secondaryEntityDetails) {
         this.actionType = actionType;
         this.mainEntityName = mainEntityName;
-        this.secondaryEntityName = secondaryEntityName;
+        this.secondaryEntityDetails = secondaryEntityDetails;
     }
 
     @Override
     public String getMainEntityName() {return mainEntityName;}
 
     @Override
-    public String getSecondaryEntityName() {return secondaryEntityName;}
+    public ActionType getActionType() { return actionType; }
 
     @Override
-    public ActionType getActionType() { return actionType; }
+    public SecondaryEntityDetails getSecondaryEntityDetails(){ return secondaryEntityDetails;}
+
 }

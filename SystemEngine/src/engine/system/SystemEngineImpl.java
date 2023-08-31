@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SystemEngineImpl implements SystemEngine, Serializable {
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated2";
     private WorldInstance simulation = null;
     private WorldDefinition simulationDef = null;
     private final WorldDefFactory worldDefFactory = new WorldDefFactoryImpl();

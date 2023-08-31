@@ -7,13 +7,14 @@ import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
+import engine.world.factory.SecondaryEntityDetails;
 
 public class Increase extends AbstractAction {
     private final String propertyName;
     private final String byExpression;
 
-    public Increase(String mainEntityName, String propertyName, String byExpression) {
-        super(ActionType.INCREASE, mainEntityName);
+    public Increase(String mainEntityName, SecondaryEntityDetails secondaryEntityDetails, String propertyName, String byExpression) {
+        super(ActionType.INCREASE, mainEntityName, secondaryEntityDetails);
         this.propertyName = propertyName;
         this.byExpression = byExpression;
     }

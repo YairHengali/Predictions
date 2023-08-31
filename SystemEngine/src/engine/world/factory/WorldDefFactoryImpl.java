@@ -21,6 +21,7 @@ import exceptions.xml.NotUniqueEnvVarException;
 import exceptions.xml.NotUniquePropertyException;
 import jaxb.generated2.*;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -120,7 +121,9 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
 
     private void addTerminationSettings(PRDWorld generatedWorld)
     {
-        for (Object obj: generatedWorld.getPRDTermination().getPRDByTicksOrPRDBySecond()) {
+        currWorkingWorld.setTerminationByUser(generatedWorld.getPRDTermination().getPRDByUser() != null);
+
+        for (Object obj: generatedWorld.getPRDTermination().getPRDBySecondOrPRDByTicks()) {
             if (obj instanceof PRDByTicks) {
                 PRDByTicks ticks = (PRDByTicks) obj;
                 currWorkingWorld.setMaxNumberOfTicks(ticks.getCount());
@@ -151,7 +154,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         }
     }
 
-    private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
+    private ConditionImpl createConditionAction(String actionEntityName, PRDCondition prdCondition, SecondaryEntityDetails secondaryEntityDetails) //ASSUMING ALL CONDITIONS CONTAIN THE SAME THEN AND ELSE
     {
         ConditionImpl resCondition;
         if (prdCondition.getSingularity().equals("single")) {
@@ -175,13 +178,13 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                     break;
             }
 
-            resCondition = new SingleCondition(prdCondition.getEntity(), prdCondition.getProperty(), conditionOp, prdCondition.getValue());
+            resCondition = new SingleCondition(prdCondition.getEntity(),secondaryEntityDetails, prdCondition.getProperty(), conditionOp, prdCondition.getValue());
         }
         else //singularity: multiple
         {
-            MultipleCondition multipleCondition = new MultipleCondition(actionEntityName, LogicalOperator.valueOf(prdCondition.getLogical().toUpperCase()));
+            MultipleCondition multipleCondition = new MultipleCondition(actionEntityName,secondaryEntityDetails, LogicalOperator.valueOf(prdCondition.getLogical().toUpperCase()));
             for (PRDCondition prdSubCondition : prdCondition.getPRDCondition()) {
-                multipleCondition.addCondition(createConditionAction(actionEntityName, prdSubCondition));
+                multipleCondition.addCondition(createConditionAction(actionEntityName, prdSubCondition, secondaryEntityDetails));
             }
 
             resCondition = multipleCondition;
@@ -193,8 +196,18 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
     private Action createActionFromPrd(PRDAction prdAction)
     {
         Action resAction = null;
+        if (prdAction.getType().equals("proximity") || prdAction.getType().equals("replace")) //TODO: IMPLEMENT THE METHODS
+            return resAction;
+
         if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
             throw new NotExistingEntityException(prdAction.getEntity(), prdAction.getType());
+        }
+
+        SecondaryEntityDetails secondaryEntityDetails;
+        try {
+            secondaryEntityDetails = getSecondaryEntityDetails(prdAction.getPRDSecondaryEntity());
+        }catch (NotExistingEntityException e){
+            throw new NotExistingEntityException(e.getEntityName(), prdAction.getType());
         }
 
         switch (prdAction.getType()) {
@@ -204,9 +217,9 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                 checkForValidIncreaseDecreaseArguments(prdAction);
 
                 if (prdAction.getType().equals("increase")) {
-                    resAction = new Increase(prdAction.getEntity(), prdAction.getProperty(), prdAction.getBy());
+                    resAction = new Increase(prdAction.getEntity(), secondaryEntityDetails, prdAction.getProperty(), prdAction.getBy());
                 } else {
-                    resAction = new Decrease(prdAction.getEntity(), prdAction.getProperty(), prdAction.getBy());
+                    resAction = new Decrease(prdAction.getEntity(), secondaryEntityDetails, prdAction.getProperty(), prdAction.getBy());
                 }
                 break;
 
@@ -224,13 +237,13 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg2()))) {
                         throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
                     } else {
-                        resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
+                        resAction = new Calculation(prdAction.getEntity(), secondaryEntityDetails, prdAction.getResultProp(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
                     }
                 } else if (prdAction.getPRDDivide() != null) {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg2()))) {
                         throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
                     } else {
-                        resAction = new Calculation(prdAction.getEntity(), prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
+                        resAction = new Calculation(prdAction.getEntity(), secondaryEntityDetails, prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
                     }
                 } else {
                     throw new IllegalArgumentException("Invalid xml file! Calculation action supports MULTIPLY or DIVIDE only!");
@@ -238,7 +251,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                 break;
 
             case "condition":
-                ConditionImpl resCondition = createConditionAction(prdAction.getEntity(), prdAction.getPRDCondition());
+                ConditionImpl resCondition = createConditionAction(prdAction.getEntity(), prdAction.getPRDCondition(), secondaryEntityDetails);
 
                 for (PRDAction prdActionInThen : prdAction.getPRDThen().getPRDAction()) {
                     resCondition.addActionToThen(createActionFromPrd(prdActionInThen));
@@ -257,15 +270,42 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                 if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
                     throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
                 }
-                resAction = new SetAction(prdAction.getEntity(), prdAction.getProperty(), prdAction.getValue());
+                resAction = new SetAction(prdAction.getEntity(), secondaryEntityDetails, prdAction.getProperty(), prdAction.getValue());
                 break;
 
             case "kill":
-                resAction = new Kill(prdAction.getEntity());
+                resAction = new Kill(prdAction.getEntity(), secondaryEntityDetails);
                 break;
         }
 
         return resAction;
+    }
+
+    private SecondaryEntityDetails getSecondaryEntityDetails(PRDAction.PRDSecondaryEntity prdSecondaryEntity) {
+        if (prdSecondaryEntity == null){
+            return null;
+        }
+
+        if (currWorkingWorld.getEntityDefinitionByName(prdSecondaryEntity.getEntity()) == null) {
+            throw new NotExistingEntityException(prdSecondaryEntity.getEntity(), null);
+        }
+
+        SecondaryEntityDetails res = new SecondaryEntityDetails();
+
+        res.setName(prdSecondaryEntity.getEntity());
+
+        if (prdSecondaryEntity.getPRDSelection().getCount().equalsIgnoreCase("ALL")){
+            res.setMaxCount(null);
+        }
+        else{
+            res.setMaxCount(Integer.parseInt(prdSecondaryEntity.getPRDSelection().getCount()));
+        }
+
+        if(prdSecondaryEntity.getPRDSelection().getPRDCondition() != null){
+            res.setCondition(createConditionAction(prdSecondaryEntity.getEntity(), prdSecondaryEntity.getPRDSelection().getPRDCondition(), null));
+        }
+
+        return res;
     }
 
     private void checkForValidIncreaseDecreaseArguments(PRDAction prdAction)
