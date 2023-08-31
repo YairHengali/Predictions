@@ -30,7 +30,6 @@ public class WorldDefinition implements Serializable {
         SecondsToTerminate = secondsToTerminate;
     }
 
-
     public EntityDefinition getEntityDefinitionByName(String entityName){
         return name2EntitiesDef.get(entityName);
     }

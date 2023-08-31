@@ -1,6 +1,5 @@
 package engine.world;
 
-import engine.entity.EntityDefinition;
 import engine.entity.manager.EntityInstanceManager;
 import engine.entity.manager.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
@@ -41,12 +40,9 @@ public class WorldInstance implements Serializable, Runnable {
     public void runInitIteration(WorldDefinition simulationDef){//Tick0
         currentNumberOfTicks = 0;
 
-        entityInstanceManager = new EntityInstanceManagerImpl();
+        entityInstanceManager = new EntityInstanceManagerImpl(simulationDef.getEntitiesDefinitions());
+        entityInstanceManager.createEntitiesInstances();
 
-        for(EntityDefinition entityDefinition : simulationDef.getEntitiesDefinitions())
-        {
-            entityInstanceManager.createEntityInstances(entityDefinition);
-        }
 
         activeEnvironmentVariables = new ActiveEnvironmentVariablesImpl();
         for(PropertyDefinition envVarDef : simulationDef.getEnvironmentVariablesDefinitions())

@@ -117,7 +117,9 @@ public class PropertyDefinition implements Serializable, Cloneable {
     public PropertyDefinition clone() {
         try {
             PropertyDefinition clone = (PropertyDefinition) super.clone();
-            clone.valueRange = new Range(valueRange.getFrom().doubleValue(), valueRange.getTo().doubleValue());
+            if(valueRange != null) {
+                clone.valueRange = new Range(valueRange.getFrom().doubleValue(), valueRange.getTo().doubleValue());
+            }
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();

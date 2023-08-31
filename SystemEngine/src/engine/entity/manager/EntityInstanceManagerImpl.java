@@ -9,26 +9,32 @@ import java.util.*;
 public class EntityInstanceManagerImpl implements EntityInstanceManager, Serializable {
     private int count;
     private final Map<String, List<EntityInstance>> name2EntInstancesList;
+    private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
+
 
     private final Set<EntityInstance>  EntitiesToKill;
 
-    public EntityInstanceManagerImpl() {
+    public EntityInstanceManagerImpl(Collection<EntityDefinition> entityDefinitionCollection) {
         count = 0;
         name2EntInstancesList = new HashMap<>();
         EntitiesToKill = new HashSet<>();
+        entityDefinitionCollection.forEach(entityDefinition -> this.name2EntitiesDef.put(entityDefinition.getName(), entityDefinition.clone()));
     }
 
     @Override
-    public void createEntityInstances(EntityDefinition entityDefinition) {
-        for (int i = 0; i < entityDefinition.getPopulation(); i++) {
-            EntityInstance newEntityInstance = new EntityInstance(entityDefinition, count);
-            count++;
+    public void createEntitiesInstances() {
+        for(EntityDefinition entityDefinition: this.name2EntitiesDef.values()){
+            for (int i = 0; i < entityDefinition.getPopulation(); i++) {
+                EntityInstance newEntityInstance = new EntityInstance(entityDefinition, count);
+                count++;
 
-            if(!name2EntInstancesList.containsKey(entityDefinition.getName())) {
-                name2EntInstancesList.put(entityDefinition.getName(),new ArrayList<>());
+                if(!name2EntInstancesList.containsKey(entityDefinition.getName())) {
+                    name2EntInstancesList.put(entityDefinition.getName(),new ArrayList<>());
+                }
+                name2EntInstancesList.get(entityDefinition.getName()).add(newEntityInstance);
             }
-            name2EntInstancesList.get(entityDefinition.getName()).add(newEntityInstance);
         }
+
     }
 
     @Override
@@ -49,4 +55,15 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     public List<EntityInstance> getInstancesListByName(String entityName) {
         return name2EntInstancesList.get(entityName);
     }
+
+    @Override
+    public void createAnInstance(String name) {
+
+    }
+
+    @Override
+    public EntityDefinition getEntityDefByName(String entityName) {
+        return name2EntitiesDef.get(entityName);
+    }
+
 }

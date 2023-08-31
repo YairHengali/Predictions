@@ -6,11 +6,15 @@ import engine.entity.EntityInstance;
 import java.util.List;
 
 public interface EntityInstanceManager {
-    void createEntityInstances(EntityDefinition entityDefinition);
+    void createEntitiesInstances();
 
     void killEntity(EntityInstance entityInstance);
 
     void killEntities();
 
     List<EntityInstance> getInstancesListByName(String entityName);
+
+    void createAnInstance(String name); //TODO!!!
+
+    EntityDefinition getEntityDefByName(String entityName);
 }
