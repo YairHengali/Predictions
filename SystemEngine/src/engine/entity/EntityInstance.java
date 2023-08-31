@@ -23,7 +23,7 @@ public class EntityInstance implements Serializable {
     public EntityInstance(EntityDefinition entityDefinition, int id) {
         this.id = id;
         this.name = entityDefinition.getName();
-        this.definition = new EntityDefinition(entityDefinition);
+        this.definition = entityDefinition.clone();
 
         for (PropertyDefinition def : entityDefinition.getName2propertyDef().values()) {
             try {

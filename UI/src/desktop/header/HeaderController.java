@@ -79,6 +79,7 @@ public class HeaderController {
             mainController.addDataToSimulationTreeView();
             mainController.addDataToEntitiesTable();
             mainController.addDataToEnvVarsTable();
+
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + System.lineSeparator());
