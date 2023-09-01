@@ -8,7 +8,7 @@ public abstract class PropertyInstance implements Serializable {
     protected String value;
     private final String name;
     private final PropertyType type;
-    private int lastTickModified = 0;
+    private Integer lastTickModified = 0;
 
 
     public PropertyInstance(String name, PropertyType type) {
@@ -32,6 +32,8 @@ public abstract class PropertyInstance implements Serializable {
         return lastTickModified;
     }
 
-    public void setLastTickModified(int lastTickModified) {
-        this.lastTickModified = lastTickModified;
+    public void setLastTickModified(Integer lastTickModified) {
+        if(lastTickModified != null){
+            this.lastTickModified = lastTickModified;
+        }
     }}

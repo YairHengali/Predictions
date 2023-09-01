@@ -42,13 +42,13 @@ public class Calculation extends AbstractAction {
                 try {
                     switch (calcType) {
                         case MULTIPLY:
-                            ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression));
+                            ((DecimalProperty) currentEntityPropertyInstance).setValue(  (Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression)) ,  context.getCurrentTick() );
                             break;
                         case DIVIDE:
                             if (Integer.parseInt(value2FromExpression) == 0) {
                                 throw new ArithmeticException("Can not divide by zero in action calculation");
                             } else {
-                                ((DecimalProperty) currentEntityPropertyInstance).setValue(Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression));
+                                ((DecimalProperty) currentEntityPropertyInstance).setValue(  (Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression)) , context.getCurrentTick());
                             }
                             break;
 
@@ -64,14 +64,14 @@ public class Calculation extends AbstractAction {
             {
                 switch (calcType) {
                     case MULTIPLY:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression));
+                        ((FloatProperty) currentEntityPropertyInstance).setValue( (Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
                         break;
                     case DIVIDE:
                     if (Float.parseFloat(value2FromExpression) == 0){
                         throw new ArithmeticException("Can not divide by zero in action calculation");
                     }
                     else{
-                        ((FloatProperty) currentEntityPropertyInstance).setValue(Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression));
+                        ((FloatProperty) currentEntityPropertyInstance).setValue( (Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
                     }
                    break;
                 }

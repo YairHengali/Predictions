@@ -127,17 +127,17 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
                 switch (propertyType) { //TODO: LOOKS UGLY AND MIGHT BE BETTER TO IMPLEMENT SET VALUE IN PROPERTY INSTANCE..
                     case BOOLEAN:
                         if (propertyAtDerived instanceof BooleanProperty) {
-                            ((BooleanProperty) propertyAtDerived).setValue(Boolean.valueOf(propertyInstance.getValue()));
+                            ((BooleanProperty) propertyAtDerived).setValue( Boolean.valueOf(propertyInstance.getValue()) , null);
                         }
                         break;
                     case FLOAT:
                         if (propertyAtDerived instanceof FloatProperty) {
-                            ((FloatProperty) propertyAtDerived).setValue(Float.parseFloat(propertyInstance.getValue()));
+                            ((FloatProperty) propertyAtDerived).setValue(Float.parseFloat(propertyInstance.getValue()), null);
                     }
                         break;
                     case STRING:
                         if (propertyAtDerived instanceof StringProperty) {
-                            ((StringProperty) propertyAtDerived).setValue(propertyInstance.getValue());
+                            ((StringProperty) propertyAtDerived).setValue(propertyInstance.getValue(), null);
                         }
                         break;
                 }
