@@ -77,7 +77,7 @@ public class Expression2 {
             return String.valueOf(numericExp1 * (numericExp2 / 100));
         }
 
-        else if(rawExpression.startsWith("ticks")){ // TODO: Implement that(need to change wntity instacne according to this and show results tab
+        else if(rawExpression.startsWith("ticks")){ // TODO: Implement that(need to change entity instacne according to this and show results tab
             return"TODOOOOOOOOOOOOOO";
         }
 

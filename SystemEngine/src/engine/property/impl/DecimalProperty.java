@@ -41,7 +41,7 @@ public class DecimalProperty extends PropertyInstance {
         }
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Integer value, int currTick) {
         if (range == null || (value <= range.getTo().intValue() && value >= range.getFrom().intValue()))
             this.value = value.toString();
         else if(value > range.getTo().intValue())
@@ -52,5 +52,7 @@ public class DecimalProperty extends PropertyInstance {
         {
             this.value = String.valueOf(range.getFrom().intValue());
         }
+
+        setLastTickModified(currTick);
     }
 }

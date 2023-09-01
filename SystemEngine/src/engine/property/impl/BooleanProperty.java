@@ -22,7 +22,8 @@ public class BooleanProperty extends PropertyInstance {
         }
     }
 
-    public void setValue(Boolean value) {
-            this.value = value.toString();
+    public void setValue(Boolean value, int currTick) {
+        this.value = value.toString();
+        setLastTickModified(currTick);
     }
 }
