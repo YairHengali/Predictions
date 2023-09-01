@@ -49,6 +49,7 @@ public class WorldInstance implements Serializable, Runnable {
         {
             activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
         }
+
     }
 
     public TerminationReason runMainLoop(){ //TICK 1 and up...;

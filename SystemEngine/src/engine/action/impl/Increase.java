@@ -28,9 +28,9 @@ public class Increase extends AbstractAction {
 
         try {
             if (entityPropertyInstance instanceof DecimalProperty) {
-                ((DecimalProperty) entityPropertyInstance).setValue(Integer.parseInt(entityPropertyInstance.getValue()) + Integer.parseInt(valueFromExpression));
+                ((DecimalProperty) entityPropertyInstance).setValue( (Integer.parseInt(entityPropertyInstance.getValue()) + Integer.parseInt(valueFromExpression)) , context.getCurrentTick());
             } else if (entityPropertyInstance instanceof FloatProperty) {
-                ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(entityPropertyInstance.getValue()) + Float.parseFloat(valueFromExpression));
+                ((FloatProperty) entityPropertyInstance).setValue( (Float.parseFloat(entityPropertyInstance.getValue()) + Float.parseFloat(valueFromExpression)) , context.getCurrentTick());
             }
         }catch (NumberFormatException e)
         {

@@ -30,24 +30,25 @@ public class SetAction extends AbstractAction {
 
         try {
             if (entityPropertyInstance instanceof DecimalProperty) {
-                ((DecimalProperty) entityPropertyInstance).setValue(Integer.parseInt(valueFromExpression));
+                ((DecimalProperty) entityPropertyInstance).setValue(Integer.parseInt(valueFromExpression), context.getCurrentTick());
             }
             else if (entityPropertyInstance instanceof FloatProperty) {
-                ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(valueFromExpression));
+                ((FloatProperty) entityPropertyInstance).setValue(Float.parseFloat(valueFromExpression), context.getCurrentTick());
             }
             else if (entityPropertyInstance instanceof BooleanProperty) {
                 if (valueFromExpression.equals("true") || valueFromExpression.equals("false"))
                 {
-                    ((BooleanProperty) entityPropertyInstance).setValue(Boolean.valueOf(valueFromExpression));
+                    ((BooleanProperty) entityPropertyInstance).setValue(Boolean.valueOf(valueFromExpression), context.getCurrentTick());
                 }
                 else{
                     throw new IllegalArgumentException("Error in Set action! Can not set the value " + valueFromExpression + " to the boolean property: " + entityPropertyInstance.getName());
                 }
             }
             else if (entityPropertyInstance instanceof StringProperty) {
-                ((StringProperty) entityPropertyInstance).setValue(valueFromExpression);
+                ((StringProperty) entityPropertyInstance).setValue(valueFromExpression, context.getCurrentTick());
             }
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException e) {
             throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to the " + entityPropertyInstance.getType() + " property: " + entityPropertyInstance.getName());
         }
 

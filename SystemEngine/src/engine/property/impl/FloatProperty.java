@@ -40,7 +40,7 @@ public class FloatProperty extends PropertyInstance {
         }
     }
 
-    public void setValue(Float value) {
+    public void setValue(Float value, Integer currTick) {
         if (range == null || (value <= range.getTo().floatValue() && value >= range.getFrom().floatValue()))
             this.value = value.toString();
         else if(value > range.getTo().floatValue())
@@ -51,5 +51,7 @@ public class FloatProperty extends PropertyInstance {
         {
             this.value = String.valueOf(range.getFrom().floatValue());
         }
+
+        setLastTickModified(currTick);
     }
 }

@@ -28,7 +28,8 @@ public class StringProperty extends PropertyInstance {
         }
     }
 
-    public void setValue(String value) {
+    public void setValue(String value, Integer currTick) {
         this.value = value;
+        setLastTickModified(currTick);
     }
 }
