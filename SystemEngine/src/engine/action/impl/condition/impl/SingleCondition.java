@@ -37,7 +37,7 @@ public class SingleCondition extends ConditionImpl implements Condition
         boolean result = false;
 
         Expression propertyNameAsExpression = new Expression(propertyNameExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        String propertyName = propertyNameAsExpression.praseExpressionToValueString(PropertyType.STRING);
+        String propertyName = propertyNameAsExpression.praseExpressionToValueString(PropertyType.STRING);//TODO: NEED TO FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
 
         PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         //figuring value out of expression

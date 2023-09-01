@@ -169,7 +169,8 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                 throw new NotExistingEntityException(prdAction.getPRDBetween().getTargetEntity(), prdAction.getType());
             }
 
-            return resAction;//TODO: IMPLEMENT THE METHODS
+            //return resAction;//TODO: IMPLEMENT THE METHODS
+            return new Kill(prdAction.getPRDBetween().getSourceEntity(), null);
         }
         else if (prdAction.getType().equals("replace")){ //IN REPLACE, THE ENTITIES ARE: KILL AND CREATE
             if (currWorkingWorld.getEntityDefinitionByName(prdAction.getKill()) == null) {

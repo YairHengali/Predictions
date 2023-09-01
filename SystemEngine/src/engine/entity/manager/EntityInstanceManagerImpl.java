@@ -122,7 +122,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
             String propertyName = propertyInstance.getName();
             PropertyType propertyType = propertyInstance.getType();
 
-            PropertyInstance propertyAtDerived = derivedEntity.getPropertyByName(propertyName);
+            PropertyInstance propertyAtDerived = derivedEntity.getPropertyByName(propertyName);//TODO: NEED TO SET SAME LOCATION ALSO
             if (propertyAtDerived != null && propertyAtDerived.getType() == propertyType){
                 switch (propertyType) { //TODO: LOOKS UGLY AND MIGHT BE BETTER TO IMPLEMENT SET VALUE IN PROPERTY INSTANCE..
                     case BOOLEAN:

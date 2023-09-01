@@ -19,7 +19,12 @@ public class Expression2 {
     public String praseExpressionToValueString(PropertyType typeOfExpectedValue)
     {
         String mainEntityName = context.getPrimaryEntityInstance().getName();
-        String secondaryEntityName = context.getSecondaryEntityInstance().getName();
+        String secondaryEntityName = "";
+        if (context.getSecondaryEntityInstance() != null)
+        {
+            secondaryEntityName = context.getSecondaryEntityInstance().getName();
+        }
+
 
         if ((rawExpression.startsWith("environment")) || (rawExpression.startsWith("random")) || (rawExpression.startsWith("percent")) || (rawExpression.startsWith(mainEntityName + ".")) || (rawExpression.startsWith(secondaryEntityName + "."))) {
             return convertHelpFunctionsToStr(typeOfExpectedValue);
@@ -78,7 +83,18 @@ public class Expression2 {
         }
 
         else if(rawExpression.startsWith("ticks")){ // TODO: Implement that(need to change wntity instacne according to this and show results tab
-            return"TODOOOOOOOOOOOOOO";
+            String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
+
+            if (value.startsWith(mainEntityName + ".")){ //TODO: EXCEPTIONS?
+                String propertyName = value.substring(value.indexOf('.') + 1);
+                return String.valueOf(context.getPrimaryEntityInstance().getPropertyByName(propertyName).getTicks());
+            }
+
+            else{ //value.startsWith(secondaryEntityName + ".") //TODO: EXCEPTIONS?
+                String propertyName = value.substring(value.indexOf('.') + 1);
+                return String.valueOf(context.getSecondaryEntityInstance().getPropertyByName(propertyName).getTicks());
+            }
+
         }
 
         else if (rawExpression.startsWith(mainEntityName + ".")){ //TODO: EXCEPTIONS?
