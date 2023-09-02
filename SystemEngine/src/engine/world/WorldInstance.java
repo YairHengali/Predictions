@@ -21,8 +21,17 @@ public class WorldInstance implements Serializable, Runnable {
     ActiveEnvironmentVariables activeEnvironmentVariables;
     private Integer maxNumberOfTicks = null;
     private Long secondsToTerminate = null;
+    private boolean isTerminationByUser = false;
 
 
+
+    public WorldInstance(WorldDefinition worldDef) {
+        this.secondsToTerminate = worldDef.getSecondsToTerminate();
+        this.maxNumberOfTicks = worldDef.getMaxNumberOfTicks();
+        this.rules.addAll(worldDef.getRules());
+        this.isTerminationByUser = worldDef.isTerminationByUser();
+
+    }
     public EntityInstanceManager getEntityInstanceManager() {
         return entityInstanceManager;
     }
@@ -31,17 +40,15 @@ public class WorldInstance implements Serializable, Runnable {
         return activeEnvironmentVariables.getEvnVariables();
     }
 
-    public WorldInstance(WorldDefinition worldDef) {
-        this.secondsToTerminate = worldDef.getSecondsToTerminate();
-        this.maxNumberOfTicks = worldDef.getMaxNumberOfTicks();
-        this.rules.addAll(worldDef.getRules());
-    }
+
 
     public void runInitIteration(WorldDefinition simulationDef){//Tick0
         currentNumberOfTicks = 0;
 
         entityInstanceManager = new EntityInstanceManagerImpl(simulationDef.getEntitiesDefinitions());
-        entityInstanceManager.createEntitiesInstances();
+        entityInstanceManager.createEntitiesInstancesAndLocate(simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
+
+
 
 
         activeEnvironmentVariables = new ActiveEnvironmentVariablesImpl();
@@ -58,6 +65,7 @@ public class WorldInstance implements Serializable, Runnable {
 
         while (!isTermination())
         {
+
             for (Rule rule: rules) {
                 if (rule.isActive(this.currentNumberOfTicks))
                 {
@@ -65,6 +73,7 @@ public class WorldInstance implements Serializable, Runnable {
                 }
             }
             currentNumberOfTicks++;
+            entityInstanceManager.makeMoveToAllEntities();
         }
         if(currentNumberOfTicks >= maxNumberOfTicks)
         {
@@ -79,6 +88,9 @@ public class WorldInstance implements Serializable, Runnable {
     }
 
     public boolean isTermination(){
+        if(this.isTerminationByUser)
+            return false;
+
         if (this.secondsToTerminate != null && this.maxNumberOfTicks != null)
         {
             return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate) ||

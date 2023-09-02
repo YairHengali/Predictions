@@ -6,7 +6,7 @@ import engine.entity.EntityInstance;
 import java.util.List;
 
 public interface EntityInstanceManager {
-    void createEntitiesInstances();
+    void createEntitiesInstancesAndLocate(int rowSize, int colSize);
 
     void killEntity(EntityInstance entityInstance);
 
@@ -27,4 +27,6 @@ public interface EntityInstanceManager {
     void createDerivedEntity(EntityInstance entityInstance, String EntityToCreate);
 
     void createDerivedEntities();
+
+    void makeMoveToAllEntities();
 }

@@ -83,7 +83,7 @@ public class GridManagerImpl implements GridManagerAPI {
                 // Check if the cell to the right is null or on the opposite edge
                 int rightCol = (entCol == numCols - 1) ? 0 : entCol + 1;
                 GridLocation right = new GridLocation(entRow, rightCol);
-                if(!grid.isOccupied(below)){
+                if(!grid.isOccupied(right)){
                     // Cell on the right is null
                     availableLocationsToMove.add(right);
                 }
@@ -91,7 +91,7 @@ public class GridManagerImpl implements GridManagerAPI {
                 // Check if the cell to the left is null or on the opposite edge
                 int leftCol = (entCol == 0) ? numCols - 1 : entCol - 1;
                 GridLocation left = new GridLocation(entRow, leftCol);
-                if(!grid.isOccupied(below)){
+                if(!grid.isOccupied(left)){
                     // Cell on the left is null
                     availableLocationsToMove.add(left);
                 }

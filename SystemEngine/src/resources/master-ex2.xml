@@ -17,7 +17,7 @@
 			<PRD-name>e4</PRD-name>
 		</PRD-env-property>
 	</PRD-environment>
-	<PRD-grid rows="100" columns="100"/>
+	<PRD-grid rows="10" columns="10"/>
 	<PRD-entities>
 		<PRD-entity name="ent-1">
 			<PRD-properties>

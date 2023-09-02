@@ -8,6 +8,8 @@ import engine.property.api.PropertyInstance;
 import engine.property.impl.BooleanProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
+import engine.world.grid.manager.api.GridManagerAPI;
+import engine.world.grid.manager.impl.GridManagerImpl;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,6 +18,8 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     private int count;
     private final Map<String, List<EntityInstance>> name2EntInstancesList;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
+
+    private GridManagerAPI gridManager;
 
 
     private final Set<EntityInstance> EntitiesToKill;
@@ -33,10 +37,13 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
 
         EntityInstance2DerivedName = new HashMap<>();
         EntitiesToCreate = new HashSet<>();
+
+        gridManager = new GridManagerImpl();
+
     }
 
     @Override
-    public void createEntitiesInstances() {
+    public void createEntitiesInstancesAndLocate(int rowSize, int colSize) {
         for(EntityDefinition entityDefinition: this.name2EntitiesDef.values()){
             for (int i = 0; i < entityDefinition.getPopulation(); i++) {
                 EntityInstance newEntityInstance = new EntityInstance(entityDefinition, count);
@@ -49,6 +56,8 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
             }
         }
 
+        gridManager.setEmptyGrid(rowSize, colSize);
+        gridManager.initEntitiesRandomly(this.name2EntInstancesList);
     }
 
     @Override
@@ -60,6 +69,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     public void killEntities()
     {
         for (EntityInstance entityInstance : EntitiesToKill) {
+            this.gridManager.setEntityInLocation(null, ); // TODO: clearLocation() - set grid location to null, add location to nonOccupiedList
             name2EntInstancesList.get(entityInstance.getName()).remove(entityInstance);
         }
         EntitiesToKill.clear();
@@ -113,6 +123,11 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
         }
 
         EntityInstance2DerivedName.clear();
+    }
+
+    @Override
+    public void makeMoveToAllEntities() {
+        this.gridManager.makeRandomMoveToAllEntities(this.name2EntInstancesList);
     }
 
     private void createDerivedEntityInstance(EntityInstance entityInstance, String derivedEntityName){
