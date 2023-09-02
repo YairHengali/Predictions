@@ -80,7 +80,10 @@ public class RuleImpl implements Rule, Serializable {
                                                             ", in rule: " + this.name);
                 }
             }
+
             manager.killEntities();
+            manager.createScratchEntities();
+            manager.createDerivedEntities();
         }
     }
 

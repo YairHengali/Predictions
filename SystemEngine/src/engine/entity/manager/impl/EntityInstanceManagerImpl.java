@@ -19,7 +19,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     private final Map<String, List<EntityInstance>> name2EntInstancesList;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
 
-    private GridManagerAPI gridManager;
+    private final GridManagerAPI gridManager;
 
 
     private final Set<EntityInstance> EntitiesToKill;
@@ -69,7 +69,8 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     public void killEntities()
     {
         for (EntityInstance entityInstance : EntitiesToKill) {
-            this.gridManager.setEntityInLocation(null, ); // TODO: clearLocation() - set grid location to null, add location to nonOccupiedList
+            gridManager.clearLocation(entityInstance.getGridLocation());
+//            entityInstance.getGridLocation(null); not needed because removed?
             name2EntInstancesList.get(entityInstance.getName()).remove(entityInstance);
         }
         EntitiesToKill.clear();
@@ -104,7 +105,10 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
             EntityInstance newEntity = new EntityInstance(name2EntitiesDef.get(entityName), count);
             count++;
 
+            gridManager.initEntityLocationRandomly(newEntity); //Enter the entity that created in a random location(?)
+
             name2EntInstancesList.get(entityName).add(newEntity);
+
         }
         EntitiesToCreate.clear();
     }
@@ -134,11 +138,15 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
         EntityInstance derivedEntity = new EntityInstance(name2EntitiesDef.get(derivedEntityName), count);
         count++;
 
+        //SET SAME LOCATION:
+        gridManager.replaceEntitiesInLocation(entityInstance, derivedEntity, entityInstance.getGridLocation());
+
+        //SET SAME PROPERTIES WHERE EQUAL:
         for (PropertyInstance propertyInstance: entityInstance.getProperties()) {
             String propertyName = propertyInstance.getName();
             PropertyType propertyType = propertyInstance.getType();
 
-            PropertyInstance propertyAtDerived = derivedEntity.getPropertyByName(propertyName);//TODO: NEED TO SET SAME LOCATION ALSO
+            PropertyInstance propertyAtDerived = derivedEntity.getPropertyByName(propertyName);
             if (propertyAtDerived != null && propertyAtDerived.getType() == propertyType){
                 switch (propertyType) { //TODO: LOOKS UGLY AND MIGHT BE BETTER TO IMPLEMENT SET VALUE IN PROPERTY INSTANCE..
                     case BOOLEAN:

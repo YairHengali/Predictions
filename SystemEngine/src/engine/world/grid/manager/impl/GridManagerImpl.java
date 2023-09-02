@@ -37,16 +37,16 @@ public class GridManagerImpl implements GridManagerAPI {
     }
     @Override
     public void initEntitiesRandomly(Map<String, List<EntityInstance>> name2EntInstancesList) {
-        name2EntInstancesList.values().forEach(entityList -> {
-            entityList.forEach(entity -> {
+        name2EntInstancesList.values().forEach(entityList -> entityList.forEach(this::initEntityLocationRandomly));
+    }
 
-                GridLocation randomLocation = nonOccupiedLocations.get(getRandomEmptyLocationIndexInList());//TODO:need to check if index = -1
-                grid.set(entity, randomLocation);
-                entity.setGridLocation(randomLocation);
+    @Override
+    public void initEntityLocationRandomly(EntityInstance entity){
+        GridLocation randomLocation = nonOccupiedLocations.get(getRandomEmptyLocationIndexInList());//TODO:need to check if index = -1 (YAIR: NOT NEEDED! BECAUSE WE DEFINE THE WORLD WITH AT MOST M X N ENTITIES)
+        grid.set(entity, randomLocation);
+        entity.setGridLocation(randomLocation);
 
-                nonOccupiedLocations.remove(randomLocation);
-            });
-        });
+        nonOccupiedLocations.remove(randomLocation);
     }
 
     @Override
@@ -140,5 +140,11 @@ public class GridManagerImpl implements GridManagerAPI {
         else{
             System.out.println("Entity: " + outEntity.getName() + " is not in location (" + location.getRow() + location.getCol() +")");
         }
+    }
+
+    @Override
+    public void clearLocation(GridLocation gridLocation) {
+        this.grid.set(null, gridLocation);
+        nonOccupiedLocations.add(gridLocation);
     }
 }

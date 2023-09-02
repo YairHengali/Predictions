@@ -32,8 +32,8 @@ public class Grid {
 
         if (targetRow >= 0 && targetRow < rows && targetCol >= 0 && targetCol < cols) {
             grid.get(targetRow).set(targetCol, newEntity);
-            System.out.println("Matrix cell at row " + targetRow + ", col " + targetCol + " set to " + newEntity.getName());
             if(newEntity != null){
+                System.out.println("Matrix cell at row " + targetRow + ", col " + targetCol + " set to " + newEntity.getName());
                 newEntity.setGridLocation(location);
             }
         } else {
