@@ -298,10 +298,6 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
     {
         ConditionImpl resCondition;
         if (prdCondition.getSingularity().equals("single")) {
-//            if (!isExistingPropertyInEntity(prdCondition.getEntity(), prdCondition.getProperty())) { //DOESNT NEEDED BECAUSE PROPERTY IS NOW EXPRESSION
-//                throw new NotExistingPropertyException(prdCondition.getProperty(),"Condition", prdCondition.getEntity());
-//            }
-
             ConditionOp conditionOp = null;
             switch (prdCondition.getOperator()) {
                 case "=":
@@ -363,15 +359,19 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             return (this.currWorkingWorld.getEnvironmentVariableDefByName(envVarName).getType() == PropertyType.DECIMAL
                     || this.currWorkingWorld.getEnvironmentVariableDefByName(envVarName).getType() == PropertyType.FLOAT);
         }
-        else if(arg.startsWith("random")){
-            return true;
-//            String value = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
-//            try {
-//                Integer.parseInt(value);
-//                return true;
-//            } catch (NumberFormatException e) {
-//                return false;
+        else if(arg.startsWith("evaluate")){
+            String innerArgument = arg.substring(arg.indexOf('(') + 1, arg.indexOf(')'));
+            String entityName = innerArgument.substring(0, innerArgument.indexOf('.'));
+            String propertyName = innerArgument.substring(innerArgument.indexOf('.') + 1);
+
+//            if (currWorkingWorld.getEntityDefinitionByName(entityName) == null) { TODO: NEED TO? AND HOW TO DEAL WITH IT (ALSO NEED TO CHECK IN OTHER PLACES??) ALSO, HOW CAN I VALIDATE THAT IS NUMERIC PROPERTY, AND ON THE OTHER HAND, THROW NOT EXISTING PROPERTY ONLY DURING RUNTIME?
+//                throw new NotExistingEntityException(entityName, null);
 //            }
+//
+            return isExistingPropertyInEntity(entityName, propertyName) && isNumericPropertyInEntity(entityName, propertyName);
+        }
+        else if(arg.startsWith("random") || arg.startsWith("percent") || arg.startsWith("ticks")){
+            return true;
         }
         else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg))
         {

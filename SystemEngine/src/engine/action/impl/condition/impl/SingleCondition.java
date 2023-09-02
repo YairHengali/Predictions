@@ -11,15 +11,15 @@ import engine.world.factory.SecondaryEntityDetails;
 
 public class SingleCondition extends ConditionImpl implements Condition
 {
-    final String propertyNameExpression; //TODO: DOES IT CAN BY PF ANY TYPE? OR ONLY PROPERTY
+    final String firstArgExpression; //TODO: DOES IT CAN BY PF ANY TYPE? OR ONLY PROPERTY
     final ConditionOp operator;
-    final String valueToCompareExpression;
+    final String secondArgExpression;
 
-    public SingleCondition(String mainEntityName, SecondaryEntityDetails secondaryEntityDetails, String propertyNameExpression, ConditionOp conditionOperator, String valueToCompareExpression) {
+    public SingleCondition(String mainEntityName, SecondaryEntityDetails secondaryEntityDetails, String firstArgExpression, ConditionOp conditionOperator, String secondArgExpression) {
         super(mainEntityName, secondaryEntityDetails);
-        this.propertyNameExpression = propertyNameExpression;
+        this.firstArgExpression = firstArgExpression;
         this.operator = conditionOperator;
-        this.valueToCompareExpression = valueToCompareExpression;
+        this.secondArgExpression = secondArgExpression;
     }
 
     @Override
@@ -36,32 +36,32 @@ public class SingleCondition extends ConditionImpl implements Condition
     public boolean evaluateCondition(Context context) {
         boolean result = false;
 
-        Expression propertyNameAsExpression = new Expression(propertyNameExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        String propertyName = propertyNameAsExpression.praseExpressionToValueString(PropertyType.STRING);//TODO: NEED TO FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
+        Expression firstArgAsExpression = new Expression(firstArgExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        String propertyName = firstArgAsExpression.praseExpressionToValueString(PropertyType.STRING);//TODO: NEED TO FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
 
         PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         //figuring value out of expression
-        Expression valueToCompareAsExpression = new Expression(valueToCompareExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        String valueToCompare = valueToCompareAsExpression.praseExpressionToValueString(propertyToEvaluate.getType());
+        Expression secondArgAsExpression = new Expression(secondArgExpression,  context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        String secondArg = secondArgAsExpression.praseExpressionToValueString(propertyToEvaluate.getType());
 
         try {
             switch (propertyToEvaluate.getType()) {
                 case BOOLEAN:
-                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.BOOLEAN);
+                    result = operator.eval(propertyToEvaluate.getValue(), secondArg, PropertyType.BOOLEAN);
                     break;
                 case DECIMAL:
-                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.DECIMAL);
+                    result = operator.eval(propertyToEvaluate.getValue(), secondArg, PropertyType.DECIMAL);
                     break;
                 case FLOAT:
-                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.FLOAT);
+                    result = operator.eval(propertyToEvaluate.getValue(), secondArg, PropertyType.FLOAT);
                     break;
                 case STRING:
-                    result = operator.eval(propertyToEvaluate.getValue(), valueToCompare, PropertyType.STRING);
+                    result = operator.eval(propertyToEvaluate.getValue(), secondArg, PropertyType.STRING);
                     break;
             }
         }catch (ClassCastException | NumberFormatException e)
         {
-            throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + valueToCompare);
+            throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + secondArg);
         }
         catch (IllegalArgumentException e)
         {
@@ -69,7 +69,7 @@ public class SingleCondition extends ConditionImpl implements Condition
         }
         catch (Exception e)
         {
-            throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + valueToCompare);
+            throw new IllegalArgumentException("not-matching argument to single condition action, the property " + propertyToEvaluate.getName() + " is of type: " + propertyToEvaluate.getType() + " and the value to compare is: " + secondArg);
         }
         return result;
     }
