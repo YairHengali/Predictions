@@ -14,15 +14,15 @@ public class FloatEnvVarController implements EnvVarControllerAPI {
     @FXML private Label rangeLabel;
     @FXML private TextField valueTextField;
 
-    private Number from;
-    private Number to;
+    private Float from;
+    private Float to;
 
     @Override
     public void setDataFromDTO(PropertyDTO envVarDTO) {
         nameLabel.setText(envVarDTO.getName());
         typeLabel.setText(envVarDTO.getType());
-        from = envVarDTO.getFrom();
-        to = envVarDTO.getTo();
+        from = envVarDTO.getFrom().floatValue();
+        to = envVarDTO.getTo().floatValue();
         rangeLabel.setText( from + " to " + to);
     }
 

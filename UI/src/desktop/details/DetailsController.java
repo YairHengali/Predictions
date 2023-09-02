@@ -39,6 +39,9 @@ public class DetailsController {
                 if (simulationDetailsDTO.getSecondsToTerminate() != null){
                     details += "Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate() + System.lineSeparator();
                 }
+                if(simulationDetailsDTO.isTerminatedByUser()){
+                    details += "By User";
+                }
             }
             else if (selectedNodeValue.equals("Activation")) {
                 String selectedNodeRuleName = selectedNode.getParent().getValue();
@@ -179,7 +182,7 @@ public class DetailsController {
 
         TreeItem<String> terminationItem = new TreeItem<>("Termination Conditions");
 
-        TreeItem<String> gridItem = new TreeItem<>("Grid");
+        TreeItem<String> gridItem = new TreeItem<>("Grid: " + simulationDetailsDTO.getRowsInGrid() + " X " + simulationDetailsDTO.getColsInGrid());
 
         rootItem.getChildren().add(entitiesItem);
         rootItem.getChildren().add(envVarsItem);

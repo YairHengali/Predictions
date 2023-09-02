@@ -17,6 +17,10 @@ public class WorldDefinition implements Serializable {
     private final List<Rule> rules = new ArrayList<>();
     final EnvironmentVariablesDefManager environmentVariablesDefManager = new EnvironmentVariablesDefManagerImpl();
 
+    private int numOfRowsInGrid;
+    private int numOfColsInGrid;
+
+
     public void addEnvironmentVariableDef(PropertyDefinition envVarDefinitionToAdd)    {
         this.environmentVariablesDefManager.addEnvironmentVariableDef(envVarDefinitionToAdd);
     }
@@ -77,5 +81,21 @@ public class WorldDefinition implements Serializable {
 
     public boolean isTerminationByUser() {
         return terminationByUser;
+    }
+
+    public int getNumOfColsInGrid() {
+        return numOfColsInGrid;
+    }
+
+    public void setNumOfColsInGrid(int numOfColsInGrid) {
+        this.numOfColsInGrid = numOfColsInGrid;
+    }
+
+    public int getNumOfRowsInGrid() {
+        return numOfRowsInGrid;
+    }
+
+    public void setNumOfRowsInGrid(int numOfRowsInGrid) {
+        this.numOfRowsInGrid = numOfRowsInGrid;
     }
 }

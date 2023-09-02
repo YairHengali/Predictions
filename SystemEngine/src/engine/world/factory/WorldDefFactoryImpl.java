@@ -37,6 +37,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         this.currWorkingWorld = simulationDef;
 
         try{
+            addGrid(generatedWorld);
             addEnvironmentVariables(generatedWorld); // done
             addEntitiesDefinitions(generatedWorld); // done
             addRules(generatedWorld);
@@ -45,6 +46,23 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private void addGrid(PRDWorld generatedWorld) {
+        int rows = generatedWorld.getPRDGrid().getRows();
+        int columns = generatedWorld.getPRDGrid().getColumns();
+
+        if (rows < 10 || 100 < rows)
+        {
+            throw new RuntimeException("The number of rows in the grid must be between 10 to 100! got: " + rows);
+        }
+        if (columns < 10 || 100 < columns)
+        {
+            throw new RuntimeException("The number of columns in the grid must be between 10 to 100! got: " + columns);
+        }
+
+        currWorkingWorld.setNumOfRowsInGrid(rows);
+        currWorkingWorld.setNumOfColsInGrid(columns);
     }
 
     private void addEnvironmentVariables(PRDWorld generatedWorld) {
@@ -168,9 +186,6 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getTargetEntity()) == null) {
                 throw new NotExistingEntityException(prdAction.getPRDBetween().getTargetEntity(), prdAction.getType());
             }
-
-            //return resAction;//TODO: IMPLEMENT THE METHODS
-            return new Kill(prdAction.getPRDBetween().getSourceEntity(), null);
         }
         else if (prdAction.getType().equals("replace")){ //IN REPLACE, THE ENTITIES ARE: KILL AND CREATE
             if (currWorkingWorld.getEntityDefinitionByName(prdAction.getKill()) == null) {
@@ -262,6 +277,21 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
 
             case "replace":
                 resAction = new Replace(prdAction.getKill(), prdAction.getCreate(), secondaryEntityDetails, CreationMode.valueOf(prdAction.getMode().toUpperCase()));
+                break;
+            case "proximity":
+                if (!isNumericArg(prdAction.getPRDBetween().getSourceEntity(), prdAction.getPRDEnvDepth().getOf())) {
+                    throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+                } else if (!isNumericArg(prdAction.getPRDBetween().getTargetEntity(), prdAction.getPRDEnvDepth().getOf())) {
+                    throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+                }
+                Proximity proximityAction = new Proximity(prdAction.getPRDBetween().getSourceEntity(), secondaryEntityDetails, prdAction.getPRDBetween().getTargetEntity(), prdAction.getPRDEnvDepth().getOf());
+
+                for (PRDAction prdActionInThen : prdAction.getPRDActions().getPRDAction()) {
+                    proximityAction.addActionToThen(createActionFromPrd(prdActionInThen));
+                }
+
+                resAction = proximityAction;
+                break;
         }
 
         return resAction;
@@ -373,7 +403,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         else if(arg.startsWith("random") || arg.startsWith("percent") || arg.startsWith("ticks")){
             return true;
         }
-        else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg))
+        else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg)) //TODO, NEED TO CHECK FOR SECONDARY ALSO??
         {
             return true;
         }

@@ -54,15 +54,14 @@ public class Expression2 {
             }
 
         }
-
         else if(rawExpression.startsWith("random")){
             String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
             try {
                 int val = Integer.parseInt(value);
                 Random random = new Random();
-                if(typeOfExpectedValue == PropertyType.DECIMAL || typeOfExpectedValue == PropertyType.FLOAT)
+                if(typeOfExpectedValue == PropertyType.DECIMAL || typeOfExpectedValue == PropertyType.FLOAT) {
                     return String.valueOf(random.nextInt(val) + 1);
-                else{
+                } else{
                     throw new IllegalArgumentException("Error, trying to insert a decimal value (from random function) to a property of type: " + typeOfExpectedValue);
                 }
             }
@@ -70,7 +69,8 @@ public class Expression2 {
                 throw new RuntimeException(e + "\n random function must get a decimal number as argument");
             }
 
-        } else if (rawExpression.startsWith("evaluate")) {
+        }
+        else if (rawExpression.startsWith("evaluate")) {
             String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
             String propertyName = value.substring(value.indexOf('.') + 1);
 
@@ -91,7 +91,8 @@ public class Expression2 {
                 throw new IllegalArgumentException("evaluate function got the entity: " + value.substring(0, value.indexOf('.')) + " which is not in it's context");
             }
 
-        } else if(rawExpression.startsWith("percent")){ // TODO: EXCEPTIONS?
+        }
+        else if(rawExpression.startsWith("percent")){ // TODO: EXCEPTIONS?
             Expression2 innerExp1 = new Expression2 (rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(',')), context);
             Expression2 innerExp2 = new Expression2(rawExpression.substring(rawExpression.indexOf(',') + 1, rawExpression.indexOf(')')), context);
 
@@ -103,8 +104,8 @@ public class Expression2 {
 
             return String.valueOf(numericExp1 * (numericExp2 / 100));
         }
-
-        else if(rawExpression.startsWith("ticks")){
+        else //if(rawExpression.startsWith("ticks")){
+        {
             String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
 
             String propertyName = value.substring(value.indexOf('.') + 1);
@@ -116,7 +117,7 @@ public class Expression2 {
                     throw new IllegalArgumentException("In ticks function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }
             }
-            if (value.startsWith(secondaryEntityName + ".")) { //TODO: EXCEPTIONS?
+            else if (value.startsWith(secondaryEntityName + ".")) { //TODO: EXCEPTIONS?
                 if (context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null) {
                     return String.valueOf(context.getSecondaryEntityInstance().getPropertyByName(propertyName).getLastTickModified());
                 }else{
