@@ -1,4 +1,4 @@
-package engine.world.grid.manager;
+package engine.world.grid.manager.api;
 
 import com.sun.javafx.sg.prism.GrowableDataBuffer;
 import engine.entity.EntityInstance;

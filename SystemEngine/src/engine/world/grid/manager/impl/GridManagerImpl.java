@@ -1,12 +1,13 @@
-package engine.world.grid.manager;
+package engine.world.grid.manager.impl;
 
 import engine.entity.EntityInstance;
 import engine.world.grid.Grid;
 import engine.world.grid.location.GridLocation;
+import engine.world.grid.manager.api.GridManagerAPI;
 
 import java.util.*;
 
-public class GridManagerImpl implements GridManagerAPI{
+public class GridManagerImpl implements GridManagerAPI {
     private Grid grid = null;
     private List<GridLocation> nonOccupiedLocations = null;
 
