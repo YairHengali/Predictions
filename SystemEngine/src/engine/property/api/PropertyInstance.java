@@ -13,7 +13,7 @@ public abstract class PropertyInstance implements Serializable {
     private final PropertyType type;
 
     private Map<Integer, String> tick2value = new HashMap<>();
-    private Integer lastTickModified = 0;
+//    private Integer lastTickModified = 0;
 
 
     public PropertyInstance(String name, PropertyType type) {

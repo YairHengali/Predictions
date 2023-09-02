@@ -40,27 +40,34 @@ public class DetailsController {
                     details += "Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate() + System.lineSeparator();
                 }
             }
+            else if (selectedNodeValue.equals("Activation")) {
+                String selectedNodeRuleName = selectedNode.getParent().getValue();
+                for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
+                    if (ruleDTO.getName().equals(selectedNodeRuleName)) {
+                        //TODO: make it a component
+                        details = ("Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
+                                "Probability for activation: " + ruleDTO.getProbabilityForActivation() + System.lineSeparator());
+                    }
+                }
+            }
+
+
             else{
-                switch (selectedNode.getParent().getValue()){
+                switch (selectedNode.getParent().getValue()) {
                     case "Properties":
                         String selectedNodeEntityName = selectedNode.getParent().getParent().getValue(); //TODO: I have name name of Property AND this is the name of entity. get the property details from there!
-                        for (EntityDTO entityDTO :simulationDetailsDTO.getEntities())
-                        {
-                            if(entityDTO.getName().equals(selectedNodeEntityName))
-                            {
-                                for (PropertyDTO propertyDTO :entityDTO.getProperties())//TODO: better change in entityDTO to maps but for now tried like that
+                        for (EntityDTO entityDTO : simulationDetailsDTO.getEntities()) {
+                            if (entityDTO.getName().equals(selectedNodeEntityName)) {
+                                for (PropertyDTO propertyDTO : entityDTO.getProperties())//TODO: better change in entityDTO to maps but for now tried like that
                                 {
-                                    if(propertyDTO.getName().equals(selectedNodeValue)){
+                                    if (propertyDTO.getName().equals(selectedNodeValue)) {
                                         //TODO: make it a component
                                         details = ("Name: " + propertyDTO.getName() + System.lineSeparator() +
                                                 "Type: " + propertyDTO.getType() + System.lineSeparator());
-                                        if (propertyDTO.getFrom() != null){
-                                            if (propertyDTO.getType().equals("DECIMAL"))
-                                            {
+                                        if (propertyDTO.getFrom() != null) {
+                                            if (propertyDTO.getType().equals("DECIMAL")) {
                                                 details += ("Range: " + propertyDTO.getFrom().intValue() + " to " + propertyDTO.getTo().intValue() + System.lineSeparator());
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 details += ("Range: " + propertyDTO.getFrom() + " to " + propertyDTO.getTo() + System.lineSeparator());
                                             }
                                         }
@@ -71,36 +78,48 @@ public class DetailsController {
                         }
                         break;
                     case "Environment Variables":
-                        for (PropertyDTO envVarDTO :simulationDetailsDTO.getEnvironmentVariables()) {
-                            if (envVarDTO.getName().equals(selectedNodeValue))
-                            {
+                        for (PropertyDTO envVarDTO : simulationDetailsDTO.getEnvironmentVariables()) {
+                            if (envVarDTO.getName().equals(selectedNodeValue)) {
                                 //TODO: make it a component
                                 details = ("Name: " + envVarDTO.getName() + System.lineSeparator() +
                                         "Type: " + envVarDTO.getType() + System.lineSeparator());
-                                if (envVarDTO.getFrom() != null){
-                                    if (envVarDTO.getType().equals("DECIMAL"))
-                                    {
+                                if (envVarDTO.getFrom() != null) {
+                                    if (envVarDTO.getType().equals("DECIMAL")) {
                                         details += ("Range: " + envVarDTO.getFrom().intValue() + " to " + envVarDTO.getTo().intValue());
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         details += ("Range: " + envVarDTO.getFrom() + " to " + envVarDTO.getTo());
                                     }
                                 }
                             }
                         }
                         break;
-                    case "Rules": //TODO: Deal with actions details inside
-                        for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
-                            if (ruleDTO.getName().equals(selectedNodeValue))
-                            {
-                                //TODO: make it a component
-                                details = ("Name: " + ruleDTO.getName() + System.lineSeparator() +
-                                        "Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
-                                        "Probability for activation: " + ruleDTO.getProbabilityForActivation()+ System.lineSeparator() +
-                                        "Number of actions: " + ruleDTO.getActions().size());
-                            }
-                        }
+//                    case "Rules": //TODO: Deal with actions details inside
+//                        for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
+//                            if (ruleDTO.getName().equals(selectedNodeValue))
+//                            {
+//                                //TODO: make it a component
+//                                details = ("Name: " + ruleDTO.getName() + System.lineSeparator() +
+//                                        "Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
+//                                        "Probability for activation: " + ruleDTO.getProbabilityForActivation()+ System.lineSeparator() +
+//                                        "Number of actions: " + ruleDTO.getActions().size());
+//                            }
+//                        }
+//                        break;
+                    case "Actions":
+//                        String selectedNodeRuleName = selectedNode.getParent().getValue();
+//                        for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
+//                            if (ruleDTO.getName().equals(selectedNodeRuleName)) {
+//                                for (ActionDTO actionDTO : ruleDTO.getActions()) {
+////                        TODO: CREATE ACTIONS COMPONENTS AND ADD THEM TO THE RIGHT SIDE!!
+//
+//                                }
+//                            }
+//                        }
+//
+                        //FOR EACH ACTION WHEN SELECTED: CANNOT BE BY NAME! BECAUSE NOT UNIQUE, NEED TO CONSIDER OTHER APPROACH
+//                                  if(actionDTO.getName().equals(selectedNodeValue))
+
+
                         break;
                     default:
                         details = "";
@@ -143,30 +162,30 @@ public class DetailsController {
         }
 
         TreeItem<String> rulesItem = new TreeItem<>("Rules");
-        for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
-            rulesItem.getChildren().add(new TreeItem<>(ruleDTO.getName()));
-        }
 
-//      IF WANT ACTIONS OF RULE TO BE IN THE TREE
-//        for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
-//            TreeItem<String> ruleItem = new TreeItem<>(ruleDTO.getName());
-//
-//            TreeItem<String> actionsItem = new TreeItem<>("Actions");
-//            for (ActionDTO actionDTO: ruleDTO.getActions()) {
+        for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
+            TreeItem<String> ruleItem = new TreeItem<>(ruleDTO.getName());
+
+            TreeItem<String> actionsItem = new TreeItem<>("Actions");
+//            for (ActionDTO actionDTO: ruleDTO.getActions()) { //ADD INNER ACTIONS TO TREE:
 //                actionsItem.getChildren().add(new TreeItem<>(actionDTO.getName()));
 //            };
-//
-//            ruleItem.getChildren().add(actionsItem);
-//            rulesItem.getChildren().add(ruleItem);
-//        }
+
+            ruleItem.getChildren().add(actionsItem);
+            ruleItem.getChildren().add(new TreeItem<>("Activation"));
+            rulesItem.getChildren().add(ruleItem);
+        }
 
 
         TreeItem<String> terminationItem = new TreeItem<>("Termination Conditions");
+
+        TreeItem<String> gridItem = new TreeItem<>("Grid");
 
         rootItem.getChildren().add(entitiesItem);
         rootItem.getChildren().add(envVarsItem);
         rootItem.getChildren().add(rulesItem);
         rootItem.getChildren().add(terminationItem);
+        rootItem.getChildren().add(gridItem);
         this.simulationTV.setRoot(rootItem);
         this.simulationTV.refresh();
     }

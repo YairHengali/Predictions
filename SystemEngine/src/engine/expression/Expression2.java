@@ -26,12 +26,16 @@ public class Expression2 {
         }
 
 
-        if ((rawExpression.startsWith("environment")) || (rawExpression.startsWith("random")) || (rawExpression.startsWith("percent")) || (rawExpression.startsWith(mainEntityName + ".")) || (rawExpression.startsWith(secondaryEntityName + "."))) {
+        if ((rawExpression.startsWith("environment")) || (rawExpression.startsWith("random")) || (rawExpression.startsWith("percent")) || (rawExpression.startsWith("ticks")) || (rawExpression.startsWith(mainEntityName + ".")) || (rawExpression.startsWith(secondaryEntityName + "."))) {
             return convertHelpFunctionsToStr(typeOfExpectedValue);
         }
 
         else if(context.getPrimaryEntityInstance().getPropertyByName(rawExpression) != null){
             return context.getPrimaryEntityInstance().getPropertyByName(rawExpression).getValue();
+        }
+
+        else if(context.getSecondaryEntityInstance().getPropertyByName(rawExpression) != null){
+            return context.getSecondaryEntityInstance().getPropertyByName(rawExpression).getValue();
         }
 
         else {
@@ -87,12 +91,12 @@ public class Expression2 {
 
             if (value.startsWith(mainEntityName + ".")){ //TODO: EXCEPTIONS?
                 String propertyName = value.substring(value.indexOf('.') + 1);
-                return String.valueOf(context.getPrimaryEntityInstance().getPropertyByName(propertyName).getTicks());
+                return String.valueOf(context.getPrimaryEntityInstance().getPropertyByName(propertyName).getLastTickModified());
             }
 
             else{ //value.startsWith(secondaryEntityName + ".") //TODO: EXCEPTIONS?
                 String propertyName = value.substring(value.indexOf('.') + 1);
-                return String.valueOf(context.getSecondaryEntityInstance().getPropertyByName(propertyName).getTicks());
+                return String.valueOf(context.getSecondaryEntityInstance().getPropertyByName(propertyName).getLastTickModified());
             }
 
         }
