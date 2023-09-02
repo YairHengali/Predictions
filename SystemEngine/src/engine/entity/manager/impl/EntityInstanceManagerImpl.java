@@ -168,4 +168,10 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
             }
         }
     }
+
+
+    /////FOR PROXIMITY:
+    public boolean isEnt1NearEnt2(EntityInstance entityInstance1, EntityInstance entityInstance2, int depth){
+        return gridManager.isEnt1NearEnt2(entityInstance1, entityInstance2, depth);
+    }
 }

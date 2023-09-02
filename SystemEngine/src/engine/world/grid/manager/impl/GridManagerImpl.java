@@ -147,4 +147,36 @@ public class GridManagerImpl implements GridManagerAPI {
         this.grid.set(null, gridLocation);
         nonOccupiedLocations.add(gridLocation);
     }
+
+    @Override
+    public boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth){ //TODO: VALIDATE (ALSO THERE ARE COPIES OF LOCATIONS IN THE SET IF ITS MATTER..)
+        int row = ent2.getGridLocation().getRow();
+        int col = ent1.getGridLocation().getCol();
+
+        int gridRows = grid.getRows();
+        int gridCols = grid.getCols();
+
+        Set<GridLocation> nearbyLocations = new HashSet<>();
+
+        for (int i = 0; i <= depth ; i++) {
+            nearbyLocations.add(new GridLocation((((row - depth) % gridRows) + gridRows) % gridRows, (((col - i) % gridCols) + gridCols) % gridCols));
+            nearbyLocations.add(new GridLocation((((row - depth) % gridRows) + gridRows) % gridRows, (((col + i) % gridCols) + gridCols) % gridCols));
+
+            nearbyLocations.add(new GridLocation((((row + depth) % gridRows) + gridRows) % gridRows, (((col - i) % gridCols) + gridCols) % gridCols));
+            nearbyLocations.add(new GridLocation((((row + depth) % gridRows) + gridRows) % gridRows, (((col + i) % gridCols) + gridCols) % gridCols));
+
+            nearbyLocations.add(new GridLocation((((row - i) % gridRows) + gridRows) % gridRows, (((col - depth) % gridCols) + gridCols) % gridCols));
+            nearbyLocations.add(new GridLocation((((row + i) % gridRows) + gridRows) % gridRows, (((col - depth) % gridCols) + gridCols) % gridCols));
+
+            nearbyLocations.add(new GridLocation((((row - i) % gridRows) + gridRows) % gridRows, (((col + depth) % gridCols) + gridCols) % gridCols));
+            nearbyLocations.add(new GridLocation((((row + i) % gridRows) + gridRows) % gridRows, (((col + depth) % gridCols) + gridCols) % gridCols));
+        }
+
+        for (GridLocation location: nearbyLocations) {
+            if (grid.get(location) == ent2) //TODO: IS GOOD OR EQUALS/ID? (IF NOT MIGHT BE BETTER IF WILL WORK..
+                return true;
+        }
+
+        return false;
+    }
 }

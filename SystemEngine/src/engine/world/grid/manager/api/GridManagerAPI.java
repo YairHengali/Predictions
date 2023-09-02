@@ -17,4 +17,6 @@ public interface GridManagerAPI {
     void replaceEntitiesInLocation(EntityInstance outEntity, EntityInstance inEntity, GridLocation location);
 
     void clearLocation(GridLocation gridLocation);
+
+    boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth);
 }
