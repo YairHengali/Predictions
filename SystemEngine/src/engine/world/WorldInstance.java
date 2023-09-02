@@ -1,7 +1,7 @@
 package engine.world;
 
-import engine.entity.manager.EntityInstanceManager;
-import engine.entity.manager.EntityInstanceManagerImpl;
+import engine.entity.manager.api.EntityInstanceManager;
+import engine.entity.manager.impl.EntityInstanceManagerImpl;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.environment.active.ActiveEnvironmentVariablesImpl;
 //import engine.environment.manager.EnvironmentVariablesDefManager;

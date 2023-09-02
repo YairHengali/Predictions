@@ -1,7 +1,7 @@
 package engine.rule;
 
 import engine.action.api.Action;
-import engine.entity.manager.EntityInstanceManager;
+import engine.entity.manager.api.EntityInstanceManager;
 import engine.environment.active.ActiveEnvironmentVariables;
 
 import java.util.Collection;

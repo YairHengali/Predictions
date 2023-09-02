@@ -1,7 +1,8 @@
-package engine.entity.manager;
+package engine.entity.manager.impl;
 
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
+import engine.entity.manager.api.EntityInstanceManager;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.BooleanProperty;

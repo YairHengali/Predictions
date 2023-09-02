@@ -1,4 +1,4 @@
-package engine.entity.manager;
+package engine.entity.manager.api;
 
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;

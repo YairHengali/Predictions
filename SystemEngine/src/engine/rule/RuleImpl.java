@@ -4,7 +4,7 @@ import engine.action.api.Action;
 import engine.context.Context;
 import engine.context.ContextImpl;
 import engine.entity.EntityInstance;
-import engine.entity.manager.EntityInstanceManager;
+import engine.entity.manager.api.EntityInstanceManager;
 import engine.environment.active.ActiveEnvironmentVariables;
 import java.io.Serializable;
 import java.util.ArrayList;

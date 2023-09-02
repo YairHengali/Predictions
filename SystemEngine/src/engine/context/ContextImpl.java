@@ -1,7 +1,7 @@
 package engine.context;
 
 import engine.entity.EntityInstance;
-import engine.entity.manager.EntityInstanceManager;
+import engine.entity.manager.api.EntityInstanceManager;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.property.api.PropertyInstance;
 

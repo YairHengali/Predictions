@@ -6,6 +6,7 @@ import engine.property.impl.BooleanProperty;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
 import engine.property.impl.StringProperty;
+import engine.world.grid.location.GridLocation;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -19,6 +20,8 @@ public class EntityInstance implements Serializable {
     private final Map<String, PropertyInstance> name2property = new HashMap<>();
 
     private final EntityDefinition definition;
+
+    private GridLocation gridLocation = null;
 
     public EntityInstance(EntityDefinition entityDefinition, int id) {
         this.id = id;
@@ -66,5 +69,13 @@ public class EntityInstance implements Serializable {
 
     public Collection<PropertyInstance> getProperties() {
         return name2property.values();
+    }
+
+    public GridLocation getGridLocation() {
+        return gridLocation;
+    }
+
+    public void setGridLocation(GridLocation gridLocation) {
+        this.gridLocation = gridLocation;
     }
 }

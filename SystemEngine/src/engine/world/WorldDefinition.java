@@ -13,12 +13,17 @@ public class WorldDefinition implements Serializable {
     private Integer maxNumberOfTicks = null;
     private Long SecondsToTerminate = null;
     private boolean terminationByUser = false;
+    private int numOfRowsInGrid;
+    private int numOfColsInGrid;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
     private final List<Rule> rules = new ArrayList<>();
     final EnvironmentVariablesDefManager environmentVariablesDefManager = new EnvironmentVariablesDefManagerImpl();
 
-    private int numOfRowsInGrid;
-    private int numOfColsInGrid;
+
+
+
+
+
 
 
     public void addEnvironmentVariableDef(PropertyDefinition envVarDefinitionToAdd)    {
