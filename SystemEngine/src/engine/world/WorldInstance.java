@@ -65,7 +65,7 @@ public class WorldInstance implements Serializable, Runnable {
 
         while (!isTermination())
         {
-
+            //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
             for (Rule rule: rules) {
                 if (rule.isActive(this.currentNumberOfTicks))
                 {
