@@ -129,4 +129,57 @@ public class Expression2 {
             }
         }
     }
+
+    public PropertyType evaluateExpressionType(){
+        String mainEntityName = context.getPrimaryEntityInstance().getName();
+        String secondaryEntityName = "";
+        if (context.getSecondaryEntityInstance() != null)
+        {
+            secondaryEntityName = context.getSecondaryEntityInstance().getName();
+        }
+
+        if (rawExpression.startsWith("environment")){
+            String envVarName = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
+            return context.getActiveEnvironmentVariables().getEvnVariable(envVarName).getType();
+        }
+
+        else if(rawExpression.startsWith("evaluate")){
+            String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
+            String propertyName = value.substring(value.indexOf('.') + 1);
+
+            if (value.startsWith(mainEntityName + ".")){ //TODO: EXCEPTIONS?
+                if (context.getPrimaryEntityInstance().getPropertyByName(propertyName) != null){
+                    return context.getPrimaryEntityInstance().getPropertyByName(propertyName).getType();
+                } else{
+                    throw new IllegalArgumentException("In evaluate function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
+                }
+            } else if (rawExpression.startsWith(secondaryEntityName + ".")){ //TODO: EXCEPTIONS?
+                if(context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null){
+                    return context.getSecondaryEntityInstance().getPropertyByName(propertyName).getType();
+                } else{
+                    throw new IllegalArgumentException("In evaluate function, the entity: " + secondaryEntityName + " does not have the property: " + propertyName);
+                }
+
+            } else{
+                throw new IllegalArgumentException("evaluate function got the entity: " + value.substring(0, value.indexOf('.')) + " which is not in it's context");
+            }
+        }
+
+        else if ((rawExpression.startsWith("random")) || (rawExpression.startsWith("percent")) || (rawExpression.startsWith("ticks"))){
+            return PropertyType.FLOAT;
+        }
+
+        else if(context.getPrimaryEntityInstance().getPropertyByName(rawExpression) != null){
+            return context.getPrimaryEntityInstance().getPropertyByName(rawExpression).getType();
+        }
+
+        else if(context.getSecondaryEntityInstance() != null && context.getSecondaryEntityInstance().getPropertyByName(rawExpression) != null) {
+            return context.getSecondaryEntityInstance().getPropertyByName(rawExpression).getType();
+        }
+
+        else {
+            return PropertyType.STRING;
+        }
+
+    }
 }
