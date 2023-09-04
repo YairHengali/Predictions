@@ -13,6 +13,7 @@ import engine.world.grid.manager.impl.GridManagerImpl;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class EntityInstanceManagerImpl implements EntityInstanceManager, Serializable {
     private int count;
@@ -21,7 +22,11 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
 
     private final GridManagerAPI gridManager;
 
-
+@Override
+public Stream<EntityInstance> getAllEntitiesInstances()
+{
+    return name2EntInstancesList.values().stream().flatMap(List::stream); //.flatMap(List::stream).collect(Collectors.toList());
+}
     private final Set<EntityInstance> EntitiesToKill;
 
 
@@ -171,6 +176,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
 
 
     /////FOR PROXIMITY:
+    @Override
     public boolean isEnt1NearEnt2(EntityInstance entityInstance1, EntityInstance entityInstance2, int depth){
         return gridManager.isEnt1NearEnt2(entityInstance1, entityInstance2, depth);
     }

@@ -4,6 +4,8 @@ import engine.action.api.AbstractAction;
 import engine.action.api.Action;
 import engine.action.api.ActionType;
 import engine.context.Context;
+import engine.context.ContextImpl;
+import engine.entity.EntityInstance;
 import engine.expression.Expression;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
@@ -29,6 +31,21 @@ public class Proximity extends AbstractAction {
         String ofFromExpression = ofAsExpression.praseExpressionToValueString(PropertyType.FLOAT);
 
 //TODO: FIGURE OUT HOW TO GET THE SECOND ENTITY
+        for (EntityInstance targetEntity : context.getEntityInstanceManager().getInstancesListByName(targetEntityName)) {
+            if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), targetEntity, Integer.parseInt(ofFromExpression))) {
+                //INVOKE ACTIONS:
+                for (Action action : thenActions) {
+                    try {
+                        action.Run(new ContextImpl(context.getPrimaryEntityInstance(), targetEntity, context.getEntityInstanceManager(), context.getActiveEnvironmentVariables(), context.getCurrentTick()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+            break;
+        }
+
+
 
 //        if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), ENT2, ofFromExpression)) {
 //            //INVOKE ACTIONS:
