@@ -32,7 +32,8 @@ public class Proximity extends AbstractAction {
 
 //TODO: FIGURE OUT HOW TO GET THE SECOND ENTITY
         for (EntityInstance targetEntity : context.getEntityInstanceManager().getInstancesListByName(targetEntityName)) {
-            if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), targetEntity, Integer.parseInt(ofFromExpression))) {
+            int depth = Float.valueOf(ofFromExpression).intValue(); //MAYBE ROUND UP/DOWN ACCORDINGLY
+            if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), targetEntity, depth)) {
                 //INVOKE ACTIONS:
                 for (Action action : thenActions) {
                     try {

@@ -150,7 +150,7 @@ public class GridManagerImpl implements GridManagerAPI {
 
     @Override
     public boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth){ //TODO: VALIDATE (ALSO THERE ARE COPIES OF LOCATIONS IN THE SET IF ITS MATTER..)
-        int row = ent2.getGridLocation().getRow();
+        int row = ent1.getGridLocation().getRow();
         int col = ent1.getGridLocation().getCol();
 
         int gridRows = grid.getRows();

@@ -1,7 +1,6 @@
 package engine.expression;
 
 import engine.context.Context;
-import engine.entity.EntityInstance;
 import engine.environment.active.ActiveEnvironmentVariables;
 import engine.property.PropertyType;
 
@@ -112,14 +111,16 @@ public class Expression2 {
 
             if (value.startsWith(mainEntityName + ".")) { //TODO: EXCEPTIONS?
                 if (context.getPrimaryEntityInstance().getPropertyByName(propertyName) != null) {
-                    return String.valueOf(context.getPrimaryEntityInstance().getPropertyByName(propertyName).getLastTickModified());
+                    int lastTickThePropertyModified = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getLastTickModified();
+                    return String.valueOf(context.getCurrentTick() - lastTickThePropertyModified);
                 }else{
                     throw new IllegalArgumentException("In ticks function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }
             }
             else if (value.startsWith(secondaryEntityName + ".")) { //TODO: EXCEPTIONS?
                 if (context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null) {
-                    return String.valueOf(context.getSecondaryEntityInstance().getPropertyByName(propertyName).getLastTickModified());
+                    int lastTickThePropertyModified = context.getSecondaryEntityInstance().getPropertyByName(propertyName).getLastTickModified();
+                    return String.valueOf(context.getCurrentTick() - lastTickThePropertyModified);
                 }else{
                     throw new IllegalArgumentException("In ticks function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }

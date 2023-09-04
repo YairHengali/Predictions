@@ -140,8 +140,8 @@ public Stream<EntityInstance> getAllEntitiesInstances()
     }
 
     private void createDerivedEntityInstance(EntityInstance entityInstance, String derivedEntityName){
-        EntityInstance derivedEntity = new EntityInstance(name2EntitiesDef.get(derivedEntityName), count);
-        count++;
+        EntityInstance derivedEntity = new EntityInstance(name2EntitiesDef.get(derivedEntityName), entityInstance.getId());
+        //count++; setted the Id of the replaced one
 
         //SET SAME LOCATION:
         gridManager.replaceEntitiesInLocation(entityInstance, derivedEntity, entityInstance.getGridLocation());
@@ -172,6 +172,8 @@ public Stream<EntityInstance> getAllEntitiesInstances()
                 }
             }
         }
+
+        name2EntInstancesList.get(derivedEntityName).add(derivedEntity);
     }
 
 

@@ -45,7 +45,7 @@ public class Increase extends AbstractAction {
         PropertyInstance mainEntityPropertyInstance;
         if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
             mainEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName); //TODO: EX2 - HOW TO DECIDE WHICH IS THE PRIMARY?
-        else if (mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
+        else if (context.getSecondaryEntityInstance() != null && mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
             mainEntityPropertyInstance = context.getSecondaryEntityInstance().getPropertyByName(propertyName);
         else {
             throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action"); //NEEDED? OR ALREADY CHECKED IN XML PARSING?

@@ -70,7 +70,8 @@ public class RuleImpl implements Rule, Serializable {
         for (Action action: actions) {
             for (EntityInstance entityInstance : manager.getInstancesListByName(action.getMainEntityName()))
             {
-                Context context = new ContextImpl(entityInstance, manager, activeEnvironmentVariables, currentTick);
+//                Context context = new ContextImpl(entityInstance, manager, activeEnvironmentVariables, currentTick);
+                Context context = new ContextImpl(entityInstance,entityInstance, manager, activeEnvironmentVariables, currentTick);
                 try {
                     action.Run(context);
                 }

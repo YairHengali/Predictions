@@ -23,7 +23,14 @@ public class BooleanProperty extends PropertyInstance {
     }
 
     public void setValue(Boolean value, Integer currTick) {
+        String oldValue = this.value;
+
         this.value = value.toString();
-        setLastTickModified(currTick);
+
+        if (!this.value.equals(oldValue)){ //ADDED - value has changed
+            setLastTickModified(currTick);
+        }
+
     }
+
 }

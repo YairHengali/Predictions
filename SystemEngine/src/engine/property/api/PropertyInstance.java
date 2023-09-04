@@ -38,7 +38,7 @@ public abstract class PropertyInstance implements Serializable {
         return lastModifiedTick.get();
     }
 
-    public void setLastTickModified(Integer currTick) {
+    protected void setLastTickModified(Integer currTick) {
         if(currTick != null){
             this.tick2value.put(currTick, this.value);
         }

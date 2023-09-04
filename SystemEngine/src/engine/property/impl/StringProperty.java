@@ -29,7 +29,12 @@ public class StringProperty extends PropertyInstance {
     }
 
     public void setValue(String value, Integer currTick) {
+        String oldValue = this.value;
+
         this.value = value;
-        setLastTickModified(currTick);
+
+        if (!this.value.equals(oldValue)){ //value has changed
+            setLastTickModified(currTick);
+        }
     }
 }

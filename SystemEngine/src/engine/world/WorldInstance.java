@@ -65,33 +65,33 @@ public class WorldInstance implements Serializable, Runnable {
 
     }
 
-    public TerminationReason runMainLoop(){ //TICK 1 and up...;
-        this.startTime = System.currentTimeMillis();
-        currentNumberOfTicks = 1;
-
-        while (!isTermination())
-        {
-            //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
-            for (Rule rule: rules) {
-                if (rule.isActive(this.currentNumberOfTicks))
-                {
-                    rule.runRule(this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks);
-                }
-            }
-            currentNumberOfTicks++;
-            entityInstanceManager.makeMoveToAllEntities();
-        }
-        if(currentNumberOfTicks >= maxNumberOfTicks)
-        {
-            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
-            return TerminationReason.MAXTICKSREACHED;
-        }
-        else
-        {
-            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
-            return TerminationReason.SECONDSREACHED;
-        }
-    }
+//    public TerminationReason runMainLoop(){ //TICK 1 and up...;
+//        this.startTime = System.currentTimeMillis();
+//        currentNumberOfTicks = 1;
+//
+//        while (!isTermination())
+//        {
+//            //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
+//            for (Rule rule: rules) {
+//                if (rule.isActive(this.currentNumberOfTicks))
+//                {
+//                    rule.runRule(this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks);
+//                }
+//            }
+//            currentNumberOfTicks++;
+//            entityInstanceManager.makeMoveToAllEntities();
+//        }
+//        if(currentNumberOfTicks >= maxNumberOfTicks)
+//        {
+//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+//            return TerminationReason.MAXTICKSREACHED;
+//        }
+//        else
+//        {
+//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+//            return TerminationReason.SECONDSREACHED;
+//        }
+//    }
 
 
     public TerminationReason runMainLoopEx2(){ //TICK 1 and up...;
@@ -104,9 +104,10 @@ public class WorldInstance implements Serializable, Runnable {
             entityInstanceManager.makeMoveToAllEntities();
             //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
 
-            Stream<Action> actionStream = rules.stream()
+            List<Action> actionList = rules.stream()
                                             .filter(rule -> rule.isActive(this.currentNumberOfTicks))
-                                            .flatMap(rule -> rule.getActions().stream());
+                                            .flatMap(rule -> rule.getActions().stream())
+                                            .collect(Collectors.toList());
 
 
             Stream<EntityInstance> allEntitiesInstances = entityInstanceManager.getAllEntitiesInstances(); //TODO: NOW WHEN HAVE THIS TEMPLATE, THING ABOUT SOURCE TARGET
@@ -114,7 +115,7 @@ public class WorldInstance implements Serializable, Runnable {
 
             allEntitiesInstances.forEach(entityInstance -> {
                 String entityName = entityInstance.getName();
-                actionStream
+                actionList.stream()
                         .filter(action -> action.getMainEntityName().equals(entityName))
                         .forEach(action -> {
                             SecondaryEntityDetails secondaryEntityDetails = action.getSecondaryEntityDetails();
@@ -219,6 +220,8 @@ public class WorldInstance implements Serializable, Runnable {
 
     @Override
     public void run() {
-        runMainLoop();
+//        runMainLoop();
+        runMainLoopEx2();
     }
+
 }
