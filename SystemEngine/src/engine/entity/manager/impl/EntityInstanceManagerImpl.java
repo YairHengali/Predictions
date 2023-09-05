@@ -50,13 +50,12 @@ public Stream<EntityInstance> getAllEntitiesInstances()
     @Override
     public void createEntitiesInstancesAndLocate(int rowSize, int colSize) {
         for(EntityDefinition entityDefinition: this.name2EntitiesDef.values()){
+            name2EntInstancesList.put(entityDefinition.getName(),new ArrayList<>());
+
             for (int i = 0; i < entityDefinition.getPopulation(); i++) {
                 EntityInstance newEntityInstance = new EntityInstance(entityDefinition, count);
                 count++;
 
-                if(!name2EntInstancesList.containsKey(entityDefinition.getName())) {
-                    name2EntInstancesList.put(entityDefinition.getName(),new ArrayList<>());
-                }
                 name2EntInstancesList.get(entityDefinition.getName()).add(newEntityInstance);
             }
         }

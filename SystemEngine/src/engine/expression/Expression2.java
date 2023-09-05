@@ -79,7 +79,7 @@ public class Expression2 {
                 } else{
                     throw new IllegalArgumentException("In evaluate function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }
-            } else if (rawExpression.startsWith(secondaryEntityName + ".")){ //TODO: EXCEPTIONS?
+            } else if (value.startsWith(secondaryEntityName + ".")){ //TODO: EXCEPTIONS?
                 if(context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null){
                     return context.getSecondaryEntityInstance().getPropertyByName(propertyName).getValue();
                 } else{
@@ -93,7 +93,7 @@ public class Expression2 {
         }
         else if(rawExpression.startsWith("percent")){ // TODO: EXCEPTIONS?
             Expression2 innerExp1 = new Expression2 (rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(',')), context);
-            Expression2 innerExp2 = new Expression2(rawExpression.substring(rawExpression.indexOf(',') + 1, rawExpression.indexOf(')')), context);
+            Expression2 innerExp2 = new Expression2(rawExpression.substring(rawExpression.indexOf(',') + 1, rawExpression.lastIndexOf(')')), context);
 
             String innerValue1 = innerExp1.praseExpressionToValueString(PropertyType.FLOAT);
             String innerValue2 = innerExp2.praseExpressionToValueString(PropertyType.FLOAT);

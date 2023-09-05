@@ -5,6 +5,7 @@ import engineAnswers.EntityCountDTO;
 import engineAnswers.EntityDTO;
 import engineAnswers.PropertyDTO;
 import engineAnswers.pastSimulationDTO;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,22 +24,22 @@ public class ResultsController {
     @FXML
     private TextArea textResults;
 
-    @FXML
-    private Button showBTN;
 
-    @FXML
-    void showResultsTesting(ActionEvent event) {
+    public void updateSimulationsList() { //TO RUN WHEN CLICK RUN
         executionList.getItems().clear();
         List<pastSimulationDTO> pastSimulationsDetails = mainController.getSystemEngine().getPastSimulationsDetails();
         for (pastSimulationDTO pastSimulationDetails : pastSimulationsDetails) {
             executionList.getItems().add(pastSimulationDetails);
         }
-
     }
+
     private AppController mainController;
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+
+    Thread dataPullingThread;
+    int currentChosenSimulationID;
 
     public void initialize()
     {
@@ -46,6 +47,38 @@ public class ResultsController {
             showSimulationDetails(newValue);
         });
 
+//        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//            setChosenID(newValue);
+//        });
+
+
+//        dataPullingThread = new Thread(() -> {
+//            while (true) {
+//                sampleSimuInfoDTO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
+//                // Update UI using Platform.runLater()
+//                Platform.runLater(() -> {
+//                    // Update UI with the collected data:
+//                    if (simulationInfoDTO.getState() != ENDED){
+//                        //INFO ON RUNING SIMULATION
+//                    }
+//                    else{
+//                        //INFO ON ENDED SIMULATION
+//                    }
+//                });
+//                try {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+    }
+
+    private void setChosenID(pastSimulationDTO newValue) {
+        this.currentChosenSimulationID = newValue.getId();
+        if (!dataPullingThread.isAlive()){
+            dataPullingThread.start();
+        }
     }
 
     private void showSimulationDetails(pastSimulationDTO newValue) {

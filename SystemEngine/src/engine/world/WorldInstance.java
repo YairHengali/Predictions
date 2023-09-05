@@ -14,6 +14,8 @@ import engine.rule.Rule;
 import engine.world.factory.SecondaryEntityDetails;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,7 +23,7 @@ import java.util.stream.Stream;
 public class WorldInstance implements Serializable, Runnable {
     private String dateOfRun = "";
     private int currentNumberOfTicks = 0;
-    private long startTime;
+    private Instant startTime;
     private final List<Rule> rules = new ArrayList<>();
     EntityInstanceManager entityInstanceManager;
     ActiveEnvironmentVariables activeEnvironmentVariables;
@@ -46,7 +48,9 @@ public class WorldInstance implements Serializable, Runnable {
         return activeEnvironmentVariables.getEvnVariables();
     }
 
-
+    public Instant getStartTime() {
+        return startTime;
+    }
 
     public void runInitIteration(WorldDefinition simulationDef){//Tick0
         currentNumberOfTicks = 0;
@@ -95,12 +99,15 @@ public class WorldInstance implements Serializable, Runnable {
 
 
     public TerminationReason runMainLoopEx2(){ //TICK 1 and up...;
-        this.startTime = System.currentTimeMillis();
+//        this.startTime = System.currentTimeMillis(); replaced >
+        this.startTime = Instant.now();
         currentNumberOfTicks = 1;
 
 
         while (!isTermination())
         {
+//            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
+
             entityInstanceManager.makeMoveToAllEntities();
             //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
 
@@ -175,31 +182,41 @@ public class WorldInstance implements Serializable, Runnable {
             currentNumberOfTicks++;
 
         }
-        if(currentNumberOfTicks >= maxNumberOfTicks)
+        if(this.maxNumberOfTicks != null && currentNumberOfTicks >= this.maxNumberOfTicks)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             return TerminationReason.MAXTICKSREACHED;
         }
-        else
+        else if(this.secondsToTerminate != null && Duration.between(startTime, Instant.now()).getSeconds() >= secondsToTerminate)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             return TerminationReason.SECONDSREACHED;
+        }
+        else
+        {
+            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+            return TerminationReason.ENDEDBYUSER;
         }
     }
 
 
     public boolean isTermination(){
+        long timeSimulationRunning = Duration.between(startTime, Instant.now()).getSeconds();
         if(this.isTerminationByUser)
             return false;
 
         if (this.secondsToTerminate != null && this.maxNumberOfTicks != null)
         {
-            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate) ||
+//            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate) ||
+//                    (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+            return (timeSimulationRunning >= this.secondsToTerminate) ||
                     (this.currentNumberOfTicks >= this.maxNumberOfTicks);
+
         }
         else if (this.secondsToTerminate != null)
         {
-            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate);
+//            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate);
+            return (timeSimulationRunning >= this.secondsToTerminate);
         }
         else // this.maxNumberOfTicks != null
         {

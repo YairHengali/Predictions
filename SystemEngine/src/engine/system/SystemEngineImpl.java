@@ -253,4 +253,27 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
         return entitiesDetails;
     }
+//
+//    public void pullData(int simulationID){
+//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
+//        wantedSimulation.getCurrentTick();
+//        wantedSimulation.getCurrentTime();
+//        wantedSimulation.getEntitiesCount();
+//    }
+//
+//    public void pauseSimulation(int simulationID){
+//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
+//        wantedSimulation.setState(PAUSED);
+//    }
+//
+//    public void resumeSimulation(int simulationID){
+//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
+//        wantedSimulation.setState(RUNNING);
+//    }
+//
+//    public void stopSimulation(int simulationID){
+//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
+//        wantedSimulation.setState(ENDED);
+//    }
+
 }

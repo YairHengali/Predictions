@@ -82,6 +82,7 @@ public class AppController {
 
     public void moveToResultsTab(){
         tabPane.getSelectionModel().select(resultsTab);
+        resultsComponentController.updateSimulationsList();
     }
 
     public void addDataToEntitiesTable()

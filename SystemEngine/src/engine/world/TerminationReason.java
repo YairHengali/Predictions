@@ -1,5 +1,5 @@
 package engine.world;
 
 public enum TerminationReason {
-    MAXTICKSREACHED, SECONDSREACHED
+    MAXTICKSREACHED, SECONDSREACHED, ENDEDBYUSER
 }
