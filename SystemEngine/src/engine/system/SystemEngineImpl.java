@@ -6,12 +6,12 @@ import engine.entity.EntityInstance;
 import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
-import engine.world.TerminationReason;
 import engine.world.WorldDefinition;
 import engine.world.WorldInstance;
 import engine.world.factory.WorldDefFactory;
 import engine.world.factory.WorldDefFactoryImpl;
 import engineAnswers.*;
+import ex2.runningSimulationDTO;
 import jaxb.generated2.*;
 
 import javax.xml.bind.JAXBContext;
@@ -19,6 +19,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -231,7 +233,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
         for (EntityDefinition entityDefinition : simulationDef.getEntitiesDefinitions()) {
 
-            int startCount = pastSimulation.getEntityInstanceManager().getEntityDefByName(entityDefinition.getName()).getPopulation(); //TODO: CHANGE! DEF CHANGES EVERY TIME - maybe each instance will hold its def?
+            int startCount = pastSimulation.getEntityInstanceManager().getEntityDefByName(entityDefinition.getName()).getPopulation();
             int endCount = pastSimulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size();
             entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
 
@@ -253,27 +255,42 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
         return entitiesDetails;
     }
-//
-//    public void pullData(int simulationID){
-//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
-//        wantedSimulation.getCurrentTick();
-//        wantedSimulation.getCurrentTime();
-//        wantedSimulation.getEntitiesCount();
-//    }
-//
+
+
+
+    //////////////////////////////////////TRYING PULLING DATA:
+    @Override
+    public runningSimulationDTO pullData(int simulationID){
+        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
+        int currentNumberOfTicks = wantedSimulation.getCurrentNumberOfTicks();
+        long timeRunning = wantedSimulation.getStartTime() == null ? 0 : Duration.between(wantedSimulation.getStartTime(), Instant.now()).getSeconds();
+
+        List<EntityCountDTO> entityCountDtos = new ArrayList<>();
+        for (EntityDefinition entityDefinition : simulationDef.getEntitiesDefinitions()) {
+
+            int startCount = wantedSimulation.getEntityInstanceManager().getEntityDefByName(entityDefinition.getName()).getPopulation();
+            int endCount = wantedSimulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size(); //MIGHT BE PROBLEM DURING SIMULATION
+            entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
+        }
+
+        return new runningSimulationDTO(currentNumberOfTicks, timeRunning, entityCountDtos);
+    }
+
 //    public void pauseSimulation(int simulationID){
 //        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
 //        wantedSimulation.setState(PAUSED);
 //    }
-//
+
 //    public void resumeSimulation(int simulationID){
 //        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
 //        wantedSimulation.setState(RUNNING);
 //    }
-//
+
 //    public void stopSimulation(int simulationID){
 //        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
-//        wantedSimulation.setState(ENDED);
+////        wantedSimulation.endSimualation()
+////                free the thread
+////                wantedSimulation.setState(ENDED);
 //    }
 
 }

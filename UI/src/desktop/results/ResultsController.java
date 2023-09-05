@@ -5,6 +5,7 @@ import engineAnswers.EntityCountDTO;
 import engineAnswers.EntityDTO;
 import engineAnswers.PropertyDTO;
 import engineAnswers.pastSimulationDTO;
+import ex2.runningSimulationDTO;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,35 +44,44 @@ public class ResultsController {
 
     public void initialize()
     {
-        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            showSimulationDetails(newValue);
-        });
-
 //        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            setChosenID(newValue);
+//            showSimulationDetails(newValue);
 //        });
 
+        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            setChosenID(newValue);
+        });
 
-//        dataPullingThread = new Thread(() -> {
-//            while (true) {
-//                sampleSimuInfoDTO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
-//                // Update UI using Platform.runLater()
-//                Platform.runLater(() -> {
-//                    // Update UI with the collected data:
+
+        dataPullingThread = new Thread(() -> {
+            while (true) {
+                runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
+                // Update UI using Platform.runLater()
+                Platform.runLater(() -> {
+                    // Update UI with the collected data:
+
+                    ///TESTING:
+                    textResults.setText("Entities Count:\n" +
+                            testINFO.getEntityCountDTOS().toString() +
+                                    System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
+                                    System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds());
+                    ///////////
+
+                //NEXT MIGHT NEED THIS:
 //                    if (simulationInfoDTO.getState() != ENDED){
 //                        //INFO ON RUNING SIMULATION
 //                    }
 //                    else{
 //                        //INFO ON ENDED SIMULATION
 //                    }
-//                });
-//                try {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+                });
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void setChosenID(pastSimulationDTO newValue) {

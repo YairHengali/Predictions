@@ -52,6 +52,10 @@ public class WorldInstance implements Serializable, Runnable {
         return startTime;
     }
 
+    public int getCurrentNumberOfTicks() {
+        return currentNumberOfTicks;
+    }
+
     public void runInitIteration(WorldDefinition simulationDef){//Tick0
         currentNumberOfTicks = 0;
 
