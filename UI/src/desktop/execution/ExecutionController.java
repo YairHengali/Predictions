@@ -54,6 +54,7 @@ public class ExecutionController {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
         clearBTN.disableProperty().bind(mainController.isFileLoadedProperty().not());
+        startBTN.disableProperty().bind(mainController.isFileLoadedProperty().not());
     }
 
 
