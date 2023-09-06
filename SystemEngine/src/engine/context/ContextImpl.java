@@ -9,13 +9,14 @@ import java.io.Serializable;
 
 public class ContextImpl implements Context, Serializable {
     private final EntityInstance primaryEntityInstance;
-    private final EntityInstance secondaryEntityInstance = null;//TODO: implement, deal with nulls and so on
+    private final EntityInstance secondaryEntityInstance;//TODO: implement, deal with nulls and so on
     private final int currentTick;
     private final EntityInstanceManager entityInstanceManager;
     private final ActiveEnvironmentVariables activeEnvironment;
 
-    public ContextImpl(EntityInstance primaryEntityInstance, EntityInstanceManager entityInstanceManager, ActiveEnvironmentVariables activeEnvironment, int currentTick) {
+    public ContextImpl(EntityInstance primaryEntityInstance,EntityInstance secondaryEntityInstance, EntityInstanceManager entityInstanceManager, ActiveEnvironmentVariables activeEnvironment, int currentTick) {
         this.primaryEntityInstance = primaryEntityInstance;
+        this.secondaryEntityInstance = secondaryEntityInstance;
         this.entityInstanceManager = entityInstanceManager;
         this.activeEnvironment = activeEnvironment;
         this.currentTick = currentTick;

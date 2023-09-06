@@ -66,7 +66,7 @@ public class ExecutionController {
                 mainController.getSystemEngine().setEnvVarDefFromDto(envVarDTO);
             }
 
-        mainController.moveToResultsTab();
+
 
             /*                      NEED TO FIGURE OUT HOW TASKS WORKING
             SimulationTask simulationTask = new SimulationTask(mainController.getSystemEngine());
@@ -74,7 +74,7 @@ public class ExecutionController {
             mainController.getSystemEngine().addTaskToThreadPool(simulationTask);*/
 
         mainController.getSystemEngine().runSimulation(); //TODO: stopped here!
-
+        mainController.moveToResultsTab();
 
         }catch (Exception e) {
             System.out.println("Error: " + e.getMessage() + " try again!");

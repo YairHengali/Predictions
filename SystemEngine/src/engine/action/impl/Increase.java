@@ -4,6 +4,7 @@ import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.context.Context;
 import engine.expression.Expression;
+import engine.expression.Expression2;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -19,18 +20,45 @@ public class Increase extends AbstractAction {
         this.byExpression = byExpression;
     }
 
+//    @Override
+//    public void Run(Context context) {
+//        Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+//        PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+//        String valueFromExpression = expression.praseExpressionToValueString(entityPropertyInstance.getType());
+//
+//
+//        try {
+//            if (entityPropertyInstance instanceof DecimalProperty) {
+//                ((DecimalProperty) entityPropertyInstance).setValue( (Integer.parseInt(entityPropertyInstance.getValue()) + Integer.parseInt(valueFromExpression)) , context.getCurrentTick());
+//            } else if (entityPropertyInstance instanceof FloatProperty) {
+//                ((FloatProperty) entityPropertyInstance).setValue( (Float.parseFloat(entityPropertyInstance.getValue()) + Float.parseFloat(valueFromExpression)) , context.getCurrentTick());
+//            }
+//        }catch (NumberFormatException e)
+//        {
+//            throw new NumberFormatException("can not add float to integer in action Increase\n" + e.getMessage());
+//        }
+//    }
+
     @Override
     public void Run(Context context) {
-        Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-        String valueFromExpression = expression.praseExpressionToValueString(entityPropertyInstance.getType());
+        Expression2 byAsExpression = new Expression2(byExpression, context);
+        PropertyInstance mainEntityPropertyInstance;
+        if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
+            mainEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName); //TODO: EX2 - HOW TO DECIDE WHICH IS THE PRIMARY?
+        else if (context.getSecondaryEntityInstance() != null && mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
+            mainEntityPropertyInstance = context.getSecondaryEntityInstance().getPropertyByName(propertyName);
+        else {
+            throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action"); //NEEDED? OR ALREADY CHECKED IN XML PARSING?
+        }
+
+        String byFromExpression = byAsExpression.praseExpressionToValueString(mainEntityPropertyInstance.getType());
 
 
         try {
-            if (entityPropertyInstance instanceof DecimalProperty) {
-                ((DecimalProperty) entityPropertyInstance).setValue( (Integer.parseInt(entityPropertyInstance.getValue()) + Integer.parseInt(valueFromExpression)) , context.getCurrentTick());
-            } else if (entityPropertyInstance instanceof FloatProperty) {
-                ((FloatProperty) entityPropertyInstance).setValue( (Float.parseFloat(entityPropertyInstance.getValue()) + Float.parseFloat(valueFromExpression)) , context.getCurrentTick());
+            if (mainEntityPropertyInstance instanceof DecimalProperty) {
+                ((DecimalProperty) mainEntityPropertyInstance).setValue( (Integer.parseInt(mainEntityPropertyInstance.getValue()) + Integer.parseInt(byFromExpression)) , context.getCurrentTick());
+            } else if (mainEntityPropertyInstance instanceof FloatProperty) {
+                ((FloatProperty) mainEntityPropertyInstance).setValue( (Float.parseFloat(mainEntityPropertyInstance.getValue()) + Float.parseFloat(byFromExpression)) , context.getCurrentTick());
             }
         }catch (NumberFormatException e)
         {

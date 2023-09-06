@@ -1,6 +1,7 @@
 package engine.system;
 
 import engineAnswers.*;
+import ex2.runningSimulationDTO;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,4 +31,7 @@ public interface SystemEngine {
     void setAllPopulationToZero();
 
     Collection<EntityDTO> getEntitiesListDTO();
+
+    //////////////////////////////////////TRYING PULLING DATA:
+    runningSimulationDTO pullData(int simulationID);
 }

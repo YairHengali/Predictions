@@ -4,8 +4,11 @@ import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface EntityInstanceManager {
+    Stream<EntityInstance> getAllEntitiesInstances();
+
     void createEntitiesInstancesAndLocate(int rowSize, int colSize);
 
     void killEntity(EntityInstance entityInstance);
@@ -29,4 +32,7 @@ public interface EntityInstanceManager {
     void createDerivedEntities();
 
     void makeMoveToAllEntities();
+
+    /////FOR PROXIMITY:
+    boolean isEnt1NearEnt2(EntityInstance entityInstance1, EntityInstance entityInstance2, int depth);
 }
