@@ -12,7 +12,7 @@ import engine.world.factory.SecondaryEntityDetails;
 
 public class SingleCondition extends ConditionImpl implements Condition
 {
-    final String firstArgExpression; //TODO: DOES IT CAN BY PF ANY TYPE? OR ONLY PROPERTY
+    final String firstArgExpression;
     final ConditionOp operator;
     final String secondArgExpression;
 
@@ -38,7 +38,7 @@ public class SingleCondition extends ConditionImpl implements Condition
         boolean result = false;
 
         Expression2 firstArgAsExpression = new Expression2(firstArgExpression, context);
-        PropertyType firstArgType = firstArgAsExpression.evaluateExpressionType();//TODO: NEED TO FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
+        PropertyType firstArgType = firstArgAsExpression.evaluateExpressionType();//FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
 
         String firstArg = firstArgAsExpression.praseExpressionToValueString(firstArgType);
 

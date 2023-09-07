@@ -31,6 +31,8 @@ public class WorldInstance implements Serializable, Runnable {
     private Long secondsToTerminate = null;
     private boolean isTerminationByUser = false;
 
+    private Instant endTime;
+
 
 
     public WorldInstance(WorldDefinition worldDef) {
@@ -79,7 +81,6 @@ public class WorldInstance implements Serializable, Runnable {
 //
 //        while (!isTermination())
 //        {
-//            //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
 //            for (Rule rule: rules) {
 //                if (rule.isActive(this.currentNumberOfTicks))
 //                {
@@ -113,7 +114,6 @@ public class WorldInstance implements Serializable, Runnable {
 //            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
 
             entityInstanceManager.makeMoveToAllEntities();
-            //TODO: NEED TO BE DONE WITH STREAMS NOW TO MAKE IT EASIER (PAGE 23)
 
             List<Action> actionList = rules.stream()
                                             .filter(rule -> rule.isActive(this.currentNumberOfTicks))
@@ -121,7 +121,7 @@ public class WorldInstance implements Serializable, Runnable {
                                             .collect(Collectors.toList());
 
 
-            Stream<EntityInstance> allEntitiesInstances = entityInstanceManager.getAllEntitiesInstances(); //TODO: NOW WHEN HAVE THIS TEMPLATE, THING ABOUT SOURCE TARGET
+            Stream<EntityInstance> allEntitiesInstances = entityInstanceManager.getAllEntitiesInstances();
             //TODO: MAYBE ASK AVIAD, DOES TARGET IS: SECONDERY WITH: "ALL" AND WITHOUT CONDITION, OR THAT IT ALSO MAY HAVE E SECONDARY ENTITY
 
             allEntitiesInstances.forEach(entityInstance -> {
@@ -129,54 +129,57 @@ public class WorldInstance implements Serializable, Runnable {
                 actionList.stream()
                         .filter(action -> action.getMainEntityName().equals(entityName))
                         .forEach(action -> {
-                            SecondaryEntityDetails secondaryEntityDetails = action.getSecondaryEntityDetails();
-                            if (secondaryEntityDetails == null) { //no secondary entity
-                                action.Run(new ContextImpl(entityInstance, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
-                            }
-                            else {
-                                List<EntityInstance> secondaryEntities = entityInstanceManager.getInstancesListByName(secondaryEntityDetails.getName());
+                            try {
+                                SecondaryEntityDetails secondaryEntityDetails = action.getSecondaryEntityDetails();
+                                if (secondaryEntityDetails == null) { //no secondary entity
+                                    action.Run(new ContextImpl(entityInstance, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
+                                } else {
+                                    List<EntityInstance> secondaryEntities = entityInstanceManager.getInstancesListByName(secondaryEntityDetails.getName());
 //                                        .stream();
 
-                                if (secondaryEntityDetails.getMaxCount() == null) { // count = "all"
-                                    //use all secondary list
-                                    secondaryEntities.forEach(secondaryEntityInstance -> action.Run(new ContextImpl(entityInstance, secondaryEntityInstance, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks )));
+                                    if (secondaryEntityDetails.getMaxCount() == null) { // count = "all"
+                                        //use all secondary list
+                                        secondaryEntities.forEach(secondaryEntityInstance -> action.Run(new ContextImpl(entityInstance, secondaryEntityInstance, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks)));
 
-                                }else {
-                                    if(secondaryEntityDetails.getCondition() == null){ // no condition
-                                        Random random = new Random();
-                                        int maxCount = secondaryEntityDetails.getMaxCount();
-                                        int secEntSize = secondaryEntities.size();
+                                    } else {
+                                        if (secondaryEntityDetails.getCondition() == null) { // no condition
+                                            Random random = new Random();
+                                            int maxCount = secondaryEntityDetails.getMaxCount();
+                                            int secEntSize = secondaryEntities.size();
 
-                                        for (int i = 0; i < maxCount && i < secEntSize; i++) {
-                                            EntityInstance randChosenSecEnt = secondaryEntities.get(random.nextInt(secEntSize));
-                                            action.Run(new ContextImpl(entityInstance, randChosenSecEnt, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks ));
-                                        }
+                                            for (int i = 0; i < maxCount && i < secEntSize; i++) {
+                                                EntityInstance randChosenSecEnt = secondaryEntities.get(random.nextInt(secEntSize));
+                                                action.Run(new ContextImpl(entityInstance, randChosenSecEnt, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
+                                            }
 
-                                        //use random up to MaxCount secondary stream
+                                            //use random up to MaxCount secondary stream
 //                                        List<EntityInstance> shuffledList = new ArrayList<>(secondaryEntities);
 //                                        Collections.shuffle(secondaryEntities); //MAKE SURE THE SHUFFLE DONT MAKE TRUBLE TO ORIGINAL
 
 
-                                    } else{// there is condition //TODO: is there option for all and condition?
-                                        //use random up to MaxCount ON secondary stream that filtered by their condition
-                                        List<EntityInstance> secondaryEntitiesAfterCondition = secondaryEntities
-                                                .stream()
-                                                .filter(secondaryEntity -> secondaryEntityDetails.getCondition().evaluateCondition(new ContextImpl(secondaryEntity, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks))) //SENT THE CURRENT ENTITY(SECONDARY) AS MAIN, AND NULL AS SECONDARY
-                                                .collect(Collectors.toList());
+                                        } else {// there is condition //TODO: is there option for all and condition?
+                                            //use random up to MaxCount ON secondary stream that filtered by their condition
+                                            List<EntityInstance> secondaryEntitiesAfterCondition = secondaryEntities
+                                                    .stream()
+                                                    .filter(secondaryEntity -> secondaryEntityDetails.getCondition().evaluateCondition(new ContextImpl(secondaryEntity, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks))) //SENT THE CURRENT ENTITY(SECONDARY) AS MAIN, AND NULL AS SECONDARY
+                                                    .collect(Collectors.toList());
 
-                                        Random random = new Random();
-                                        int maxCount = secondaryEntityDetails.getMaxCount();
-                                        int secEntSize = secondaryEntitiesAfterCondition.size(); //NEED TO CHOOSE MINIMUM FROM THEM OF FROM ALL?
+                                            Random random = new Random();
+                                            int maxCount = secondaryEntityDetails.getMaxCount();
+                                            int secEntSize = secondaryEntitiesAfterCondition.size(); //NEED TO CHOOSE MINIMUM FROM THEM OF FROM ALL?
 
-                                        for (int i = 0; i < maxCount && i < secEntSize; i++) {
-                                            EntityInstance randChosenSecEnt = secondaryEntitiesAfterCondition.get(random.nextInt(secEntSize));
-                                            action.Run(new ContextImpl(entityInstance, randChosenSecEnt, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks ));
+                                            for (int i = 0; i < maxCount && i < secEntSize; i++) {
+                                                EntityInstance randChosenSecEnt = secondaryEntitiesAfterCondition.get(random.nextInt(secEntSize));
+                                                action.Run(new ContextImpl(entityInstance, randChosenSecEnt, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
+                                            }
                                         }
                                     }
-                                }
 
-                            }
-                        });
+                                }
+                            }catch (Exception e) {
+                                throw new RuntimeException(e.getMessage() + "\n" +"Error occurred with main entity: " +
+                                        entityName); //TODO: might not needed because cant get the rule name
+                            }});
                 });
 
 
@@ -194,6 +197,7 @@ public class WorldInstance implements Serializable, Runnable {
         else if(this.secondsToTerminate != null && Duration.between(startTime, Instant.now()).getSeconds() >= secondsToTerminate)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+            this.endTime = Instant.now(); //TESTT.. WILL BE BY SIMULATION STATE
             return TerminationReason.SECONDSREACHED;
         }
         else
@@ -229,6 +233,14 @@ public class WorldInstance implements Serializable, Runnable {
 
     }
 
+    public long getRunningTime() { //TESTT WILL BE WITH SIMULATION STATE
+        if (startTime == null) //PROBABLY NEED TO SYNCHRONIZE
+            return 0;
+        else if(endTime == null) //PROBABLY NEED TO SYNCHRONIZE
+            return Duration.between(startTime , Instant.now()).getSeconds();
+        else //endTime != null
+            return Duration.between(startTime , endTime).getSeconds();
+    }
 
     public String getDateOfRun() {
         return dateOfRun;
@@ -237,7 +249,6 @@ public class WorldInstance implements Serializable, Runnable {
     public void setDateOfRun(String dateOfRun) {
         this.dateOfRun = dateOfRun;
     }
-
 
     @Override
     public void run() {

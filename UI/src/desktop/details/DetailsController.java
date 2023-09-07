@@ -58,7 +58,7 @@ public class DetailsController {
             else{
                 switch (selectedNode.getParent().getValue()) {
                     case "Properties":
-                        String selectedNodeEntityName = selectedNode.getParent().getParent().getValue(); //TODO: I have name name of Property AND this is the name of entity. get the property details from there!
+                        String selectedNodeEntityName = selectedNode.getParent().getParent().getValue();
                         for (EntityDTO entityDTO : simulationDetailsDTO.getEntities()) {
                             if (entityDTO.getName().equals(selectedNodeEntityName)) {
                                 for (PropertyDTO propertyDTO : entityDTO.getProperties())//TODO: better change in entityDTO to maps but for now tried like that

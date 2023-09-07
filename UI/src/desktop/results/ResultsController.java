@@ -1,20 +1,14 @@
 package desktop.results;
 
 import desktop.AppController;
-import engineAnswers.EntityCountDTO;
 import engineAnswers.EntityDTO;
 import engineAnswers.PropertyDTO;
 import engineAnswers.pastSimulationDTO;
 import ex2.runningSimulationDTO;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.util.List;
 
@@ -26,12 +20,14 @@ public class ResultsController {
     private TextArea textResults;
 
 
-    public void updateSimulationsList() { //TO RUN WHEN CLICK RUN
-        executionList.getItems().clear();
-        List<pastSimulationDTO> pastSimulationsDetails = mainController.getSystemEngine().getPastSimulationsDetails();
-        for (pastSimulationDTO pastSimulationDetails : pastSimulationsDetails) {
-            executionList.getItems().add(pastSimulationDetails);
-        }
+    public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
+//        executionList.getItems().clear();
+//        List<pastSimulationDTO> pastSimulationsDetails = mainController.getSystemEngine().getPastSimulationsDetails();
+//        for (pastSimulationDTO pastSimulationDetails : pastSimulationsDetails) {
+//            executionList.getItems().add(pastSimulationDetails);
+//    }
+        executionList.getItems().add(pastSimulationDTO);
+
     }
 
     private AppController mainController;

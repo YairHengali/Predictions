@@ -1,11 +1,10 @@
 package engine.action.api;
 
-import engine.action.impl.condition.api.Condition;
+import engine.context.Context;
+import engine.entity.EntityInstance;
 import engine.world.factory.SecondaryEntityDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractAction implements Action, Serializable {
     private final ActionType actionType;
@@ -29,4 +28,13 @@ public abstract class AbstractAction implements Action, Serializable {
     @Override
     public SecondaryEntityDetails getSecondaryEntityDetails(){ return secondaryEntityDetails;}
 
+    protected EntityInstance getMainEntityInstance(Context context){
+        if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
+            return context.getPrimaryEntityInstance(); //TODO: EX2 - HOW TO DECIDE WHICH IS THE PRIMARY?
+        else if (context.getSecondaryEntityInstance() != null && mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
+            return context.getSecondaryEntityInstance();
+        else {
+            throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action, in action: " + actionType); //NEEDED? OR ALREADY CHECKED IN XML PARSING?
+        }
+    }
 }

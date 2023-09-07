@@ -42,7 +42,7 @@ public class GridManagerImpl implements GridManagerAPI {
 
     @Override
     public void initEntityLocationRandomly(EntityInstance entity){
-        GridLocation randomLocation = nonOccupiedLocations.get(getRandomEmptyLocationIndexInList());//TODO:need to check if index = -1 (YAIR: NOT NEEDED! BECAUSE WE DEFINE THE WORLD WITH AT MOST M X N ENTITIES)
+        GridLocation randomLocation = nonOccupiedLocations.get(getRandomEmptyLocationIndexInList());//TODO:need to check if index = -1
         grid.set(entity, randomLocation);
         entity.setGridLocation(randomLocation);
 
