@@ -122,7 +122,6 @@ public class WorldInstance implements Serializable, Runnable {
 
 
             Stream<EntityInstance> allEntitiesInstances = entityInstanceManager.getAllEntitiesInstances();
-            //TODO: MAYBE ASK AVIAD, DOES TARGET IS: SECONDERY WITH: "ALL" AND WITHOUT CONDITION, OR THAT IT ALSO MAY HAVE E SECONDARY ENTITY
 
             allEntitiesInstances.forEach(entityInstance -> {
                 String entityName = entityInstance.getName();
@@ -138,11 +137,19 @@ public class WorldInstance implements Serializable, Runnable {
 //                                        .stream();
 
                                     if (secondaryEntityDetails.getMaxCount() == null) { // count = "all"
-                                        //use all secondary list
-                                        secondaryEntities.forEach(secondaryEntityInstance -> action.Run(new ContextImpl(entityInstance, secondaryEntityInstance, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks)));
-
-                                    } else {
                                         if (secondaryEntityDetails.getCondition() == null) { // no condition
+                                            //use all secondary list
+                                            secondaryEntities.forEach(secondaryEntityInstance -> action.Run(new ContextImpl(entityInstance, secondaryEntityInstance, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks)));
+                                        }else{ // there is condition
+                                            //use all secondary list after filtered by condition
+                                            secondaryEntities
+                                                    .stream()
+                                                    .filter(secondaryEntityInstance -> secondaryEntityDetails.getCondition().evaluateCondition(new ContextImpl(secondaryEntityInstance, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks))) //SENT THE CURRENT ENTITY(SECONDARY) AS MAIN, AND NULL AS SECONDARY
+                                                    .forEach(secondaryEntityInstance -> action.Run(new ContextImpl(entityInstance, secondaryEntityInstance, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks)));
+                                            }
+                                    } else { // count is a number
+                                        if (secondaryEntityDetails.getCondition() == null) { // no condition
+                                            //use random up to MaxCount secondary entities
                                             Random random = new Random();
                                             int maxCount = secondaryEntityDetails.getMaxCount();
                                             int secEntSize = secondaryEntities.size();
@@ -152,13 +159,8 @@ public class WorldInstance implements Serializable, Runnable {
                                                 action.Run(new ContextImpl(entityInstance, randChosenSecEnt, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
                                             }
 
-                                            //use random up to MaxCount secondary stream
-//                                        List<EntityInstance> shuffledList = new ArrayList<>(secondaryEntities);
-//                                        Collections.shuffle(secondaryEntities); //MAKE SURE THE SHUFFLE DONT MAKE TRUBLE TO ORIGINAL
-
-
-                                        } else {// there is condition //TODO: is there option for all and condition?
-                                            //use random up to MaxCount ON secondary stream that filtered by their condition
+                                        } else {// there is condition
+                                            //use random up to MaxCount secondary entities filtered by condition
                                             List<EntityInstance> secondaryEntitiesAfterCondition = secondaryEntities
                                                     .stream()
                                                     .filter(secondaryEntity -> secondaryEntityDetails.getCondition().evaluateCondition(new ContextImpl(secondaryEntity, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks))) //SENT THE CURRENT ENTITY(SECONDARY) AS MAIN, AND NULL AS SECONDARY

@@ -33,7 +33,7 @@ public abstract class ConditionImpl extends AbstractAction implements Condition 
 
     protected void invokeThenActions(Context context){
         for (Action action: thenActions) {
-            try { //TODO: here there might be an secondary also?? (I think no, because working on same context) also, is it better to adjust the context here or in the action itself like i did..
+            try {
                 action.Run(context);
             } catch (Exception e) {
                 throw new RuntimeException(e);
