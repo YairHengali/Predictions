@@ -19,8 +19,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -148,7 +146,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
 
     @Override
-    public EndOfSimulationDTO runSimulation() {
+    public pastSimulationDTO runSimulation() {
         WorldInstance currSimulation = this.createNewSimulation();
         id2pastSimulation.put(currentSimulationID++, currSimulation);
         threadExecutor.execute(currSimulation);
@@ -157,7 +155,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 //        currentSimulationID++;
 
 //        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
-        return null;
+        return new pastSimulationDTO(currSimulation.getDateOfRun(), currentSimulationID - 1);
+//        return null;
     }
 
     @Override
@@ -263,7 +262,9 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     public runningSimulationDTO pullData(int simulationID){
         WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
         int currentNumberOfTicks = wantedSimulation.getCurrentNumberOfTicks();
-        long timeRunning = wantedSimulation.getStartTime() == null ? 0 : Duration.between(wantedSimulation.getStartTime(), Instant.now()).getSeconds();
+//        long timeRunning = wantedSimulation.getStartTime() == null ? 0 : Duration.between(wantedSimulation.getStartTime(), Instant.now()).getSeconds();
+
+        long timeRunning = wantedSimulation.getRunningTime();
 
         List<EntityCountDTO> entityCountDtos = new ArrayList<>();
         for (EntityDefinition entityDefinition : simulationDef.getEntitiesDefinitions()) {

@@ -9,7 +9,7 @@ import java.util.List;
 public interface SystemEngine {
     void loadSimulation(String filePath) throws Exception;
     SimulationDetailsDTO getSimulationDetails();
-    EndOfSimulationDTO runSimulation();
+    pastSimulationDTO runSimulation();
     List<pastSimulationDTO> getPastSimulationsDetails();
     Boolean isThereLoadedSimulation();
     List<PropertyDTO> getEnvVarsDefinitionDto();

@@ -3,6 +3,7 @@ package engine.action.impl;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.context.Context;
+import engine.entity.EntityInstance;
 import engine.world.factory.SecondaryEntityDetails;
 
 public class Kill extends AbstractAction {
@@ -13,6 +14,8 @@ public class Kill extends AbstractAction {
 
     @Override
     public void Run(Context context) {
-        context.getEntityInstanceManager().killEntity(context.getPrimaryEntityInstance());
+//        context.getEntityInstanceManager().killEntity(context.getPrimaryEntityInstance());
+        EntityInstance mainEntity = getMainEntityInstance(context);
+        context.getEntityInstanceManager().killEntity(mainEntity);
     }
 }

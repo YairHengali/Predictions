@@ -3,7 +3,7 @@ package engine.action.impl;
 import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.context.Context;
-import engine.expression.Expression;
+import engine.entity.EntityInstance;
 import engine.expression.Expression2;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
@@ -42,14 +42,19 @@ public class Increase extends AbstractAction {
     @Override
     public void Run(Context context) {
         Expression2 byAsExpression = new Expression2(byExpression, context);
-        PropertyInstance mainEntityPropertyInstance;
-        if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
-            mainEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName); //TODO: EX2 - HOW TO DECIDE WHICH IS THE PRIMARY?
-        else if (context.getSecondaryEntityInstance() != null && mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
-            mainEntityPropertyInstance = context.getSecondaryEntityInstance().getPropertyByName(propertyName);
-        else {
-            throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action"); //NEEDED? OR ALREADY CHECKED IN XML PARSING?
-        }
+//        PropertyInstance mainEntityPropertyInstance;
+//        if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
+//            mainEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+//        else if (context.getSecondaryEntityInstance() != null && mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
+//            mainEntityPropertyInstance = context.getSecondaryEntityInstance().getPropertyByName(propertyName);
+//        else {
+//            throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action"); //NEEDED? OR ALREADY CHECKED IN XML PARSING?
+//        }
+
+        //USING PROTECTED METHOD:
+        EntityInstance mainEntity = getMainEntityInstance(context);
+
+        PropertyInstance mainEntityPropertyInstance = mainEntity.getPropertyByName(propertyName);
 
         String byFromExpression = byAsExpression.praseExpressionToValueString(mainEntityPropertyInstance.getType());
 

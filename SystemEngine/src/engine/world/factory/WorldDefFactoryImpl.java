@@ -178,7 +178,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
     private Action createActionFromPrd(PRDAction prdAction)
     {
         Action resAction = null;
-        if (prdAction.getType().equals("proximity"))//IN PROXIMITY, THE ENTITIES ARE: SOURCE AND TARGET TODO: DOES IT THE SECONDARY? because doesnt have count or conditions
+        if (prdAction.getType().equals("proximity"))//IN PROXIMITY, THE ENTITIES ARE: SOURCE AND TARGET
         {
             if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getSourceEntity()) == null) {
                 throw new NotExistingEntityException(prdAction.getPRDBetween().getSourceEntity(), prdAction.getType());

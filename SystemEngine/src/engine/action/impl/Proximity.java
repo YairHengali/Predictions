@@ -7,6 +7,7 @@ import engine.context.Context;
 import engine.context.ContextImpl;
 import engine.entity.EntityInstance;
 import engine.expression.Expression;
+import engine.expression.Expression2;
 import engine.property.PropertyType;
 import engine.property.api.PropertyInstance;
 import engine.world.factory.SecondaryEntityDetails;
@@ -27,17 +28,37 @@ public class Proximity extends AbstractAction {
     }
     @Override
     public void Run(Context context) {
-        Expression ofAsExpression = new Expression(ofExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        //BEFORE getMainEntityInstance(context) FUNCTION:
+//        Expression ofAsExpression = new Expression(ofExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+//        String ofFromExpression = ofAsExpression.praseExpressionToValueString(PropertyType.FLOAT);
+//
+//        for (EntityInstance targetEntity : context.getEntityInstanceManager().getInstancesListByName(targetEntityName)) {
+//            int depth = Float.valueOf(ofFromExpression).intValue(); //MAYBE ROUND UP/DOWN ACCORDINGLY
+//            if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), targetEntity, depth)) {
+//                //INVOKE ACTIONS:
+//                for (Action action : thenActions) {
+//                    try {
+//                        action.Run(new ContextImpl(context.getPrimaryEntityInstance(), targetEntity, context.getEntityInstanceManager(), context.getActiveEnvironmentVariables(), context.getCurrentTick()));
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
+//            break;
+//        }
+
+        Expression2 ofAsExpression = new Expression2(ofExpression, context);
         String ofFromExpression = ofAsExpression.praseExpressionToValueString(PropertyType.FLOAT);
 
-//TODO: FIGURE OUT HOW TO GET THE SECOND ENTITY
+        EntityInstance sourceEntityInstance = getMainEntityInstance(context);
+
         for (EntityInstance targetEntity : context.getEntityInstanceManager().getInstancesListByName(targetEntityName)) {
             int depth = Float.valueOf(ofFromExpression).intValue(); //MAYBE ROUND UP/DOWN ACCORDINGLY
-            if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), targetEntity, depth)) {
+            if (context.getEntityInstanceManager().isEnt1NearEnt2(sourceEntityInstance, targetEntity, depth)) {
                 //INVOKE ACTIONS:
                 for (Action action : thenActions) {
                     try {
-                        action.Run(new ContextImpl(context.getPrimaryEntityInstance(), targetEntity, context.getEntityInstanceManager(), context.getActiveEnvironmentVariables(), context.getCurrentTick()));
+                        action.Run(new ContextImpl(sourceEntityInstance, targetEntity, context.getEntityInstanceManager(), context.getActiveEnvironmentVariables(), context.getCurrentTick()));
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -45,19 +66,6 @@ public class Proximity extends AbstractAction {
             }
             break;
         }
-
-
-
-//        if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), ENT2, ofFromExpression)) {
-//            //INVOKE ACTIONS:
-//            for (Action action : thenActions) {
-//                try {
-//                    action.Run(context);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
 
     }
 

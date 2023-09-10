@@ -4,7 +4,8 @@ import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.action.api.ClacType;
 import engine.context.Context;
-import engine.expression.Expression;
+import engine.entity.EntityInstance;
+import engine.expression.Expression2;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -24,58 +25,113 @@ public class Calculation extends AbstractAction {
         this.calcType = calcType;
     }
 
+//    @Override
+//    public void Run(Context context) {
+//
+//        Expression arg1AsExpression = new Expression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+//        Expression arg2AsExpression = new Expression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+//
+//        PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+//
+//        String value1FromExpression = arg1AsExpression.praseExpressionToValueString(currentEntityPropertyInstance.getType());
+//        String value2FromExpression = arg2AsExpression.praseExpressionToValueString(currentEntityPropertyInstance.getType());
+//
+//
+//
+//            if (currentEntityPropertyInstance instanceof DecimalProperty)
+//            {
+//                try {
+//                    switch (calcType) {
+//                        case MULTIPLY:
+//                            ((DecimalProperty) currentEntityPropertyInstance).setValue(  (Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression)) ,  context.getCurrentTick() );
+//                            break;
+//                        case DIVIDE:
+//                            if (Integer.parseInt(value2FromExpression) == 0) {
+//                                throw new ArithmeticException("Can not divide by zero in action calculation");
+//                            } else {
+//                                ((DecimalProperty) currentEntityPropertyInstance).setValue(  (Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression)) , context.getCurrentTick());
+//                            }
+//                            break;
+//
+//                    }
+//                }
+//                catch(NumberFormatException e)
+//                {
+//                    throw new IllegalArgumentException("Cannot receive float argument: " + value1FromExpression + ", to action Calculation with decimal property: " + currentEntityPropertyInstance.getName());
+//                }
+//
+//            }
+//            else if (currentEntityPropertyInstance instanceof FloatProperty)
+//            {
+//                switch (calcType) {
+//                    case MULTIPLY:
+//                        ((FloatProperty) currentEntityPropertyInstance).setValue( (Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
+//                        break;
+//                    case DIVIDE:
+//                    if (Float.parseFloat(value2FromExpression) == 0){
+//                        throw new ArithmeticException("Can not divide by zero in action calculation");
+//                    }
+//                    else{
+//                        ((FloatProperty) currentEntityPropertyInstance).setValue( (Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
+//                    }
+//                   break;
+//                }
+//            }
+//    }
+
     @Override
     public void Run(Context context) {
 
-        Expression arg1AsExpression = new Expression(arg1Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-        Expression arg2AsExpression = new Expression(arg2Expression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression2 arg1AsExpression = new Expression2(arg1Expression, context);
+        Expression2 arg2AsExpression = new Expression2(arg2Expression, context);
 
-        PropertyInstance currentEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
+        EntityInstance mainEntityInstance = getMainEntityInstance(context);
+        PropertyInstance mainEntityPropertyInstance = mainEntityInstance.getPropertyByName(propertyName);
 
-        String value1FromExpression = arg1AsExpression.praseExpressionToValueString(currentEntityPropertyInstance.getType());
-        String value2FromExpression = arg2AsExpression.praseExpressionToValueString(currentEntityPropertyInstance.getType());
+        String value1FromExpression = arg1AsExpression.praseExpressionToValueString(mainEntityPropertyInstance.getType());
+        String value2FromExpression = arg2AsExpression.praseExpressionToValueString(mainEntityPropertyInstance.getType());
 
 
 
-            if (currentEntityPropertyInstance instanceof DecimalProperty)
-            {
-                try {
-                    switch (calcType) {
-                        case MULTIPLY:
-                            ((DecimalProperty) currentEntityPropertyInstance).setValue(  (Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression)) ,  context.getCurrentTick() );
-                            break;
-                        case DIVIDE:
-                            if (Integer.parseInt(value2FromExpression) == 0) {
-                                throw new ArithmeticException("Can not divide by zero in action calculation");
-                            } else {
-                                ((DecimalProperty) currentEntityPropertyInstance).setValue(  (Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression)) , context.getCurrentTick());
-                            }
-                            break;
-
-                    }
-                }
-                catch(NumberFormatException e)
-                {
-                    throw new IllegalArgumentException("Cannot receive float argument: " + value1FromExpression + ", to action Calculation with decimal property: " + currentEntityPropertyInstance.getName());
-                }
-
-            }
-            else if (currentEntityPropertyInstance instanceof FloatProperty)
-            {
+        if (mainEntityPropertyInstance instanceof DecimalProperty)
+        {
+            try {
                 switch (calcType) {
                     case MULTIPLY:
-                        ((FloatProperty) currentEntityPropertyInstance).setValue( (Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
+                        ((DecimalProperty) mainEntityPropertyInstance).setValue((Integer.parseInt(value1FromExpression) * Integer.parseInt(value2FromExpression)) ,  context.getCurrentTick());
                         break;
                     case DIVIDE:
+                        if (Integer.parseInt(value2FromExpression) == 0) {
+                            throw new ArithmeticException("Can not divide by zero in action calculation");
+                        } else {
+                            ((DecimalProperty) mainEntityPropertyInstance).setValue((Integer.parseInt(value1FromExpression) / Integer.parseInt(value2FromExpression)) , context.getCurrentTick());
+                        }
+                        break;
+
+                }
+            }
+            catch(NumberFormatException e)
+            {
+                throw new IllegalArgumentException("Cannot receive float argument: " + value1FromExpression + ", to action Calculation with decimal property: " + mainEntityPropertyInstance.getName());
+            }
+
+        }
+        else if (mainEntityPropertyInstance instanceof FloatProperty)
+        {
+            switch (calcType) {
+                case MULTIPLY:
+                    ((FloatProperty) mainEntityPropertyInstance).setValue((Float.parseFloat(value1FromExpression) * Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
+                    break;
+                case DIVIDE:
                     if (Float.parseFloat(value2FromExpression) == 0){
                         throw new ArithmeticException("Can not divide by zero in action calculation");
                     }
                     else{
-                        ((FloatProperty) currentEntityPropertyInstance).setValue( (Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
+                        ((FloatProperty) mainEntityPropertyInstance).setValue((Float.parseFloat(value1FromExpression) / Float.parseFloat(value2FromExpression)) , context.getCurrentTick());
                     }
-                   break;
-                }
+                    break;
             }
+        }
     }
 }
 

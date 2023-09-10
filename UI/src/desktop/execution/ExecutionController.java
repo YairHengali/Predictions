@@ -6,6 +6,7 @@ import engine.property.PropertyType;
 import engineAnswers.EndOfSimulationDTO;
 import engineAnswers.EntityDTO;
 import engineAnswers.PropertyDTO;
+import engineAnswers.pastSimulationDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -73,8 +74,8 @@ public class ExecutionController {
             this.bindTaskToUIComponents();
             mainController.getSystemEngine().addTaskToThreadPool(simulationTask);*/
 
-        mainController.getSystemEngine().runSimulation(); //TODO: stopped here!
-        mainController.moveToResultsTab();
+            pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();//TODO: stopped here!
+            mainController.moveToResultsTab(pastSimulationDTO);
 
         }catch (Exception e) {
             System.out.println("Error: " + e.getMessage() + " try again!");

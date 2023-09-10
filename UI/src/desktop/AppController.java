@@ -6,6 +6,7 @@ import desktop.header.HeaderController;
 import desktop.results.ResultsController;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
+import engineAnswers.pastSimulationDTO;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -80,9 +81,9 @@ public class AppController {
         return systemEngine;
     }
 
-    public void moveToResultsTab(){
+    public void moveToResultsTab(pastSimulationDTO pastSimulationDTO){
         tabPane.getSelectionModel().select(resultsTab);
-        resultsComponentController.updateSimulationsList();
+        resultsComponentController.addItemToSimulationsList(pastSimulationDTO);
     }
 
     public void addDataToEntitiesTable()

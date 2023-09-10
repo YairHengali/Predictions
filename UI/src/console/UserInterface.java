@@ -96,8 +96,8 @@ public class UserInterface {
                         //systemEngine.createNewSimulation();
                         List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
                         printActiveEnvVars(activeEnvVarDtos);
-                        EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
-                        printEndOfSimulationDetails(endOfSimulationDTO);
+//                        EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
+//                        printEndOfSimulationDetails(endOfSimulationDTO);
                     } catch (Exception e) {
                         System.out.println(e.getMessage() + System.lineSeparator());
                     }
