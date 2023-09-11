@@ -6,6 +6,7 @@ import engineAnswers.PropertyDTO;
 import engineAnswers.pastSimulationDTO;
 import ex2.runningSimulationDTO;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,6 +32,12 @@ public class ResultsController {
     private Button resumeBTN;
 
 
+
+    private SimpleBooleanProperty disablePause = new SimpleBooleanProperty(true);
+    private SimpleBooleanProperty disableStop = new SimpleBooleanProperty(true);
+    private SimpleBooleanProperty disableResume = new SimpleBooleanProperty(true);
+
+
     public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
 //        executionList.getItems().clear();
 //        List<pastSimulationDTO> pastSimulationsDetails = mainController.getSystemEngine().getPastSimulationsDetails();
@@ -49,10 +56,18 @@ public class ResultsController {
     Thread dataPullingThread;
     int currentChosenSimulationID;
 
+    public ResultsController() {
+
+
+    }
+
     public void initialize(){
 //        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //            showSimulationDetails(newValue);
 //        });
+        this.pauseBTN.disableProperty().bind(disablePause);
+        this.resumeBTN.disableProperty().bind(disableResume);
+        this.stopBTN.disableProperty().bind(disableStop);
 
         executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             setChosenID(newValue);
@@ -72,6 +87,7 @@ public class ResultsController {
                                     System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
                                     System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds() +
                                     System.lineSeparator() + "Status:  " + testINFO.getStatus());
+                    calcDisableValueToAllBTNs(testINFO.getStatus());
                     ///////////
 
                 //NEXT MIGHT NEED THIS:
@@ -91,6 +107,26 @@ public class ResultsController {
         });
     }
 
+    private void calcDisableValueToAllBTNs(String status)
+    {
+        if(status.equals("TERMINATED") || status.equals("CREATED")){
+            disablePause.set(true);
+            disableStop.set(true);
+            disableResume.set(true);
+
+        }
+        else if(status.equals("PAUSED")) {
+            disablePause.set(true);
+            disableStop.set(false);
+            disableResume.set(false);
+        }
+        else if (status.equals("RUNNING")) {
+            disablePause.set(false);
+            disableStop.set(false);
+            disableResume.set(true);
+        }
+
+    }
     private void setChosenID(pastSimulationDTO newValue) {
         this.currentChosenSimulationID = newValue.getId();
         if (!dataPullingThread.isAlive()){

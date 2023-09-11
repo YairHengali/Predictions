@@ -12,6 +12,7 @@ import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
 import engine.world.factory.SecondaryEntityDetails;
+import javafx.util.Pair;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -24,6 +25,7 @@ public class WorldInstance implements Serializable, Runnable {
     private String dateOfRun = "";
     private int currentNumberOfTicks = 0;
     private Instant startTime;
+    private long runningTime = 0;
     private final List<Rule> rules = new ArrayList<>();
     EntityInstanceManager entityInstanceManager;
     ActiveEnvironmentVariables activeEnvironmentVariables;
@@ -32,6 +34,8 @@ public class WorldInstance implements Serializable, Runnable {
     private boolean isTerminationByUser = false;
     private Instant endTime;
     private SimulationStatus status;
+    private final Object statusLock = new Object();
+    private List<Pair<SimulationStatus, Instant>> statusLog;
     private int simulationID;
 
 
@@ -43,6 +47,7 @@ public class WorldInstance implements Serializable, Runnable {
         this.isTerminationByUser = worldDef.isTerminationByUser();
         this.simulationID = id;
         this.status = SimulationStatus.CREATED;
+        statusLog = new ArrayList<>();
 
 
     }
@@ -83,16 +88,22 @@ public class WorldInstance implements Serializable, Runnable {
 
     }
 
-    public synchronized void pauseSimulation(){
-        if(this.status != SimulationStatus.TERMINATED) {
-            this.status = SimulationStatus.PAUSED;
+    public void pauseSimulation(){
+        synchronized (statusLock) {
+            if (this.status == SimulationStatus.RUNNING) {
+                this.status = SimulationStatus.PAUSED;
+                runningTime += Duration.between(startTime , Instant.now()).getSeconds();
+            }
         }
 
     }
 
-    public synchronized void resumeSimulation(){
-        if(this.status == SimulationStatus.PAUSED) {
-            this.status = SimulationStatus.RUNNING;
+    public void resumeSimulation(){
+        synchronized (statusLock) {
+            if (this.status == SimulationStatus.PAUSED) {
+                this.status = SimulationStatus.RUNNING;
+                startTime = Instant.now();
+            }
         }
     }
 
@@ -134,12 +145,14 @@ public class WorldInstance implements Serializable, Runnable {
         synchronized (this){
             this.status = SimulationStatus.RUNNING;
         }
+        this.statusLog.add(new Pair<>(SimulationStatus.RUNNING,Instant.now()));
 
 
         while (!isTerminated)
         {
             isPaused = checkIfPaused();
-            if(!isPaused){
+            isTerminated = isTermination();
+            if(!isPaused && !isTerminated){
 //            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
 
                 entityInstanceManager.makeMoveToAllEntities();
@@ -219,13 +232,16 @@ public class WorldInstance implements Serializable, Runnable {
                 this.entityInstanceManager.createScratchEntities();
                 this.entityInstanceManager.createDerivedEntities();
                 currentNumberOfTicks++;
+
             } // if not paused
-            isTerminated = isTermination();
         }
 
         synchronized (this){
+            if(this.status == SimulationStatus.RUNNING)
+                this.runningTime += Duration.between(startTime , Instant.now()).getSeconds();
             this.status = SimulationStatus.TERMINATED;
         }
+
 
         if(this.maxNumberOfTicks != null && currentNumberOfTicks >= this.maxNumberOfTicks)
         {
@@ -245,9 +261,10 @@ public class WorldInstance implements Serializable, Runnable {
         }
     }
 
-
-    private synchronized boolean checkIfPaused(){
-        return this.status == SimulationStatus.PAUSED;
+    private boolean checkIfPaused(){
+        synchronized (statusLock) {
+            return this.status == SimulationStatus.PAUSED;
+        }
     }
     public boolean isTermination(){
         long timeSimulationRunning = Duration.between(startTime, Instant.now()).getSeconds();
@@ -280,13 +297,44 @@ public class WorldInstance implements Serializable, Runnable {
 
     }
 
+
+    /*  [ (R,0), (P,5), (R,9), (P,30) ]  */
     public long getRunningTime() { //TESTT WILL BE WITH SIMULATION STATE
-        if (startTime == null) //PROBABLY NEED TO SYNCHRONIZE
-            return 0;
-        else if(endTime == null) //PROBABLY NEED TO SYNCHRONIZE
-            return Duration.between(startTime , Instant.now()).getSeconds();
-        else //endTime != null
-            return Duration.between(startTime , endTime).getSeconds();
+//        if (startTime == null) //PROBABLY NEED TO SYNCHRONIZE
+//            return 0;
+//        else if(endTime == null) //PROBABLY NEED TO SYNCHRONIZE
+//            return Duration.between(startTime , Instant.now()).getSeconds();
+//        else //endTime != null
+//            return Duration.between(startTime , endTime).getSeconds();
+
+        synchronized (statusLock) {
+            if (this.status == SimulationStatus.RUNNING)
+                return runningTime + Duration.between(startTime, Instant.now()).getSeconds();
+            else
+                return runningTime;
+        }
+
+//        if(this.statusLog.isEmpty())
+//            return 0;
+//
+//        long totalDuration = 0;
+//        Instant start = null, stop = null;
+//
+//        for (int i = 0; i < statusLog.size(); i++){
+//            if(statusLog.get(i).getKey() == SimulationStatus.RUNNING) {
+//                start = statusLog.get(i).getValue();
+//                if(i == statusLog.size() - 1){
+//                    stop = Instant.now();
+//                    totalDuration += Duration.between(start , stop).getSeconds();
+//                }
+//            }
+//            else if(statusLog.get(i).getKey() == SimulationStatus.PAUSED || statusLog.get(i).getKey() == SimulationStatus.TERMINATED) {
+//                stop = statusLog.get(i).getValue();
+//                totalDuration += Duration.between(start , stop).getSeconds();
+//            }
+//        }
+//
+//        return totalDuration;
     }
 
     public String getDateOfRun() {
@@ -297,7 +345,16 @@ public class WorldInstance implements Serializable, Runnable {
         this.dateOfRun = dateOfRun;
     }
 
-    public synchronized void terminateByUser(){this.status = SimulationStatus.TERMINATED;}
+    public void terminateByUser(){
+        synchronized (statusLock) {
+            if(this.status != SimulationStatus.TERMINATED) {
+                if(this.status == SimulationStatus.RUNNING){
+                    this.runningTime += Duration.between(startTime, Instant.now()).getSeconds();
+                }
+                this.status = SimulationStatus.TERMINATED;
+            }
+        }
+    }
 
     @Override
     public void run() {
