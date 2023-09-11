@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated2";
@@ -35,6 +36,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
     private int numOfThreads = 1;
     ExecutorService threadExecutor;
+    private Map<Integer, Future<?>> runningSimulations;
 
 
 
@@ -105,9 +107,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         return (PRDWorld) u.unmarshal(in);
     }
 
-    private WorldInstance createNewSimulation()
-    {
-        WorldInstance resSimulation = new WorldInstance(this.simulationDef);
+    private WorldInstance createNewSimulation(){
+        WorldInstance resSimulation = new WorldInstance(this.simulationDef, currentSimulationID);
         resSimulation.runInitIteration(this.simulationDef);
         String dateOfRun = simpleDateFormat.format(new Date());
         resSimulation.setDateOfRun(dateOfRun);
@@ -148,13 +149,14 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public pastSimulationDTO runSimulation() {
         WorldInstance currSimulation = this.createNewSimulation();
-        id2pastSimulation.put(currentSimulationID++, currSimulation);
-        threadExecutor.execute(currSimulation);
 
+        id2pastSimulation.put(currentSimulationID, currSimulation);
+        threadExecutor.execute(currSimulation);
 //        TerminationReason terminationReason = simulation.runMainLoop();
 //        currentSimulationID++;
 
 //        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
+        currentSimulationID++;
         return new pastSimulationDTO(currSimulation.getDateOfRun(), currentSimulationID - 1);
 //        return null;
     }
@@ -254,7 +256,22 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
         return entitiesDetails;
     }
-
+    @Override
+    public void pauseSimulation(int simulationID){
+        WorldInstance simulationToPause = id2pastSimulation.get(simulationID);
+        simulationToPause.pauseSimulation();
+    }
+    @Override
+    public void resumeSimulation(int simulationID){
+        WorldInstance simulationToResume = id2pastSimulation.get(simulationID);
+        simulationToResume.resumeSimulation();
+//        threadExecutor.notifyAll();
+    }
+    @Override
+    public void stopSimulation(int simulationID){
+        WorldInstance simulationToResume = id2pastSimulation.get(simulationID);
+        simulationToResume.terminateByUser();
+    }
 
 
     //////////////////////////////////////TRYING PULLING DATA:
@@ -274,7 +291,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
         }
 
-        return new runningSimulationDTO(currentNumberOfTicks, timeRunning, entityCountDtos);
+        return new runningSimulationDTO(currentNumberOfTicks, timeRunning, entityCountDtos, wantedSimulation.getStatusString());
     }
 
 //    public void pauseSimulation(int simulationID){

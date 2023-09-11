@@ -34,4 +34,9 @@ public interface SystemEngine {
 
     //////////////////////////////////////TRYING PULLING DATA:
     runningSimulationDTO pullData(int simulationID);
+
+    void pauseSimulation(int simulationID);
+
+    void resumeSimulation(int simulationID);
+    void stopSimulation(int simulationID);
 }
