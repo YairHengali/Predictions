@@ -37,7 +37,6 @@ public class HeaderController {
     @FXML
     private void initialize(){
         loadFileTF.textProperty().bind(selectedFileProperty);
-
     }
 
     public HeaderController(){
@@ -75,7 +74,7 @@ public class HeaderController {
 
 
             System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
-            mainController.getSystemEngine().clearPastSimulations();
+            mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
             mainController.clearResultsTab();
             mainController.addDataToSimulationTreeView();
             mainController.addDataToEntitiesTable();

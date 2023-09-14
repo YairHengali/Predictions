@@ -96,6 +96,6 @@ public class AppController {
     }
 
     public void clearResultsTab() {
-        resultsComponentController.clearResults();
+        resultsComponentController.clearExecutionList();
     }
 }

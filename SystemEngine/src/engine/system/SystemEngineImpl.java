@@ -141,6 +141,9 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public void clearPastSimulations()
     {
+        threadExecutor.shutdownNow();
+        threadExecutor = Executors.newFixedThreadPool(this.numOfThreads);
+
         id2pastSimulation.clear();
         currentSimulationID = 0;
     }

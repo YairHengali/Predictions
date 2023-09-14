@@ -37,7 +37,7 @@ public class ResultsController {
 
     private AppController mainController;
     Thread dataPullingThread;
-    int currentChosenSimulationID;
+    int currentChosenSimulationID = -1;
     boolean isCurrSimulationTerminatesByUser;
     @FXML
     private HBox simulationHBox;
@@ -63,6 +63,7 @@ public class ResultsController {
         this.mainController = mainController;
     }
 
+    @FXML
     public void initialize(){
 //        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //            showSimulationDetails(newValue);
@@ -79,37 +80,40 @@ public class ResultsController {
 
         dataPullingThread = new Thread(() -> {
             while (true) {
-                runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
-                this.isCurrSimulationTerminatesByUser = testINFO.isTerminateByUser();
-                // Update UI using Platform.runLater()
-                Platform.runLater(() -> {
-                    // Update UI with the collected data:
-                    showRunningSimulationDetails(testINFO, currentChosenSimulationID);
-                    ///TESTING:
-                    textResults.setText("Entities Count:\n" +
-                            testINFO.getEntityCountDTOS().toString() +
-                                    System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
-                                    System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds() +
-                                    System.lineSeparator() + "Status:  " + testINFO.getStatus());
-                    calcDisableValueToAllBTNs(testINFO.getStatus());
-                    ///////////
+                if (currentChosenSimulationID != -1) { // if there is chosen option
+                    runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
+                    this.isCurrSimulationTerminatesByUser = testINFO.isTerminateByUser();
+                    // Update UI using Platform.runLater()
+                    Platform.runLater(() -> {
+                        // Update UI with the collected data:
+                    showRunningSimulationDetails(testINFO, currentChosenSimulationID); noted
+                        ///TESTING:
+                        textResults.setText("Entities Count:\n" +
+                                testINFO.getEntityCountDTOS().toString() +
+                                System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
+                                System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds() +
+                                System.lineSeparator() + "Status:  " + testINFO.getStatus());
+                        calcDisableValueToAllBTNs(testINFO.getStatus());
+                        ///////////
 
-                //NEXT MIGHT NEED THIS:
+                        //NEXT MIGHT NEED THIS:
 //                    if (simulationInfoDTO.getState() != ENDED){
 //                        //INFO ON RUNING SIMULATION
 //                    }
 //                    else{
 //                        //INFO ON ENDED SIMULATION
 //                    }
-                });
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    });
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
     }
+
 
     private void calcDisableValueToAllBTNs(String status)
     {
@@ -135,9 +139,14 @@ public class ResultsController {
 
     }
     private void setChosenID(pastSimulationDTO newValue) {
-        this.currentChosenSimulationID = newValue.getId();
-        if (!dataPullingThread.isAlive()){
-            dataPullingThread.start();
+        if(newValue == null){
+            currentChosenSimulationID = -1;
+        }
+        else{
+            this.currentChosenSimulationID = newValue.getId();
+            if (!dataPullingThread.isAlive()){
+                dataPullingThread.start();
+            }
         }
     }
 
@@ -186,5 +195,10 @@ public class ResultsController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public void clearExecutionList() {
+        executionList.getItems().clear();
     }
 }

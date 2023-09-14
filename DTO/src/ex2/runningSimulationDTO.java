@@ -6,14 +6,14 @@ import java.util.List;
 
 public class runningSimulationDTO {
     int currentTick;
-    int totalTicks;
+    Integer totalTicks;
     long currentSeconds;
-    long totalSeconds;
+    Long totalSeconds;
     String status;
     boolean isTerminateByUser;
     List<EntityCountDTO> entityCountDTOS;
 
-    public runningSimulationDTO(int currentTick, int totalTicks, long currentSeconds, long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS) {
+    public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS) {
         this.currentTick = currentTick;
         this.totalTicks = totalTicks;
         this.currentSeconds = currentSeconds;
