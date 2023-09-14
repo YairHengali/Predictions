@@ -30,13 +30,14 @@
    </opaqueInsets>
    <children>
       <ListView fx:id="executionList" prefHeight="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="2" />
-      <TextArea fx:id="textResults" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <TextArea fx:id="textResults" disable="true" prefHeight="200.0" prefWidth="200.0" visible="false" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2" />
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
             <Button fx:id="pauseBTN" mnemonicParsing="false" onAction="#pauseButtonPressed" prefHeight="25.0" prefWidth="50.0" text="pause" />
             <Button fx:id="resumeBTN" mnemonicParsing="false" onAction="#resumeButtonPressed" text="resume" />
+            <Button fx:id="stopBTN" mnemonicParsing="false" onAction="#stopButtonPressed" text="stop" />
          </children>
       </HBox>
-      <Button fx:id="stopBTN" mnemonicParsing="false" onAction="#stopButtonPressed" text="stop" GridPane.columnIndex="3" GridPane.rowIndex="4" />
    </children>
 </GridPane>

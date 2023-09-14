@@ -51,6 +51,10 @@ public class WorldInstance implements Serializable, Runnable {
     public String getStatusString(){
         return this.status.toString();
     }
+
+    public boolean isTerminateByUser(){
+        return isTerminationByUser;
+    }
     public EntityInstanceManager getEntityInstanceManager() {
         return entityInstanceManager;
     }
@@ -262,7 +266,7 @@ public class WorldInstance implements Serializable, Runnable {
             return this.status == SimulationStatus.PAUSED;
         }
     }
-    public boolean isTermination(){
+    private boolean isTermination(){
         long timeSimulationRunning = Duration.between(startTime, Instant.now()).getSeconds();
 
         synchronized (this) {
@@ -330,6 +334,14 @@ public class WorldInstance implements Serializable, Runnable {
                 this.status = SimulationStatus.TERMINATED;
             }
         }
+    }
+
+    public Integer getMaxNumberOfTicks() {
+        return maxNumberOfTicks;
+    }
+
+    public Long getSecondsToTerminate() {
+        return secondsToTerminate;
     }
 
     @Override
