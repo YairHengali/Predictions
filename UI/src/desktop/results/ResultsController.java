@@ -56,11 +56,6 @@ public class ResultsController {
     Thread dataPullingThread;
     int currentChosenSimulationID;
 
-    public ResultsController() {
-
-
-    }
-
     public void initialize(){
 //        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //            showSimulationDetails(newValue);
