@@ -147,8 +147,6 @@ public class ResultsController {
             }
 
         }
-
-
     }
 
     @FXML
@@ -163,5 +161,9 @@ public class ResultsController {
     @FXML
     void stopButtonPressed(ActionEvent event) {
         mainController.getSystemEngine().stopSimulation(currentChosenSimulationID);
+    }
+
+    public void clearResults() {
+        executionList.getItems().clear();
     }
 }

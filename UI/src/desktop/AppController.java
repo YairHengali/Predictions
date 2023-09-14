@@ -94,4 +94,8 @@ public class AppController {
     public void addDataToEnvVarsTable() {
         executionComponentController.addDataToEnvVarsListView();
     }
+
+    public void clearResultsTab() {
+        resultsComponentController.clearResults();
+    }
 }

@@ -76,9 +76,11 @@ public class HeaderController {
 
             System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
             mainController.getSystemEngine().clearPastSimulations();
+            mainController.clearResultsTab();
             mainController.addDataToSimulationTreeView();
             mainController.addDataToEntitiesTable();
             mainController.addDataToEnvVarsTable();
+
 
         }
         catch (Exception e) {
