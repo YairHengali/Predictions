@@ -35,7 +35,7 @@ public class WorldInstance implements Serializable, Runnable {
     private Instant endTime;
     private SimulationStatus status;
     private final Object statusLock = new Object();
-    private List<Pair<SimulationStatus, Instant>> statusLog;
+
     private int simulationID;
 
 
@@ -47,12 +47,13 @@ public class WorldInstance implements Serializable, Runnable {
         this.isTerminationByUser = worldDef.isTerminationByUser();
         this.simulationID = id;
         this.status = SimulationStatus.CREATED;
-        statusLog = new ArrayList<>();
-
-
     }
     public String getStatusString(){
         return this.status.toString();
+    }
+
+    public boolean isTerminateByUser(){
+        return isTerminationByUser;
     }
     public EntityInstanceManager getEntityInstanceManager() {
         return entityInstanceManager;
@@ -134,18 +135,17 @@ public class WorldInstance implements Serializable, Runnable {
 //        }
 //    }
 
-
     public TerminationReason runMainLoopEx2(){ //TICK 1 and up...;
 //        this.startTime = System.currentTimeMillis(); replaced >
-        this.startTime = Instant.now();
-        currentNumberOfTicks = 1;
-        boolean isTerminated = isTermination();
+        boolean isTerminated = false;
         boolean isPaused = false;
+
 
         synchronized (this){
             this.status = SimulationStatus.RUNNING;
         }
-        this.statusLog.add(new Pair<>(SimulationStatus.RUNNING,Instant.now()));
+        this.startTime = Instant.now();
+        currentNumberOfTicks = 1;
 
 
         while (!isTerminated)
@@ -266,7 +266,7 @@ public class WorldInstance implements Serializable, Runnable {
             return this.status == SimulationStatus.PAUSED;
         }
     }
-    public boolean isTermination(){
+    private boolean isTermination(){
         long timeSimulationRunning = Duration.between(startTime, Instant.now()).getSeconds();
 
         synchronized (this) {
@@ -297,8 +297,6 @@ public class WorldInstance implements Serializable, Runnable {
 
     }
 
-
-    /*  [ (R,0), (P,5), (R,9), (P,30) ]  */
     public long getRunningTime() { //TESTT WILL BE WITH SIMULATION STATE
 //        if (startTime == null) //PROBABLY NEED TO SYNCHRONIZE
 //            return 0;
@@ -307,34 +305,16 @@ public class WorldInstance implements Serializable, Runnable {
 //        else //endTime != null
 //            return Duration.between(startTime , endTime).getSeconds();
 
+
+        // running time is being updated whenever simulation is paused in pauseSimulation(),
+        // startTime is being updated whenever simulation is resumed in resumeSimulation(),
+        // if currently running - summing old value of runningTime and new duration.
         synchronized (statusLock) {
             if (this.status == SimulationStatus.RUNNING)
                 return runningTime + Duration.between(startTime, Instant.now()).getSeconds();
             else
                 return runningTime;
         }
-
-//        if(this.statusLog.isEmpty())
-//            return 0;
-//
-//        long totalDuration = 0;
-//        Instant start = null, stop = null;
-//
-//        for (int i = 0; i < statusLog.size(); i++){
-//            if(statusLog.get(i).getKey() == SimulationStatus.RUNNING) {
-//                start = statusLog.get(i).getValue();
-//                if(i == statusLog.size() - 1){
-//                    stop = Instant.now();
-//                    totalDuration += Duration.between(start , stop).getSeconds();
-//                }
-//            }
-//            else if(statusLog.get(i).getKey() == SimulationStatus.PAUSED || statusLog.get(i).getKey() == SimulationStatus.TERMINATED) {
-//                stop = statusLog.get(i).getValue();
-//                totalDuration += Duration.between(start , stop).getSeconds();
-//            }
-//        }
-//
-//        return totalDuration;
     }
 
     public String getDateOfRun() {
@@ -354,6 +334,14 @@ public class WorldInstance implements Serializable, Runnable {
                 this.status = SimulationStatus.TERMINATED;
             }
         }
+    }
+
+    public Integer getMaxNumberOfTicks() {
+        return maxNumberOfTicks;
+    }
+
+    public Long getSecondsToTerminate() {
+        return secondsToTerminate;
     }
 
     @Override
