@@ -15,6 +15,14 @@ public class Replace extends AbstractAction {
         this.entityToCreateName = entityToCreateName;
     }
 
+    public CreationMode getCreationMode() {
+        return creationMode;
+    }
+
+    public String getEntityToCreateName() {
+        return entityToCreateName;
+    }
+
     @Override
     public void Run(Context context) {
         EntityInstance entityToKill = getMainEntityInstance(context);

@@ -23,6 +23,18 @@ public class SingleCondition extends ConditionImpl implements Condition
         this.secondArgExpression = secondArgExpression;
     }
 
+    public String getFirstArgExpression() {
+        return firstArgExpression;
+    }
+
+    public ConditionOp getOperator() {
+        return operator;
+    }
+
+    public String getSecondArgExpression() {
+        return secondArgExpression;
+    }
+
     @Override
     public void Run(Context context) {
         if (evaluateCondition(context)) {
@@ -41,8 +53,6 @@ public class SingleCondition extends ConditionImpl implements Condition
         PropertyType firstArgType = firstArgAsExpression.evaluateExpressionType();//FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
 
         String firstArg = firstArgAsExpression.praseExpressionToValueString(firstArgType);
-
-//        PropertyInstance propertyToEvaluate = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
 
         //figuring value out of expression
         Expression2 secondArgAsExpression = new Expression2(secondArgExpression, context);

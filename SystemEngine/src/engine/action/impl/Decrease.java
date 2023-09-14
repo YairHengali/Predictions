@@ -21,24 +21,13 @@ public class Decrease extends AbstractAction {
         this.byExpression = byExpression;
     }
 
-//    @Override
-//    public void Run(Context context) {
-//        Expression expression = new Expression(byExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-//        PropertyInstance entityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
-//        String valueFromExpression = expression.praseExpressionToValueString(entityPropertyInstance.getType());
-//
-//        try {
-//            if (entityPropertyInstance instanceof DecimalProperty) {
-//                ((DecimalProperty) entityPropertyInstance).setValue( (Integer.parseInt(entityPropertyInstance.getValue()) - Integer.parseInt(valueFromExpression)) , context.getCurrentTick());
-//            } else if (entityPropertyInstance instanceof FloatProperty) {
-//                ((FloatProperty) entityPropertyInstance).setValue( (Float.parseFloat(entityPropertyInstance.getValue()) - Float.parseFloat(valueFromExpression)) , context.getCurrentTick());
-//            }
-//        } catch (NumberFormatException e)
-//        {
-//            throw new NumberFormatException("can not subtract float to integer in action Decrease\n" + e.getMessage());
-//        }
-//    }
+    public String getPropertyName() {
+        return propertyName;
+    }
 
+    public String getByExpression() {
+        return byExpression;
+    }
 
     @Override
     public void Run(Context context) {

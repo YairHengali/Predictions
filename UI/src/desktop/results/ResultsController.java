@@ -86,7 +86,7 @@ public class ResultsController {
                     // Update UI using Platform.runLater()
                     Platform.runLater(() -> {
                         // Update UI with the collected data:
-                    showRunningSimulationDetails(testINFO, currentChosenSimulationID); noted
+                    showRunningSimulationDetails(testINFO, currentChosenSimulationID);
                         ///TESTING:
                         textResults.setText("Entities Count:\n" +
                                 testINFO.getEntityCountDTOS().toString() +

@@ -24,29 +24,22 @@ public class Proximity extends AbstractAction {
         this.ofExpression = ofExpression;
         this.targetEntityName = targetEntityName;
         thenActions = new ArrayList<>();
-
     }
+
+    public String getOfExpression() {
+        return ofExpression;
+    }
+
+    public String getTargetEntityName() {
+        return targetEntityName;
+    }
+
+    public int getNumOfThenActions(){
+        return thenActions.size();
+    }
+
     @Override
     public void Run(Context context) {
-        //BEFORE getMainEntityInstance(context) FUNCTION:
-//        Expression ofAsExpression = new Expression(ofExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
-//        String ofFromExpression = ofAsExpression.praseExpressionToValueString(PropertyType.FLOAT);
-//
-//        for (EntityInstance targetEntity : context.getEntityInstanceManager().getInstancesListByName(targetEntityName)) {
-//            int depth = Float.valueOf(ofFromExpression).intValue(); //MAYBE ROUND UP/DOWN ACCORDINGLY
-//            if (context.getEntityInstanceManager().isEnt1NearEnt2(context.getPrimaryEntityInstance(), targetEntity, depth)) {
-//                //INVOKE ACTIONS:
-//                for (Action action : thenActions) {
-//                    try {
-//                        action.Run(new ContextImpl(context.getPrimaryEntityInstance(), targetEntity, context.getEntityInstanceManager(), context.getActiveEnvironmentVariables(), context.getCurrentTick()));
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
-//            break;
-//        }
-
         Expression2 ofAsExpression = new Expression2(ofExpression, context);
         String ofFromExpression = ofAsExpression.praseExpressionToValueString(PropertyType.FLOAT);
 

@@ -1,6 +1,9 @@
 package engine.system;
 
 import engine.action.api.Action;
+import engine.action.impl.*;
+import engine.action.impl.condition.impl.MultipleCondition;
+import engine.action.impl.condition.impl.SingleCondition;
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
 import engine.property.PropertyDefinition;
@@ -53,6 +56,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
 
             simulationDef = new WorldDefinition();
             worldDefFactory.insertDataToWorldDefinition(this.simulationDef, generatedWorld);
+
             this.numOfThreads = generatedWorld.getPRDThreadCount();
             threadExecutor = Executors.newFixedThreadPool(this.numOfThreads);
 
@@ -93,6 +97,171 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate(), simulationDef.isTerminationByUser(), simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
         return simulationDetails;
     }
+
+
+    public SimulationDetailsDTO getSimulationDetails3(){
+        SimulationDetailsDTO simulationDetails;
+        List<EntityDTO> entitiesDetails = new ArrayList<>();
+        List<RuleDTO> rulesDetails = new ArrayList<>();
+
+        for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
+            List<PropertyDTO> propertiesDetails = new ArrayList<>();
+            for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
+                addPropertyToDtoList(propertiesDetails, propertyDefinition);
+            }
+            entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
+        }
+
+        List<PropertyDTO> envVarsDetails = getEnvVarsDefinitionDto();
+
+        for (Rule rule: simulationDef.getRules()) {
+            List<ActionDTO> actionsDetails = new ArrayList<>();
+            for (Action action: rule.getActions()){
+                String secondaryEntityName = action.getSecondaryEntityDetails() == null ? null : action.getSecondaryEntityDetails().getName();// TODO: TYPE OF SECONDARY?? what does he meant
+                switch (action.getActionType()) {
+                    case INCREASE:
+                        Increase increaseAction = (Increase) action;
+                        actionsDetails.add(new IncreaseActionDto(increaseAction.getActionType(), increaseAction.getMainEntityName(), secondaryEntityName, increaseAction.getPropertyName(), increaseAction.getByExpression()));
+                        break;
+                    case DECREASE:
+                        Decrease decreaseAction = (Decrease) action;
+                        actionsDetails.add(new IncreaseActionDto(decreaseAction.getActionType(), decreaseAction.getMainEntityName(), secondaryEntityName, decreaseAction.getPropertyName(), decreaseAction.getByExpression()));
+                        break;
+                    case CALCULATION:
+                        Calculation calculationAction = (Calculation) action;
+                        actionsDetails.add(new CalculationActionDto(calculationAction.getActionType(), calculationAction.getMainEntityName(),secondaryEntityName, calculationAction.getCalcType(), calculationAction.getPropertyName(), calculationAction.getArg1Expression(),calculationAction.getArg2Expression()));
+                        break;
+                    case CONDITION:
+                        if (action instanceof SingleCondition)
+                        {
+                            SingleCondition singleConditionAction = (SingleCondition) action;
+                            actionsDetails.add(new SingleConditionDto(singleConditionAction.getActionType(), singleConditionAction.getMainEntityName(), secondaryEntityName, singleConditionAction.getFirstArgExpression(), singleConditionAction.getOperator(), singleConditionAction.getSecondArgExpression(), singleConditionAction.getNumOfThenActions(), singleConditionAction.getNumOfElseActions()));
+                        } else{ // (action instanceof MultipleCondition)
+                            MultipleCondition multipleConditionAction = (MultipleCondition) action;
+                            actionsDetails.add(new MultipleConditionDto(multipleConditionAction.getActionType(), multipleConditionAction.getMainEntityName(), secondaryEntityName, multipleConditionAction.getLogicalOperator(),multipleConditionAction.getNumOfConditions(), multipleConditionAction.getNumOfThenActions(), multipleConditionAction.getNumOfElseActions()));
+                        }
+                        break;
+                    case SET:
+                        SetAction setAction = (SetAction) action;
+                        actionsDetails.add(new SetActionDto(setAction.getActionType(), setAction.getMainEntityName(), secondaryEntityName, setAction.getPropertyName(), setAction.getValueExpression()));
+                        break;
+                    case KILL:
+                        actionsDetails.add(new ActionDto(action.getActionType(), action.getMainEntityName(), secondaryEntityName));
+                        break;
+                    case REPLACE:
+                        break;
+                    case PROXIMITY:
+                        break;
+                }
+
+            }
+            rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
+        }
+
+        simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate(), simulationDef.isTerminationByUser(), simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
+        return simulationDetails;
+    }
+
+//    public SimulationDetailsDTO getSimulationDetails2(PRDWorld generatedWorld){
+//        SimulationDetailsDTO simulationDetails;
+//        List<EntityDTO> entitiesDetails = new ArrayList<>();
+//        List<RuleDTO> rulesDetails = new ArrayList<>();
+//
+//
+//        for (PRDEntity prdEntity: generatedWorld.getPRDEntities().getPRDEntity()) {
+//            List<PropertyDTO> propertiesDetails = new ArrayList<>();
+//
+//            for (PRDProperty prdProperty: prdEntity.getPRDProperties().getPRDProperty()) {
+//                if (prdProperty.getPRDRange() != null) {
+//                    propertiesDetails.add( new PropertyDTO(prdProperty.getPRDName(), prdProperty.getType(), prdProperty.getPRDRange().getFrom(), prdProperty.getPRDRange().getTo(),  prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit()));
+//                }
+//                else{
+//                    propertiesDetails.add( new PropertyDTO(prdProperty.getPRDName(), prdProperty.getType(),null, null,  prdProperty.getPRDValue().isRandomInitialize(), prdProperty.getPRDValue().getInit()));
+//                }
+//            }
+//            entitiesDetails.add(new EntityDTO(prdEntity.getName(),0, propertiesDetails));
+//        }
+//
+//
+//
+//        List<PropertyDTO> envVarsDetails = getEnvVarsDefinitionDto();
+//
+//
+//        for (PRDRule prdRule : generatedWorld.getPRDRules().getPRDRule()) {
+//            List<ActionDTO> actionsDetails = new ArrayList<>();
+//
+//            for (PRDAction prdAction : prdRule.getPRDActions().getPRDAction()){
+//                String secondaryEntityName = prdAction.getPRDSecondaryEntity() == null ? null : prdAction.getPRDSecondaryEntity().getEntity();
+//                switch (prdAction.getType()) {
+//                    case "increase":
+//                    case "decrease":
+//                        actionsDetails.add(new IncreaseActionDTO(prdAction.getType(), prdAction.getEntity(), secondaryEntityName, prdAction.getProperty(), prdAction.getBy()));
+//                        break;
+//                    case "calculation":
+//                        if (prdAction.getPRDMultiply() != null) {
+//                            actionsDetails.add(new CalculationActionDTO(prdAction.getType(), prdAction.getEntity(), secondaryEntityName, prdAction.getResultProp(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), "MULTIPLY"));
+//                        } else if (prdAction.getPRDDivide() != null) {
+//                             actionsDetails.add(new CalculationActionDTO(prdAction.getType(), prdAction.getEntity(), secondaryEntityName, prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), "DIVIDE"));
+//                            }
+//                        break;
+//                    case "condition":
+//                        ConditionImpl resCondition = createConditionAction(prdAction.getEntity(), prdAction.getPRDCondition(), secondaryEntityDetails);
+//
+//                        actionsDetails.add(new ConditionActionDTO(prdAction.getType(), prdAction.getEntity(), secondaryEntityName,
+//                        for (PRDAction prdActionInThen : prdAction.getPRDThen().getPRDAction()) {
+//                            resCondition.addActionToThen(createActionFromPrd(prdActionInThen));
+//                        }
+//
+//                        if (prdAction.getPRDElse() != null) {
+//                            for (PRDAction prdActionInElse : prdAction.getPRDElse().getPRDAction()) {
+//                                resCondition.addActionToElse(createActionFromPrd(prdActionInElse));
+//                            }
+//                        }
+//
+//                        resAction = resCondition;
+//                        break;
+//
+//                    case "set":
+//                        if (!isExistingPropertyInEntity(prdAction.getEntity(), prdAction.getProperty())) {
+//                            throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
+//                        }
+//                        resAction = new SetAction(prdAction.getEntity(), secondaryEntityDetails, prdAction.getProperty(), prdAction.getValue());
+//                        break;
+//
+//                    case "kill":
+//                        resAction = new Kill(prdAction.getEntity(), secondaryEntityDetails);
+//                        break;
+//
+//                    case "replace":
+//                        resAction = new Replace(prdAction.getKill(), prdAction.getCreate(), secondaryEntityDetails, CreationMode.valueOf(prdAction.getMode().toUpperCase()));
+//                        break;
+//                    case "proximity":
+//                        if (!isNumericArg(prdAction.getPRDBetween().getSourceEntity(), prdAction.getPRDEnvDepth().getOf())) {
+//                            throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+//                        } else if (!isNumericArg(prdAction.getPRDBetween().getTargetEntity(), prdAction.getPRDEnvDepth().getOf())) {
+//                            throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+//                        }
+//                        Proximity proximityAction = new Proximity(prdAction.getPRDBetween().getSourceEntity(), secondaryEntityDetails, prdAction.getPRDBetween().getTargetEntity(), prdAction.getPRDEnvDepth().getOf());
+//
+//                        for (PRDAction prdActionInThen : prdAction.getPRDActions().getPRDAction()) {
+//                            proximityAction.addActionToThen(createActionFromPrd(prdActionInThen));
+//                        }
+//
+//                        resAction = proximityAction;
+//                        break;
+//                actionsDetails.add(new ActionDTO(action.getActionType().toString()));
+//            }
+//            rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
+//        }
+//
+//
+//
+//        simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate(), simulationDef.isTerminationByUser(), simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
+//        return simulationDetails;
+//
+//    }
+//    }
+
     private void addPropertyToDtoList(List<PropertyDTO> propertiesDtoList, PropertyDefinition propertyDefinition) {
         if (propertyDefinition.getValueRange() != null) {
             propertiesDtoList.add( new PropertyDTO(propertyDefinition.getName(), propertyDefinition.getType().toString(), propertyDefinition.getValueRange().getFrom(),propertyDefinition.getValueRange().getTo(), propertyDefinition.isInitializedRandomly(), propertyDefinition.getInitValue()));

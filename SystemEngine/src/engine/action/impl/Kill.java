@@ -14,7 +14,6 @@ public class Kill extends AbstractAction {
 
     @Override
     public void Run(Context context) {
-//        context.getEntityInstanceManager().killEntity(context.getPrimaryEntityInstance());
         EntityInstance mainEntity = getMainEntityInstance(context);
         context.getEntityInstanceManager().killEntity(mainEntity);
     }

@@ -25,6 +25,21 @@ public class Calculation extends AbstractAction {
         this.calcType = calcType;
     }
 
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public String getArg1Expression() {
+        return arg1Expression;
+    }
+
+    public String getArg2Expression() {
+        return arg2Expression;
+    }
+
+    public ClacType getCalcType() {
+        return calcType;
+    }
 //    @Override
 //    public void Run(Context context) {
 //

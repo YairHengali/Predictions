@@ -21,6 +21,14 @@ public class SetAction extends AbstractAction {
         this.valueExpression = valueExpression;
     }
 
+    public String getPropertyName() {
+        return propertyName;
+    }
+
+    public String getValueExpression() {
+        return valueExpression;
+    }
+
     @Override
     public void Run(Context context) {
         Expression valueAsExpression = new Expression(valueExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
@@ -54,6 +62,5 @@ public class SetAction extends AbstractAction {
         catch (NumberFormatException e) {
             throw new NumberFormatException("Error in Set action! Can not set the value " + valueFromExpression + " to the " + mainEntityPropertyInstance.getType() + " property: " + mainEntityPropertyInstance.getName());
         }
-
     }
 }

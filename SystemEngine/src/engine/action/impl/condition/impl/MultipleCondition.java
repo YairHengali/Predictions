@@ -18,6 +18,14 @@ public class MultipleCondition extends ConditionImpl implements Condition {
         this.logicalOperator = logicalOperator;
     }
 
+    public LogicalOperator getLogicalOperator() {
+        return logicalOperator;
+    }
+
+    public int getNumOfConditions(){
+        return conditionList.size();
+    }
+
     @Override
     public void Run(Context context) {
         if (evaluateCondition(context)) {

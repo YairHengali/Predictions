@@ -21,6 +21,12 @@ public abstract class ConditionImpl extends AbstractAction implements Condition 
         elseActions = new ArrayList<>();
     }
 
+    public int getNumOfThenActions(){
+        return thenActions.size();
+    }
+    public int getNumOfElseActions(){
+        return elseActions.size();
+    }
     @Override
     public void addActionToThen(Action actionToAdd) {
         this.thenActions.add(actionToAdd);
