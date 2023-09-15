@@ -53,14 +53,14 @@
       </HBox>
       <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+            <HBox fx:id="ticksProgressHBox" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                <children>
                   <Label text="ticks" />
                   <ProgressBar fx:id="ticksProgressBar" prefHeight="18.0" prefWidth="220.0" progress="0.0" />
                   <Label fx:id="ticksPrecentLBL" text="\%" />
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+            <HBox fx:id="timeProgressHBox" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                <children>
                   <Label minWidth="45.0" text="seconds" />
                   <ProgressBar fx:id="timeProgressBar" prefHeight="18.0" prefWidth="220.0" progress="0.0" />

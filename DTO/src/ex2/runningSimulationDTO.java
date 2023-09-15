@@ -43,11 +43,11 @@ public class runningSimulationDTO {
         return status;
     }
 
-    public int getTotalTicks() {
+    public Integer getTotalTicks() {
         return totalTicks;
     }
 
-    public long getTotalSeconds() {
+    public Long getTotalSeconds() {
         return totalSeconds;
     }
 }
