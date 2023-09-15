@@ -87,13 +87,14 @@ public class ResultsController {
                     Platform.runLater(() -> {
                         // Update UI with the collected data:
                     showRunningSimulationDetails(testINFO, currentChosenSimulationID);
+                    calcDisableValueToAllBTNs(testINFO.getStatus());
+
                         ///TESTING:
-                        textResults.setText("Entities Count:\n" +
-                                testINFO.getEntityCountDTOS().toString() +
-                                System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
-                                System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds() +
-                                System.lineSeparator() + "Status:  " + testINFO.getStatus());
-                        calcDisableValueToAllBTNs(testINFO.getStatus());
+                                textResults.setText("Entities Count:\n" +
+                                        testINFO.getEntityCountDTOS().toString() +
+                                        System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
+                                        System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds() +
+                                        System.lineSeparator() + "Status:  " + testINFO.getStatus());
                         ///////////
 
                         //NEXT MIGHT NEED THIS:
@@ -154,7 +155,6 @@ public class ResultsController {
     void pauseButtonPressed(ActionEvent event) {
         mainController.getSystemEngine().pauseSimulation(currentChosenSimulationID);
     }
-
     @FXML
     void resumeButtonPressed(ActionEvent event) {
         mainController.getSystemEngine().resumeSimulation(currentChosenSimulationID);
@@ -165,6 +165,8 @@ public class ResultsController {
     }
 
     private void showRunningSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
+
+
         if (!id2simulationComponent.containsKey(simulationID)) {
             createRunningSimulationComponent(simulationDTO, simulationID);
         }
@@ -172,10 +174,12 @@ public class ResultsController {
             id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
         }
 
-        if(!simulationHBox.getChildren().isEmpty())
+        if(!simulationHBox.getChildren().isEmpty()) {
             simulationHBox.getChildren().clear();
+        }
 
         simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
+
     }
     private void createRunningSimulationComponent(runningSimulationDTO simulationDTO, int simulationID)
     {
