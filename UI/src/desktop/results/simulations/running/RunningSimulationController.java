@@ -87,14 +87,14 @@ public class RunningSimulationController implements simulationControllerAPI {
 
         if(isTimeProgress) {
             this.showingTimeProgress.set(true);
-            setTimeProgressBar(simulationDTO.getCurrentSeconds(), 100);
+            setTimeProgressBar(simulationDTO.getCurrentSeconds(), simulationDTO.getTotalSeconds());
         }
         else
             this.showingTimeProgress.set(false);
 
         if(isTicksProgress) {
             this.showingTicksProgress.set(true);
-            setTicksProgressBar(simulationDTO.getCurrentTick(), 100);
+            setTicksProgressBar(simulationDTO.getCurrentTick(), simulationDTO.getTotalTicks());
         }
         else
             this.showingTicksProgress.set(false);
