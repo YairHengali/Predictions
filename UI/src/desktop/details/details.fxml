@@ -4,10 +4,11 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.details.DetailsController">
+<GridPane hgap="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.details.DetailsController">
    <columnConstraints>
       <ColumnConstraints hgrow="NEVER" minWidth="20.0" prefWidth="20.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -24,7 +25,14 @@
    </rowConstraints>
    <children>
       <TreeView fx:id="simulationTV" prefHeight="200.0" prefWidth="234.0" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="3" />
-      <TextArea fx:id="detailsTextArea" editable="false" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+      <FlowPane fx:id="detailsFlowPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <children>
+            <TextArea fx:id="detailsTextArea" editable="false" prefHeight="50.0" prefWidth="50.0" />
+         </children>
+      </FlowPane>
    </children>
    <opaqueInsets>
       <Insets />

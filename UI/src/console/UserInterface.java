@@ -342,7 +342,7 @@ public class UserInterface {
             System.out.println("    Number of actions: " + ruleDTO.getActions().size());
             System.out.println("    Actions names: ");
             for (ActionDTO actionDTO : ruleDTO.getActions()){
-                System.out.println("        Name: " + actionDTO.getName());
+                System.out.println("        Name: " + actionDTO.getType());
             }
             System.out.println();
         }

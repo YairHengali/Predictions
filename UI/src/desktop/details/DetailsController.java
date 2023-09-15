@@ -1,12 +1,20 @@
 package desktop.details;
 
 import desktop.AppController;
+import desktop.details.action.api.ActionControllerAPI;
+import engine.action.api.ActionType;
 import engineAnswers.*;
+import ex2.actions.SingleConditionDTO;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +24,8 @@ public class DetailsController {
     private TreeView<String> simulationTV;
     @FXML
     private TextArea detailsTextArea;
+    @FXML
+    private FlowPane detailsFlowPane;
     private AppController mainController;
 
     Map<TreeItem<String>, String> treeItem2Details = new HashMap<>(); //TODO: HOW TO IMPLEMENT THE MASTER DETAILS??
@@ -28,6 +38,8 @@ public class DetailsController {
 
     private void showDetails(TreeItem<String> selectedNode) { //TODO: can change in simulationDetailsDTO to maps but for now tried like that
         SimulationDetailsDTO simulationDetailsDTO = mainController.getSystemEngine().getSimulationDetails();
+        detailsFlowPane.getChildren().clear();
+
         if (selectedNode != null && selectedNode.isLeaf()) {
             String selectedNodeValue = selectedNode.getValue();
             String details = "";
@@ -50,6 +62,17 @@ public class DetailsController {
                         //TODO: make it a component
                         details = ("Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
                                 "Probability for activation: " + ruleDTO.getProbabilityForActivation() + System.lineSeparator());
+                    }
+                }
+            }
+
+            else if (selectedNodeValue.equals("Actions")) {
+                String selectedNodeRuleName = selectedNode.getParent().getValue();
+                for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
+                    if (ruleDTO.getName().equals(selectedNodeRuleName)) {
+                        for (ActionDTO actionDTO : ruleDTO.getActions()) {
+                            detailsFlowPane.getChildren().add(createActionComponent(actionDTO));
+                        }
                     }
                 }
             }
@@ -130,11 +153,18 @@ public class DetailsController {
                 }
             }
 
-            detailsTextArea.setText(details);
-        } else { //FOR CLEANUP WHEN NOT LEAF
 
-            detailsTextArea.setText("");
+//            if(!detailsFlowPane.getChildren().isEmpty())
+//                detailsFlowPane.getChildren().clear();
+
+            detailsTextArea.setText(details);
+//            detailsTextArea.setVisible(true);
+            detailsFlowPane.getChildren().add(detailsTextArea);
         }
+//        else { //FOR CLEANUP WHEN NOT LEAF
+//
+//            detailsTextArea.setText("");
+//        }
     }
 
     public void setMainController(AppController mainController) {
@@ -171,7 +201,7 @@ public class DetailsController {
 
             TreeItem<String> actionsItem = new TreeItem<>("Actions");
 //            for (ActionDTO actionDTO: ruleDTO.getActions()) { //ADD INNER ACTIONS TO TREE:
-//                actionsItem.getChildren().add(new TreeItem<>(actionDTO.getName()));
+//                actionsItem.getChildren().add(new TreeItem<>(actionDTO.getType()));
 //            };
 
             ruleItem.getChildren().add(actionsItem);
@@ -191,5 +221,54 @@ public class DetailsController {
         rootItem.getChildren().add(gridItem);
         this.simulationTV.setRoot(rootItem);
         this.simulationTV.refresh();
+    }
+
+    private Node createActionComponent(ActionDTO actionDTO)
+    {
+        try {
+            FXMLLoader loaderComponent = new FXMLLoader();
+            Node component = null;
+            ActionControllerAPI actionController = null;
+
+            switch (ActionType.valueOf(actionDTO.getType().toUpperCase())) {
+                case INCREASE:
+                case DECREASE:
+                    loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/increase.fxml"));
+                    break;
+                case CALCULATION:
+                    loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/calculation.fxml"));
+                    break;
+                case CONDITION:
+                    if (actionDTO instanceof SingleConditionDTO)
+                        loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/simpleCondition.fxml"));
+                    else // (actionDTO instanceof MultipleConditionDTO)
+                        loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/multipleCondition.fxml"));
+                    break;
+                case SET:
+                    loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/set.fxml"));
+                    break;
+                case KILL:
+                    loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/kill.fxml"));
+                    break;
+                case REPLACE:
+                    loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/replace.fxml"));
+                    break;
+                case PROXIMITY:
+                    loaderComponent.setLocation(getClass().getResource("/desktop/details/action/impl/proximity.fxml"));
+                    break;
+            }
+
+            component = loaderComponent.load();
+            actionController = loaderComponent.getController();
+            actionController.setDataFromDTO(actionDTO);
+
+            return component;
+//            name2envVarController.put(envVarDTO.getName(), envVarController);
+//            name2envVarComponent.put(envVarDTO.getName(), component);
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

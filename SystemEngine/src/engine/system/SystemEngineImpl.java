@@ -4,6 +4,7 @@ import engine.action.api.Action;
 import engine.action.impl.*;
 import engine.action.impl.condition.impl.MultipleCondition;
 import engine.action.impl.condition.impl.SingleCondition;
+import engine.action.impl.replace.Replace;
 import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
 import engine.property.PropertyDefinition;
@@ -14,6 +15,7 @@ import engine.world.WorldInstance;
 import engine.world.factory.WorldDefFactory;
 import engine.world.factory.WorldDefFactoryImpl;
 import engineAnswers.*;
+import ex2.actions.*;
 import ex2.runningSimulationDTO;
 import jaxb.generated2.*;
 
@@ -70,36 +72,37 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             throw new RuntimeException(e.getMessage());
         }
     }
+//    @Override
+//    public SimulationDetailsDTO getSimulationDetails() {
+//        SimulationDetailsDTO simulationDetails;
+//        List<EntityDTO> entitiesDetails = new ArrayList<>();
+//        List<RuleDTO> rulesDetails = new ArrayList<>();
+//
+//        for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
+//            List<PropertyDTO> propertiesDetails = new ArrayList<>();
+//            for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
+//                addPropertyToDtoList(propertiesDetails, propertyDefinition);
+//            }
+//            entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
+//        }
+//
+//        List<PropertyDTO> envVarsDetails = getEnvVarsDefinitionDto();
+//
+//        for (Rule rule: simulationDef.getRules()) {
+//            List<ActionDTO> actionsDetails = new ArrayList<>();
+//            for (Action action: rule.getActions()){
+//                actionsDetails.add(new ActionDTO(action.getActionType().toString()));
+//            }
+//            rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
+//        }
+//
+//        simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate(), simulationDef.isTerminationByUser(), simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
+//        return simulationDetails;
+//    }
+//
+
     @Override
-    public SimulationDetailsDTO getSimulationDetails() {
-        SimulationDetailsDTO simulationDetails;
-        List<EntityDTO> entitiesDetails = new ArrayList<>();
-        List<RuleDTO> rulesDetails = new ArrayList<>();
-
-        for (EntityDefinition entityDefinition: simulationDef.getEntitiesDefinitions()) {
-            List<PropertyDTO> propertiesDetails = new ArrayList<>();
-            for (PropertyDefinition propertyDefinition: entityDefinition.getName2propertyDef().values()) {
-                addPropertyToDtoList(propertiesDetails, propertyDefinition);
-            }
-            entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
-        }
-
-        List<PropertyDTO> envVarsDetails = getEnvVarsDefinitionDto();
-
-        for (Rule rule: simulationDef.getRules()) {
-            List<ActionDTO> actionsDetails = new ArrayList<>();
-            for (Action action: rule.getActions()){
-                actionsDetails.add(new ActionDTO(action.getActionType().toString()));
-            }
-            rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
-        }
-
-        simulationDetails = new SimulationDetailsDTO(entitiesDetails, envVarsDetails, rulesDetails, simulationDef.getMaxNumberOfTicks(), simulationDef.getSecondsToTerminate(), simulationDef.isTerminationByUser(), simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
-        return simulationDetails;
-    }
-
-
-    public SimulationDetailsDTO getSimulationDetails3(){
+    public SimulationDetailsDTO getSimulationDetails(){
         SimulationDetailsDTO simulationDetails;
         List<EntityDTO> entitiesDetails = new ArrayList<>();
         List<RuleDTO> rulesDetails = new ArrayList<>();
@@ -118,42 +121,47 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             List<ActionDTO> actionsDetails = new ArrayList<>();
             for (Action action: rule.getActions()){
                 String secondaryEntityName = action.getSecondaryEntityDetails() == null ? null : action.getSecondaryEntityDetails().getName();// TODO: TYPE OF SECONDARY?? what does he meant
+                String actionType = action.getActionType().toString();
+
                 switch (action.getActionType()) {
                     case INCREASE:
                         Increase increaseAction = (Increase) action;
-                        actionsDetails.add(new IncreaseActionDto(increaseAction.getActionType(), increaseAction.getMainEntityName(), secondaryEntityName, increaseAction.getPropertyName(), increaseAction.getByExpression()));
+                        actionsDetails.add(new IncreaseActionDTO(actionType, increaseAction.getMainEntityName(), secondaryEntityName, increaseAction.getPropertyName(), increaseAction.getByExpression()));
                         break;
                     case DECREASE:
                         Decrease decreaseAction = (Decrease) action;
-                        actionsDetails.add(new IncreaseActionDto(decreaseAction.getActionType(), decreaseAction.getMainEntityName(), secondaryEntityName, decreaseAction.getPropertyName(), decreaseAction.getByExpression()));
+                        actionsDetails.add(new IncreaseActionDTO(actionType, decreaseAction.getMainEntityName(), secondaryEntityName, decreaseAction.getPropertyName(), decreaseAction.getByExpression()));
                         break;
                     case CALCULATION:
                         Calculation calculationAction = (Calculation) action;
-                        actionsDetails.add(new CalculationActionDto(calculationAction.getActionType(), calculationAction.getMainEntityName(),secondaryEntityName, calculationAction.getCalcType(), calculationAction.getPropertyName(), calculationAction.getArg1Expression(),calculationAction.getArg2Expression()));
+                        actionsDetails.add(new CalculationActionDTO(actionType, calculationAction.getMainEntityName(),secondaryEntityName, calculationAction.getCalcType().toString(), calculationAction.getPropertyName(), calculationAction.getArg1Expression(),calculationAction.getArg2Expression()));
                         break;
                     case CONDITION:
                         if (action instanceof SingleCondition)
                         {
                             SingleCondition singleConditionAction = (SingleCondition) action;
-                            actionsDetails.add(new SingleConditionDto(singleConditionAction.getActionType(), singleConditionAction.getMainEntityName(), secondaryEntityName, singleConditionAction.getFirstArgExpression(), singleConditionAction.getOperator(), singleConditionAction.getSecondArgExpression(), singleConditionAction.getNumOfThenActions(), singleConditionAction.getNumOfElseActions()));
+                            actionsDetails.add(new SingleConditionDTO(actionType, singleConditionAction.getMainEntityName(), secondaryEntityName, singleConditionAction.getFirstArgExpression(), singleConditionAction.getOperator().toString(), singleConditionAction.getSecondArgExpression(), singleConditionAction.getNumOfThenActions(), singleConditionAction.getNumOfElseActions()));
                         } else{ // (action instanceof MultipleCondition)
                             MultipleCondition multipleConditionAction = (MultipleCondition) action;
-                            actionsDetails.add(new MultipleConditionDto(multipleConditionAction.getActionType(), multipleConditionAction.getMainEntityName(), secondaryEntityName, multipleConditionAction.getLogicalOperator(),multipleConditionAction.getNumOfConditions(), multipleConditionAction.getNumOfThenActions(), multipleConditionAction.getNumOfElseActions()));
+                            actionsDetails.add(new MultipleConditionDTO(actionType, multipleConditionAction.getMainEntityName(), secondaryEntityName, multipleConditionAction.getLogicalOperator().toString(),multipleConditionAction.getNumOfConditions(), multipleConditionAction.getNumOfThenActions(), multipleConditionAction.getNumOfElseActions()));
                         }
                         break;
                     case SET:
                         SetAction setAction = (SetAction) action;
-                        actionsDetails.add(new SetActionDto(setAction.getActionType(), setAction.getMainEntityName(), secondaryEntityName, setAction.getPropertyName(), setAction.getValueExpression()));
+                        actionsDetails.add(new SetActionDTO(actionType, setAction.getMainEntityName(), secondaryEntityName, setAction.getPropertyName(), setAction.getValueExpression()));
                         break;
                     case KILL:
-                        actionsDetails.add(new ActionDto(action.getActionType(), action.getMainEntityName(), secondaryEntityName));
+                        actionsDetails.add(new ActionDTO(actionType, action.getMainEntityName(), secondaryEntityName));
                         break;
                     case REPLACE:
+                        Replace replaceAction = (Replace) action;
+                        actionsDetails.add(new ReplaceActionDTO(actionType, replaceAction.getMainEntityName(), secondaryEntityName, replaceAction.getEntityToCreateName(), replaceAction.getCreationMode().toString()));
                         break;
                     case PROXIMITY:
+                        Proximity proximityAction = (Proximity) action;
+                        actionsDetails.add(new ProximityActionDTO(actionType, proximityAction.getMainEntityName(), secondaryEntityName, proximityAction.getTargetEntityName(), proximityAction.getOfExpression(), proximityAction.getNumOfThenActions()));
                         break;
                 }
-
             }
             rulesDetails.add(new RuleDTO(rule.getName(), rule.getTicksForActivations(), rule.getProbForActivations(), actionsDetails));
         }

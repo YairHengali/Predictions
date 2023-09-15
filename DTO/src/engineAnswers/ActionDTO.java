@@ -1,13 +1,25 @@
 package engineAnswers;
 
 public class ActionDTO {
-    private final String name;
+    private final String type;
+    private final String mainEntityName;
+    private final String secondaryEntityName; //TODO: more details?
 
-    public ActionDTO(String name) {
-        this.name = name;
+    public ActionDTO(String type, String mainEntityName, String secondaryEntityName) {
+        this.type = type;
+        this.mainEntityName = mainEntityName;
+        this.secondaryEntityName = secondaryEntityName;
     }
 
-    public String getName() {
-        return name;
+    public String getMainEntityName() {
+        return mainEntityName;
+    }
+
+    public String getSecondaryEntityName() {
+        return secondaryEntityName;
+    }
+
+    public String getType() {
+        return type;
     }
 }
