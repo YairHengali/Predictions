@@ -1,6 +1,7 @@
 package engine.system;
 
 import engineAnswers.*;
+import ex2.ThreadpoolDTO;
 import ex2.runningSimulationDTO;
 
 import java.util.Collection;
@@ -39,4 +40,7 @@ public interface SystemEngine {
 
     void resumeSimulation(int simulationID);
     void stopSimulation(int simulationID);
+
+    ThreadpoolDTO getThreadpoolData();
+
 }

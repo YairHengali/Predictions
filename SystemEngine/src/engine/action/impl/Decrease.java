@@ -5,7 +5,6 @@ import engine.action.api.ActionType;
 import engine.context.Context;
 import engine.entity.EntityInstance;
 import engine.expression.Expression;
-import engine.expression.Expression2;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -31,7 +30,7 @@ public class Decrease extends AbstractAction {
 
     @Override
     public void Run(Context context) {
-        Expression2 byAsExpression = new Expression2(byExpression, context);
+        Expression byAsExpression = new Expression(byExpression, context);
         //USING PROTECTED METHOD:
         EntityInstance mainEntity = getMainEntityInstance(context);
 

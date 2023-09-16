@@ -31,7 +31,7 @@ public class SetAction extends AbstractAction {
 
     @Override
     public void Run(Context context) {
-        Expression valueAsExpression = new Expression(valueExpression, context.getActiveEnvironmentVariables(), context.getPrimaryEntityInstance());
+        Expression valueAsExpression = new Expression(valueExpression, context);
 
 //        PropertyInstance EntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);
         EntityInstance mainEntity = getMainEntityInstance(context);
