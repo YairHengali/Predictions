@@ -26,7 +26,6 @@ public class DetailsController {
     @FXML
     private VBox detailsVBox;
     private AppController mainController;
-    Map<TreeItem<String>, String> treeItem2Details = new HashMap<>(); //TODO: HOW TO IMPLEMENT THE MASTER DETAILS??
 
     public void initialize() {
         simulationTV.getSelectionModel().selectedItemProperty().addListener(
@@ -70,6 +69,7 @@ public class DetailsController {
                     if (ruleDTO.getName().equals(selectedNodeRuleName)) {
                         for (ActionDTO actionDTO : ruleDTO.getActions()) {
                             detailsVBox.getChildren().add(createActionComponent(actionDTO));
+                            detailsVBox.getChildren().add(new Label());
                         }
                     }
                 }
