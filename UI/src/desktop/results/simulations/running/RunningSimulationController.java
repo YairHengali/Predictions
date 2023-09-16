@@ -111,7 +111,7 @@ public class RunningSimulationController implements simulationControllerAPI {
     private void setTimeProgressBar(long currTime, long totalTime){
         double progress = (double) currTime /totalTime;
         timeProgressBar.setProgress(progress);
-        timeProgress.set(progress * 77);
+        timeProgress.set(progress * 100);
     }
 
     private void bindDataToEntityTableView(runningSimulationDTO simulationDTO){

@@ -267,7 +267,8 @@ public class WorldInstance implements Serializable, Runnable {
         }
     }
     private boolean isTermination(){
-        long timeSimulationRunning = Duration.between(startTime, Instant.now()).getSeconds();
+
+        long timeSimulationRunning = getRunningTime();
 
         synchronized (this) {
             if (this.status == SimulationStatus.TERMINATED)
