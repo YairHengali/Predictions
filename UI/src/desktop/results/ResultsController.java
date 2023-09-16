@@ -88,22 +88,6 @@ public class ResultsController {
                         // Update UI with the collected data:
                     showRunningSimulationDetails(testINFO, currentChosenSimulationID);
                     calcDisableValueToAllBTNs(testINFO.getStatus());
-
-                        ///TESTING:
-                                textResults.setText("Entities Count:\n" +
-                                        testINFO.getEntityCountDTOS().toString() +
-                                        System.lineSeparator() + "Current Tick:  " + testINFO.getCurrentTick() +
-                                        System.lineSeparator() + "Current Seconds:  " + testINFO.getCurrentSeconds() +
-                                        System.lineSeparator() + "Status:  " + testINFO.getStatus());
-                        ///////////
-
-                        //NEXT MIGHT NEED THIS:
-//                    if (simulationInfoDTO.getState() != ENDED){
-//                        //INFO ON RUNING SIMULATION
-//                    }
-//                    else{
-//                        //INFO ON ENDED SIMULATION
-//                    }
                     });
                     try {
                         Thread.sleep(300);
@@ -118,27 +102,27 @@ public class ResultsController {
 
     private void calcDisableValueToAllBTNs(String status)
     {
+        if (status.equals("TERMINATED") || status.equals("CREATED")) {
+            disablePause.set(true);
+            disableStop.set(true);
+            disableResume.set(true);
+
+        } else if (status.equals("PAUSED")) {
+            disablePause.set(true);
+            disableStop.set(false);
+            disableResume.set(false);
+        } else if (status.equals("RUNNING")) {
+            disablePause.set(false);
+            disableStop.set(false);
+            disableResume.set(true);
+        }
+
         if(!this.isCurrSimulationTerminatesByUser){
             disableStop.set(true);
         }
-        else {
-            if (status.equals("TERMINATED") || status.equals("CREATED")) {
-                disablePause.set(true);
-                disableStop.set(true);
-                disableResume.set(true);
-
-            } else if (status.equals("PAUSED")) {
-                disablePause.set(true);
-                disableStop.set(false);
-                disableResume.set(false);
-            } else if (status.equals("RUNNING")) {
-                disablePause.set(false);
-                disableStop.set(false);
-                disableResume.set(true);
-            }
-        }
-
     }
+
+
     private void setChosenID(pastSimulationDTO newValue) {
         if(newValue == null){
             currentChosenSimulationID = -1;
