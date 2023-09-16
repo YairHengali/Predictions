@@ -149,7 +149,7 @@ public class GridManagerImpl implements GridManagerAPI {
     }
 
     @Override
-    public boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth){ //TODO: VALIDATE (ALSO THERE ARE COPIES OF LOCATIONS IN THE SET IF ITS MATTER..)
+    public boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth){ //TODO:(THERE ARE COPIES OF LOCATIONS IN THE SET IF ITS MATTER..)
         int row = ent1.getGridLocation().getRow();
         int col = ent1.getGridLocation().getCol();
 
@@ -173,7 +173,7 @@ public class GridManagerImpl implements GridManagerAPI {
         }
 
         for (GridLocation location: nearbyLocations) {
-            if (grid.get(location) == ent2) //TODO: IS GOOD OR EQUALS/ID? (IF NOT MIGHT BE BETTER IF WILL WORK..
+            if (grid.get(location) == ent2)
                 return true;
         }
 

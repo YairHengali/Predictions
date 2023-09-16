@@ -7,9 +7,7 @@ import engine.context.Context;
 import engine.context.ContextImpl;
 import engine.entity.EntityInstance;
 import engine.expression.Expression;
-import engine.expression.Expression2;
 import engine.property.PropertyType;
-import engine.property.api.PropertyInstance;
 import engine.world.factory.SecondaryEntityDetails;
 
 import java.util.ArrayList;
@@ -40,7 +38,7 @@ public class Proximity extends AbstractAction {
 
     @Override
     public void Run(Context context) {
-        Expression2 ofAsExpression = new Expression2(ofExpression, context);
+        Expression ofAsExpression = new Expression(ofExpression, context);
         String ofFromExpression = ofAsExpression.praseExpressionToValueString(PropertyType.FLOAT);
 
         EntityInstance sourceEntityInstance = getMainEntityInstance(context);

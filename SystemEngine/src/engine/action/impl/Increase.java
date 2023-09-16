@@ -4,7 +4,7 @@ import engine.action.api.AbstractAction;
 import engine.action.api.ActionType;
 import engine.context.Context;
 import engine.entity.EntityInstance;
-import engine.expression.Expression2;
+import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -30,7 +30,7 @@ public class Increase extends AbstractAction {
 
     @Override
     public void Run(Context context) {
-        Expression2 byAsExpression = new Expression2(byExpression, context);
+        Expression byAsExpression = new Expression(byExpression, context);
 //        PropertyInstance mainEntityPropertyInstance;
 //        if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
 //            mainEntityPropertyInstance = context.getPrimaryEntityInstance().getPropertyByName(propertyName);

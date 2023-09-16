@@ -5,7 +5,7 @@ import engine.action.api.ActionType;
 import engine.action.api.ClacType;
 import engine.context.Context;
 import engine.entity.EntityInstance;
-import engine.expression.Expression2;
+import engine.expression.Expression;
 import engine.property.api.PropertyInstance;
 import engine.property.impl.DecimalProperty;
 import engine.property.impl.FloatProperty;
@@ -97,8 +97,8 @@ public class Calculation extends AbstractAction {
     @Override
     public void Run(Context context) {
 
-        Expression2 arg1AsExpression = new Expression2(arg1Expression, context);
-        Expression2 arg2AsExpression = new Expression2(arg2Expression, context);
+        Expression arg1AsExpression = new Expression(arg1Expression, context);
+        Expression arg2AsExpression = new Expression(arg2Expression, context);
 
         EntityInstance mainEntityInstance = getMainEntityInstance(context);
         PropertyInstance mainEntityPropertyInstance = mainEntityInstance.getPropertyByName(propertyName);

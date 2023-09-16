@@ -5,9 +5,7 @@ import engine.action.impl.condition.ConditionOp;
 import engine.action.impl.condition.api.Condition;
 import engine.context.Context;
 import engine.expression.Expression;
-import engine.expression.Expression2;
 import engine.property.PropertyType;
-import engine.property.api.PropertyInstance;
 import engine.world.factory.SecondaryEntityDetails;
 
 public class SingleCondition extends ConditionImpl implements Condition
@@ -49,13 +47,13 @@ public class SingleCondition extends ConditionImpl implements Condition
     public boolean evaluateCondition(Context context) {
         boolean result = false;
 
-        Expression2 firstArgAsExpression = new Expression2(firstArgExpression, context);
+        Expression firstArgAsExpression = new Expression(firstArgExpression, context);
         PropertyType firstArgType = firstArgAsExpression.evaluateExpressionType();//FIND ITS TYPE, AND THIS WILL BE THE REQUIRED TYPE FOR OTHER VALUETOCOMPARE
 
         String firstArg = firstArgAsExpression.praseExpressionToValueString(firstArgType);
 
         //figuring value out of expression
-        Expression2 secondArgAsExpression = new Expression2(secondArgExpression, context);
+        Expression secondArgAsExpression = new Expression(secondArgExpression, context);
         String secondArg = secondArgAsExpression.praseExpressionToValueString(firstArgType);
 
         try {
