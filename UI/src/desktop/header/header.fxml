@@ -7,19 +7,33 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="84.0" prefWidth="530.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.header.HeaderController">
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.header.HeaderController">
    <children>
       <Label text="Predictions" />
-      <HBox prefWidth="200.0">
+      <HBox spacing="7.0">
          <children>
             <Button fx:id="loadFileBTN" mnemonicParsing="false" onAction="#loadFileButtonActionListener" text="Load XML File" />
             <TextField fx:id="loadFileTF" editable="false" minWidth="300.0" prefHeight="25.0" text="No file Loaded">
                <HBox.margin>
-                  <Insets left="5.0" />
+                  <Insets />
                </HBox.margin></TextField>
+            <VBox>
+               <children>
+                  <Label text="Waiting Simulations:" />
+                  <Label text="Running Simulations:" />
+                  <Label text="Ended Simulations" />
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label fx:id="waitingLabel" text="0" />
+                  <Label fx:id="runningLabel" text="0" />
+                  <Label fx:id="endedLabel" text="0" />
+               </children>
+            </VBox>
          </children>
          <padding>
-            <Insets bottom="10.0" left="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
       </HBox>
    </children>

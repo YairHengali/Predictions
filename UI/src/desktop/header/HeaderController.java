@@ -1,34 +1,38 @@
 package desktop.header;
 
 import desktop.AppController;
-import engineAnswers.EntityDTO;
-import engineAnswers.PropertyDTO;
-import engineAnswers.RuleDTO;
-import engineAnswers.SimulationDetailsDTO;
+import ex2.ThreadpoolDTO;
+import ex2.runningSimulationDTO;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.IOException;
 
 public class HeaderController {
 
-
     @FXML private Button loadFileBTN;
     @FXML private TextField loadFileTF;
+    @FXML
+    private Label waitingLabel;
+
+    @FXML
+    private Label runningLabel;
+
+    @FXML
+    private Label endedLabel;
+
 
     private AppController mainController;
     private String lastAccessedFolderPath = "";
     private SimpleStringProperty selectedFileProperty;
+
+    Thread ThreadpoolDataPullingThread;
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
@@ -37,6 +41,23 @@ public class HeaderController {
     @FXML
     private void initialize(){
         loadFileTF.textProperty().bind(selectedFileProperty);
+
+        ThreadpoolDataPullingThread = new Thread(() -> {
+            while (true) {
+                ThreadpoolDTO threadpoolData = mainController.getSystemEngine().getThreadpoolData();
+
+                Platform.runLater(() -> {
+                    waitingLabel.setText(String.valueOf(threadpoolData.getWaitingSimulations()));
+                    runningLabel.setText(String.valueOf(threadpoolData.getRunningSimulations()));
+                    endedLabel.setText(String.valueOf(threadpoolData.getEndedSimulations()));
+                    });
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
     }
 
     public HeaderController(){
@@ -75,12 +96,13 @@ public class HeaderController {
 
             System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
             mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
+            if (!ThreadpoolDataPullingThread.isAlive()){
+                ThreadpoolDataPullingThread.start();
+            }
             mainController.clearResultsTab();
             mainController.addDataToSimulationTreeView();
             mainController.addDataToEntitiesTable();
             mainController.addDataToEnvVarsTable();
-
-
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + System.lineSeparator());
