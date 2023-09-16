@@ -1,6 +1,7 @@
 package desktop.results;
 
 import desktop.AppController;
+import desktop.results.simulations.running.RunningSimulationController;
 import desktop.results.simulations.simulationControllerAPI;
 import engineAnswers.pastSimulationDTO;
 import ex2.runningSimulationDTO;
@@ -26,28 +27,19 @@ public class ResultsController {
     @FXML
     private TextArea textResults;
 
-    @FXML
-    private Button pauseBTN;
 
-    @FXML
-    private Button stopBTN;
-
-    @FXML
-    private Button resumeBTN;
 
     private AppController mainController;
     Thread dataPullingThread;
     int currentChosenSimulationID = -1;
-    boolean isCurrSimulationTerminatesByUser;
+
     @FXML
     private HBox simulationHBox;
 
     private Map<Integer, Node> id2simulationComponent = new HashMap<>();
     private Map<Integer, simulationControllerAPI> id2simulationController = new HashMap<>();
 
-    private SimpleBooleanProperty disablePause = new SimpleBooleanProperty(true);
-    private SimpleBooleanProperty disableStop = new SimpleBooleanProperty(true);
-    private SimpleBooleanProperty disableResume = new SimpleBooleanProperty(true);
+
 
     public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
 //        executionList.getItems().clear();
@@ -68,12 +60,13 @@ public class ResultsController {
 //        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 //            showSimulationDetails(newValue);
 //        });
-        this.pauseBTN.disableProperty().bind(disablePause);
-        this.resumeBTN.disableProperty().bind(disableResume);
-        this.stopBTN.disableProperty().bind(disableStop);
+
 
         executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             setChosenID(newValue);
+            if(this.id2simulationController.containsKey(newValue.getId())){
+                this.id2simulationController.get(newValue.getId()).setCurrentChosenSimulationID(newValue.getId());
+            }
         });
 
 
@@ -82,12 +75,16 @@ public class ResultsController {
             while (true) {
                 if (currentChosenSimulationID != -1) { // if there is chosen option
                     runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
-                    this.isCurrSimulationTerminatesByUser = testINFO.isTerminateByUser();
                     // Update UI using Platform.runLater()
                     Platform.runLater(() -> {
                         // Update UI with the collected data:
-                    showRunningSimulationDetails(testINFO, currentChosenSimulationID);
-                    calcDisableValueToAllBTNs(testINFO.getStatus());
+                        if(testINFO.getStatus().equals("TERMINATED")){
+                            showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
+                        }
+                        else {
+                            showRunningSimulationDetails(testINFO, currentChosenSimulationID);
+                        }
+
                     });
                     try {
                         Thread.sleep(300);
@@ -100,27 +97,7 @@ public class ResultsController {
     }
 
 
-    private void calcDisableValueToAllBTNs(String status)
-    {
-        if (status.equals("TERMINATED") || status.equals("CREATED")) {
-            disablePause.set(true);
-            disableStop.set(true);
-            disableResume.set(true);
 
-        } else if (status.equals("PAUSED")) {
-            disablePause.set(true);
-            disableStop.set(false);
-            disableResume.set(false);
-        } else if (status.equals("RUNNING")) {
-            disablePause.set(false);
-            disableStop.set(false);
-            disableResume.set(true);
-        }
-
-        if(!this.isCurrSimulationTerminatesByUser){
-            disableStop.set(true);
-        }
-    }
 
 
     private void setChosenID(pastSimulationDTO newValue) {
@@ -135,22 +112,9 @@ public class ResultsController {
         }
     }
 
-    @FXML
-    void pauseButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().pauseSimulation(currentChosenSimulationID);
-    }
-    @FXML
-    void resumeButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().resumeSimulation(currentChosenSimulationID);
-    }
-    @FXML
-    void stopButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().stopSimulation(currentChosenSimulationID);
-    }
+
 
     private void showRunningSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
-
-
         if (!id2simulationComponent.containsKey(simulationID)) {
             createRunningSimulationComponent(simulationDTO, simulationID);
         }
@@ -165,6 +129,46 @@ public class ResultsController {
         simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
 
     }
+
+    private void showTerminatedSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
+        if (!id2simulationComponent.containsKey(simulationID)) {
+            createTerminatedSimulationComponent(simulationDTO, simulationID);
+        }
+
+        if (id2simulationController.get(simulationID) instanceof RunningSimulationController) {
+            createTerminatedSimulationComponent(simulationDTO, simulationID);
+        }
+        else {
+            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
+        }
+
+        if (!simulationHBox.getChildren().isEmpty()) {
+            simulationHBox.getChildren().clear();
+        }
+
+        simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
+    }
+
+    private void createTerminatedSimulationComponent(runningSimulationDTO simulationDTO, int simulationID) {
+        try {
+            FXMLLoader loaderComponent = new FXMLLoader();
+            Node component = null;
+            simulationControllerAPI simulationController = null;
+            loaderComponent.setLocation(getClass().getResource("/desktop/results/simulations/terminated/terminatedSimulations.fxml"));
+
+
+            component = loaderComponent.load();
+            simulationController = loaderComponent.getController();
+            simulationController.setDataFromDTO(simulationDTO);
+            simulationController.setMainController(this.mainController);
+            id2simulationController.replace(simulationID, simulationController);
+            id2simulationComponent.replace(simulationID, component);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void createRunningSimulationComponent(runningSimulationDTO simulationDTO, int simulationID)
     {
         try {
@@ -177,6 +181,7 @@ public class ResultsController {
             component = loaderComponent.load();
             simulationController = loaderComponent.getController();
             simulationController.setDataFromDTO(simulationDTO);
+            simulationController.setMainController(this.mainController);
             id2simulationController.put(simulationID, simulationController);
             id2simulationComponent.put(simulationID, component);
 

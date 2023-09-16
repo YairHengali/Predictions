@@ -12,7 +12,6 @@ import engine.property.PropertyDefinition;
 import engine.property.api.PropertyInstance;
 import engine.rule.Rule;
 import engine.world.factory.SecondaryEntityDetails;
-import javafx.util.Pair;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -234,14 +233,13 @@ public class WorldInstance implements Serializable, Runnable {
                 currentNumberOfTicks++;
 
             } // if not paused
-        }
+        }// if not terminate
 
         synchronized (this){
             if(this.status == SimulationStatus.RUNNING)
                 this.runningTime += Duration.between(startTime , Instant.now()).getSeconds();
             this.status = SimulationStatus.TERMINATED;
         }
-
 
         if(this.maxNumberOfTicks != null && currentNumberOfTicks >= this.maxNumberOfTicks)
         {
@@ -326,7 +324,7 @@ public class WorldInstance implements Serializable, Runnable {
         this.dateOfRun = dateOfRun;
     }
 
-    public void terminateByUser(){
+    public void terminateSimulation(){
         synchronized (statusLock) {
             if(this.status != SimulationStatus.TERMINATED) {
                 if(this.status == SimulationStatus.RUNNING){

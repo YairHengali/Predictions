@@ -1,16 +1,15 @@
 package desktop.results.simulations.running;
 
+import desktop.AppController;
 import desktop.results.simulations.simulationControllerAPI;
 import engineAnswers.EntityCountDTO;
 import ex2.runningSimulationDTO;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
@@ -65,6 +64,18 @@ public class RunningSimulationController implements simulationControllerAPI {
     @FXML
     private HBox ticksProgressHBox;
 
+    @FXML
+    private Button pauseBTN;
+
+    @FXML
+    private Button stopBTN;
+
+    @FXML
+    private Button resumeBTN;
+    @FXML
+    private Button nextBTN;
+
+    private int currentChosenSimulationID;
     private SimpleIntegerProperty currTick = new SimpleIntegerProperty(0);
     private SimpleLongProperty runTime = new SimpleLongProperty(0);
     private SimpleStringProperty status = new SimpleStringProperty();
@@ -73,7 +84,11 @@ public class RunningSimulationController implements simulationControllerAPI {
     private SimpleBooleanProperty showingTicksProgress = new SimpleBooleanProperty(false);
     private SimpleDoubleProperty ticksProgress = new SimpleDoubleProperty(0);
     private SimpleDoubleProperty timeProgress = new SimpleDoubleProperty(0);
-
+    private AppController mainController = null;
+    boolean isCurrSimulationTerminatesByUser = false;
+    private SimpleBooleanProperty disablePause = new SimpleBooleanProperty(true);
+    private SimpleBooleanProperty disableStop = new SimpleBooleanProperty(true);
+    private SimpleBooleanProperty disableResume = new SimpleBooleanProperty(true);
     @Override
     public void setDataFromDTO(runningSimulationDTO simulationDTO) {
         currTick.set(simulationDTO.getCurrentTick());
@@ -99,7 +114,18 @@ public class RunningSimulationController implements simulationControllerAPI {
         else
             this.showingTicksProgress.set(false);
 
+        calcDisableValueToAllBTNs(simulationDTO.getStatus());
+        this.isCurrSimulationTerminatesByUser = simulationDTO.isTerminateByUser();
 
+    }
+    @Override
+    public void setCurrentChosenSimulationID(int ID){
+        this.currentChosenSimulationID = ID;
+    }
+
+    @Override
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
 
     private void setTicksProgressBar(int currTick, int totalTicks){
@@ -121,6 +147,31 @@ public class RunningSimulationController implements simulationControllerAPI {
         data.addAll(entityCountDTOCollection);
         entityTableView.setItems(data);
     }
+
+    private void calcDisableValueToAllBTNs(String status){
+        switch (status) {
+            case "TERMINATED":
+            case "CREATED":
+                disablePause.set(true);
+                disableStop.set(true);
+                disableResume.set(true);
+                break;
+            case "PAUSED":
+                disablePause.set(true);
+                disableStop.set(false);
+                disableResume.set(false);
+                break;
+            case "RUNNING":
+                disablePause.set(false);
+                disableStop.set(false);
+                disableResume.set(true);
+                break;
+        }
+
+        if(!this.isCurrSimulationTerminatesByUser){
+            disableStop.set(true);
+        }
+    }
     @FXML
     public void initialize() {
         entityColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -137,9 +188,26 @@ public class RunningSimulationController implements simulationControllerAPI {
         this.timeProgressHBox.visibleProperty().bind(showingTimeProgress);
         this.ticksProgressHBox.visibleProperty().bind(showingTicksProgress);
 
+        this.pauseBTN.disableProperty().bind(disablePause);
+        this.resumeBTN.disableProperty().bind(disableResume);
+        this.stopBTN.disableProperty().bind(disableStop);
+    }
 
-
-
+    @FXML
+    void pauseButtonPressed(ActionEvent event) {
+        mainController.getSystemEngine().pauseSimulation(currentChosenSimulationID);
+    }
+    @FXML
+    void resumeButtonPressed(ActionEvent event) {
+        mainController.getSystemEngine().resumeSimulation(currentChosenSimulationID);
+    }
+    @FXML
+    void stopButtonPressed(ActionEvent event) {
+        mainController.getSystemEngine().stopSimulation(currentChosenSimulationID);
+    }
+    @FXML
+    void nextButtonPressed(ActionEvent event) {
+        mainController.getSystemEngine().stopSimulation(currentChosenSimulationID);
     }
 
 

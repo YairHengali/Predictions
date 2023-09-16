@@ -13,6 +13,7 @@ import engine.world.grid.manager.impl.GridManagerImpl;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 public class EntityInstanceManagerImpl implements EntityInstanceManager, Serializable {
@@ -180,5 +181,23 @@ public Stream<EntityInstance> getAllEntitiesInstances()
     @Override
     public boolean isEnt1NearEnt2(EntityInstance entityInstance1, EntityInstance entityInstance2, int depth){
         return gridManager.isEnt1NearEnt2(entityInstance1, entityInstance2, depth);
+    }
+
+    @Override
+    public double getAvgOfUnmodifiedTicksOfProperty(String entityName, String propertyName, int lastTick) {
+        AtomicReference<Double> totalAvg = new AtomicReference<>((double) 0);
+
+        if(!name2EntInstancesList.containsKey(entityName))
+            throw new IllegalArgumentException("Entity: "+entityName+" does not exists!");
+        List<EntityInstance> entityInstances = name2EntInstancesList.get(entityName);
+        entityInstances.forEach(entityInstance -> {
+            totalAvg.updateAndGet(v -> v + entityInstance.getPropertyByName(propertyName).getAvgUnmodifiedTicks(lastTick));
+        });
+
+        if(entityInstances.isEmpty())
+            throw new IllegalArgumentException("Entity:" + entityName + " has 0 instances");
+
+        return totalAvg.get() / entityInstances.size();
+
     }
 }

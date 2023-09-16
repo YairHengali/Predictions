@@ -325,7 +325,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         currentSimulationID = 0;
     }
 
-
     @Override
     public pastSimulationDTO runSimulation() {
         WorldInstance currSimulation = this.createNewSimulation();
@@ -450,7 +449,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public void stopSimulation(int simulationID){
         WorldInstance simulationToResume = id2pastSimulation.get(simulationID);
-        simulationToResume.terminateByUser();
+        simulationToResume.terminateSimulation();
     }
 
 

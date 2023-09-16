@@ -35,4 +35,6 @@ public interface EntityInstanceManager {
 
     /////FOR PROXIMITY:
     boolean isEnt1NearEnt2(EntityInstance entityInstance1, EntityInstance entityInstance2, int depth);
+
+    double getAvgOfUnmodifiedTicksOfProperty(String entityName, String propertyName, int lastTick);
 }
