@@ -2,16 +2,17 @@ package desktop.details;
 
 import desktop.AppController;
 import desktop.details.action.api.ActionControllerAPI;
+import desktop.details.property.PropertyController;
 import engine.action.api.ActionType;
 import engineAnswers.*;
 import ex2.actions.SingleConditionDTO;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -23,11 +24,8 @@ public class DetailsController {
     @FXML
     private TreeView<String> simulationTV;
     @FXML
-    private TextArea detailsTextArea;
-    @FXML
-    private FlowPane detailsFlowPane;
+    private VBox detailsVBox;
     private AppController mainController;
-
     Map<TreeItem<String>, String> treeItem2Details = new HashMap<>(); //TODO: HOW TO IMPLEMENT THE MASTER DETAILS??
 
     public void initialize() {
@@ -38,30 +36,30 @@ public class DetailsController {
 
     private void showDetails(TreeItem<String> selectedNode) { //TODO: can change in simulationDetailsDTO to maps but for now tried like that
         SimulationDetailsDTO simulationDetailsDTO = mainController.getSystemEngine().getSimulationDetails();
-        detailsFlowPane.getChildren().clear();
+        detailsVBox.getChildren().clear();
 
         if (selectedNode != null && selectedNode.isLeaf()) {
             String selectedNodeValue = selectedNode.getValue();
-            String details = "";
             if (selectedNodeValue.equals("Termination Conditions"))
             {
                 if (simulationDetailsDTO.getMaxNumberOfTicks() != null) {
-                    details += "Number Of Ticks: " + simulationDetailsDTO.getMaxNumberOfTicks() + System.lineSeparator();
+                    detailsVBox.getChildren().add(new Label("Number Of Ticks: " + simulationDetailsDTO.getMaxNumberOfTicks()));
+
                 }
                 if (simulationDetailsDTO.getSecondsToTerminate() != null){
-                    details += "Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate() + System.lineSeparator();
+                    detailsVBox.getChildren().add(new Label("Number Of Seconds: " + simulationDetailsDTO.getSecondsToTerminate()));
+
                 }
                 if(simulationDetailsDTO.isTerminatedByUser()){
-                    details += "By User";
+                    detailsVBox.getChildren().add(new Label("Terminate By User"));
                 }
             }
             else if (selectedNodeValue.equals("Activation")) {
                 String selectedNodeRuleName = selectedNode.getParent().getValue();
                 for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
                     if (ruleDTO.getName().equals(selectedNodeRuleName)) {
-                        //TODO: make it a component
-                        details = ("Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
-                                "Probability for activation: " + ruleDTO.getProbabilityForActivation() + System.lineSeparator());
+                        detailsVBox.getChildren().add(new Label("Ticks for activation: " + ruleDTO.getTicksForActivation()));
+                        detailsVBox.getChildren().add(new Label("Probability for activation: " + ruleDTO.getProbabilityForActivation()));
                     }
                 }
             }
@@ -71,7 +69,7 @@ public class DetailsController {
                 for (RuleDTO ruleDTO : simulationDetailsDTO.getRules()) {
                     if (ruleDTO.getName().equals(selectedNodeRuleName)) {
                         for (ActionDTO actionDTO : ruleDTO.getActions()) {
-                            detailsFlowPane.getChildren().add(createActionComponent(actionDTO));
+                            detailsVBox.getChildren().add(createActionComponent(actionDTO));
                         }
                     }
                 }
@@ -87,17 +85,7 @@ public class DetailsController {
                                 for (PropertyDTO propertyDTO : entityDTO.getProperties())//TODO: better change in entityDTO to maps but for now tried like that
                                 {
                                     if (propertyDTO.getName().equals(selectedNodeValue)) {
-                                        //TODO: make it a component
-                                        details = ("Name: " + propertyDTO.getName() + System.lineSeparator() +
-                                                "Type: " + propertyDTO.getType() + System.lineSeparator());
-                                        if (propertyDTO.getFrom() != null) {
-                                            if (propertyDTO.getType().equals("DECIMAL")) {
-                                                details += ("Range: " + propertyDTO.getFrom().intValue() + " to " + propertyDTO.getTo().intValue() + System.lineSeparator());
-                                            } else {
-                                                details += ("Range: " + propertyDTO.getFrom() + " to " + propertyDTO.getTo() + System.lineSeparator());
-                                            }
-                                        }
-                                        details += ("Is initialized randomly: " + propertyDTO.isInitialisedRandomly());
+                                        detailsVBox.getChildren().add(createPropertyComponent(propertyDTO, false));
                                     }
                                 }
                             }
@@ -106,65 +94,15 @@ public class DetailsController {
                     case "Environment Variables":
                         for (PropertyDTO envVarDTO : simulationDetailsDTO.getEnvironmentVariables()) {
                             if (envVarDTO.getName().equals(selectedNodeValue)) {
-                                //TODO: make it a component
-                                details = ("Name: " + envVarDTO.getName() + System.lineSeparator() +
-                                        "Type: " + envVarDTO.getType() + System.lineSeparator());
-                                if (envVarDTO.getFrom() != null) {
-                                    if (envVarDTO.getType().equals("DECIMAL")) {
-                                        details += ("Range: " + envVarDTO.getFrom().intValue() + " to " + envVarDTO.getTo().intValue());
-                                    } else {
-                                        details += ("Range: " + envVarDTO.getFrom() + " to " + envVarDTO.getTo());
-                                    }
-                                }
+                                detailsVBox.getChildren().add(createPropertyComponent(envVarDTO, true));
                             }
                         }
                         break;
-//                    case "Rules": //TODO: Deal with actions details inside
-//                        for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
-//                            if (ruleDTO.getName().equals(selectedNodeValue))
-//                            {
-//                                //TODO: make it a component
-//                                details = ("Name: " + ruleDTO.getName() + System.lineSeparator() +
-//                                        "Ticks for activation: " + ruleDTO.getTicksForActivation() + System.lineSeparator() +
-//                                        "Probability for activation: " + ruleDTO.getProbabilityForActivation()+ System.lineSeparator() +
-//                                        "Number of actions: " + ruleDTO.getActions().size());
-//                            }
-//                        }
-//                        break;
-                    case "Actions":
-//                        String selectedNodeRuleName = selectedNode.getParent().getValue();
-//                        for (RuleDTO ruleDTO :simulationDetailsDTO.getRules()) {
-//                            if (ruleDTO.getName().equals(selectedNodeRuleName)) {
-//                                for (ActionDTO actionDTO : ruleDTO.getActions()) {
-////                        TODO: CREATE ACTIONS COMPONENTS AND ADD THEM TO THE RIGHT SIDE!!
-//
-//                                }
-//                            }
-//                        }
-//
-                        //FOR EACH ACTION WHEN SELECTED: CANNOT BE BY NAME! BECAUSE NOT UNIQUE, NEED TO CONSIDER OTHER APPROACH
-//                                  if(actionDTO.getName().equals(selectedNodeValue))
-
-
-                        break;
                     default:
-                        details = "";
                         break;
                 }
             }
-
-
-//            if(!detailsFlowPane.getChildren().isEmpty())
-//                detailsFlowPane.getChildren().clear();
-
-            detailsTextArea.setText(details);
-//            detailsTextArea.setVisible(true);
-            detailsFlowPane.getChildren().add(detailsTextArea);
         }
-//        else { //FOR CLEANUP WHEN NOT LEAF
-//
-//            detailsTextArea.setText("");
-//        }
     }
 
     public void setMainController(AppController mainController) {
@@ -261,11 +199,24 @@ public class DetailsController {
             component = loaderComponent.load();
             actionController = loaderComponent.getController();
             actionController.setDataFromDTO(actionDTO);
+            return component;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Node createPropertyComponent(PropertyDTO propertyDTO, boolean isEnvVar)
+    {
+        try {
+            FXMLLoader loaderComponent = new FXMLLoader();
+            loaderComponent.setLocation(getClass().getResource("/desktop/details/property/property.fxml"));
+
+            Node component = loaderComponent.load();
+            PropertyController propertyController = loaderComponent.getController();
+            propertyController.setDataFromDTO(propertyDTO, isEnvVar);
 
             return component;
-//            name2envVarController.put(envVarDTO.getName(), envVarController);
-//            name2envVarComponent.put(envVarDTO.getName(), component);
-
 
         } catch (IOException e) {
             throw new RuntimeException(e);
