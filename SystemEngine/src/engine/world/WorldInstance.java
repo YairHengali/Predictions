@@ -91,6 +91,7 @@ public class WorldInstance implements Serializable, Runnable {
     public void pauseSimulation(){
         synchronized (statusLock) {
             if (this.status == SimulationStatus.RUNNING) {
+                System.out.println("Thread: "+Thread.currentThread()+" is pausing the simulation");
                 this.status = SimulationStatus.PAUSED;
                 runningTime += Duration.between(startTime , Instant.now()).getSeconds();
             }
@@ -101,6 +102,8 @@ public class WorldInstance implements Serializable, Runnable {
     public void resumeSimulation(){
         synchronized (statusLock) {
             if (this.status == SimulationStatus.PAUSED) {
+                System.out.println("Thread: "+Thread.currentThread()+" is resuming the simulation");
+
                 this.status = SimulationStatus.RUNNING;
                 startTime = Instant.now();
             }
@@ -296,18 +299,8 @@ public class WorldInstance implements Serializable, Runnable {
 
     }
 
-    public long getRunningTime() { //TESTT WILL BE WITH SIMULATION STATE
-//        if (startTime == null) //PROBABLY NEED TO SYNCHRONIZE
-//            return 0;
-//        else if(endTime == null) //PROBABLY NEED TO SYNCHRONIZE
-//            return Duration.between(startTime , Instant.now()).getSeconds();
-//        else //endTime != null
-//            return Duration.between(startTime , endTime).getSeconds();
+    public long getRunningTime() {
 
-
-        // running time is being updated whenever simulation is paused in pauseSimulation(),
-        // startTime is being updated whenever simulation is resumed in resumeSimulation(),
-        // if currently running - summing old value of runningTime and new duration.
         synchronized (statusLock) {
             if (this.status == SimulationStatus.RUNNING)
                 return runningTime + Duration.between(startTime, Instant.now()).getSeconds();
@@ -330,6 +323,7 @@ public class WorldInstance implements Serializable, Runnable {
                 if(this.status == SimulationStatus.RUNNING){
                     this.runningTime += Duration.between(startTime, Instant.now()).getSeconds();
                 }
+                System.out.println("Thread: "+Thread.currentThread()+" is terminating the simulation");
                 this.status = SimulationStatus.TERMINATED;
             }
         }

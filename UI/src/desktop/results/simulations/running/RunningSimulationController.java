@@ -75,7 +75,7 @@ public class RunningSimulationController implements simulationControllerAPI {
     @FXML
     private Button nextBTN;
 
-    private int currentChosenSimulationID;
+    private int simulationID;
     private SimpleIntegerProperty currTick = new SimpleIntegerProperty(0);
     private SimpleLongProperty runTime = new SimpleLongProperty(0);
     private SimpleStringProperty status = new SimpleStringProperty();
@@ -89,6 +89,11 @@ public class RunningSimulationController implements simulationControllerAPI {
     private SimpleBooleanProperty disablePause = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disableStop = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disableResume = new SimpleBooleanProperty(true);
+
+    @Override
+    public void setSimulationID(int simulationID){
+        this.simulationID = simulationID;
+    }
     @Override
     public void setDataFromDTO(runningSimulationDTO simulationDTO) {
         currTick.set(simulationDTO.getCurrentTick());
@@ -118,11 +123,6 @@ public class RunningSimulationController implements simulationControllerAPI {
         this.isCurrSimulationTerminatesByUser = simulationDTO.isTerminateByUser();
 
     }
-    @Override
-    public void setCurrentChosenSimulationID(int ID){
-        this.currentChosenSimulationID = ID;
-    }
-
     @Override
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
@@ -195,19 +195,19 @@ public class RunningSimulationController implements simulationControllerAPI {
 
     @FXML
     void pauseButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().pauseSimulation(currentChosenSimulationID);
+        mainController.getSystemEngine().pauseSimulation(simulationID);
     }
     @FXML
     void resumeButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().resumeSimulation(currentChosenSimulationID);
+        mainController.getSystemEngine().resumeSimulation(simulationID);
     }
     @FXML
     void stopButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().stopSimulation(currentChosenSimulationID);
+        mainController.getSystemEngine().stopSimulation(simulationID);
     }
     @FXML
     void nextButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().stopSimulation(currentChosenSimulationID);
+        mainController.getSystemEngine().stopSimulation(simulationID);
     }
 
 

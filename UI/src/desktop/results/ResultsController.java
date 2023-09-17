@@ -39,7 +39,7 @@ public class ResultsController {
     private Map<Integer, Node> id2simulationComponent = new HashMap<>();
     private Map<Integer, simulationControllerAPI> id2simulationController = new HashMap<>();
 
-
+    boolean terminatedIsOn = false; // true if the terminated component is on the screen
 
     public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
 //        executionList.getItems().clear();
@@ -50,26 +50,19 @@ public class ResultsController {
         executionList.getItems().add(pastSimulationDTO);
 
     }
-
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-
     @FXML
     public void initialize(){
-//        executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            showSimulationDetails(newValue);
-//        });
 
 
         executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             setChosenID(newValue);
-            if(this.id2simulationController.containsKey(newValue.getId())){
-                this.id2simulationController.get(newValue.getId()).setCurrentChosenSimulationID(newValue.getId());
-            }
+//            if(this.id2simulationController.containsKey(newValue.getId())){
+//                this.id2simulationController.get(newValue.getId()).setCurrentChosenSimulationID(newValue.getId());
+//            }
         });
-
-
 
         dataPullingThread = new Thread(() -> {
             while (true) {
@@ -79,10 +72,14 @@ public class ResultsController {
                     Platform.runLater(() -> {
                         // Update UI with the collected data:
                         if(testINFO.getStatus().equals("TERMINATED")){
-                            showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
+                            if(!terminatedIsOn) {
+                                showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
+                                terminatedIsOn = true;
+                            }
                         }
                         else {
                             showRunningSimulationDetails(testINFO, currentChosenSimulationID);
+                            terminatedIsOn = false;
                         }
 
                     });
@@ -95,25 +92,19 @@ public class ResultsController {
             }
         });
     }
-
-
-
-
-
     private void setChosenID(pastSimulationDTO newValue) {
         if(newValue == null){
             currentChosenSimulationID = -1;
         }
         else{
+            if(currentChosenSimulationID != newValue.getId())
+                terminatedIsOn = false;
             this.currentChosenSimulationID = newValue.getId();
             if (!dataPullingThread.isAlive()){
                 dataPullingThread.start();
             }
         }
     }
-
-
-
     private void showRunningSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
         if (!id2simulationComponent.containsKey(simulationID)) {
             createRunningSimulationComponent(simulationDTO, simulationID);
@@ -129,7 +120,6 @@ public class ResultsController {
         simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
 
     }
-
     private void showTerminatedSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
         if (!id2simulationComponent.containsKey(simulationID)) {
             createTerminatedSimulationComponent(simulationDTO, simulationID);
@@ -148,7 +138,6 @@ public class ResultsController {
 
         simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
     }
-
     private void createTerminatedSimulationComponent(runningSimulationDTO simulationDTO, int simulationID) {
         try {
             FXMLLoader loaderComponent = new FXMLLoader();
@@ -159,8 +148,9 @@ public class ResultsController {
 
             component = loaderComponent.load();
             simulationController = loaderComponent.getController();
-            simulationController.setDataFromDTO(simulationDTO);
             simulationController.setMainController(this.mainController);
+            simulationController.setSimulationID(simulationID);
+            simulationController.setDataFromDTO(simulationDTO);
             id2simulationController.replace(simulationID, simulationController);
             id2simulationComponent.replace(simulationID, component);
         }
@@ -168,9 +158,7 @@ public class ResultsController {
             throw new RuntimeException(e);
         }
     }
-
-    private void createRunningSimulationComponent(runningSimulationDTO simulationDTO, int simulationID)
-    {
+    private void createRunningSimulationComponent(runningSimulationDTO simulationDTO, int simulationID) {
         try {
             FXMLLoader loaderComponent = new FXMLLoader();
             Node component = null;
@@ -180,8 +168,9 @@ public class ResultsController {
 
             component = loaderComponent.load();
             simulationController = loaderComponent.getController();
-            simulationController.setDataFromDTO(simulationDTO);
             simulationController.setMainController(this.mainController);
+            simulationController.setSimulationID(simulationID);
+            simulationController.setDataFromDTO(simulationDTO);
             id2simulationController.put(simulationID, simulationController);
             id2simulationComponent.put(simulationID, component);
 
@@ -189,8 +178,6 @@ public class ResultsController {
             throw new RuntimeException(e);
         }
     }
-
-
     public void clearExecutionList() {
         executionList.getItems().clear();
     }

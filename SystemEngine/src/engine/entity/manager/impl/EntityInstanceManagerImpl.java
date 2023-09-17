@@ -183,6 +183,7 @@ public Stream<EntityInstance> getAllEntitiesInstances()
         return gridManager.isEnt1NearEnt2(entityInstance1, entityInstance2, depth);
     }
 
+    // ~~~~~~~~~~~~~~~ Terminated Simulations Extra Details ~~~~~~~~~~~~~
     @Override
     public double getAvgOfUnmodifiedTicksOfProperty(String entityName, String propertyName, int lastTick) {
         AtomicReference<Double> totalAvg = new AtomicReference<>((double) 0);
@@ -195,9 +196,27 @@ public Stream<EntityInstance> getAllEntitiesInstances()
         });
 
         if(entityInstances.isEmpty())
-            throw new IllegalArgumentException("Entity:" + entityName + " has 0 instances");
+            throw new IllegalArgumentException("Entity: " + entityName + " has 0 instances");
 
         return totalAvg.get() / entityInstances.size();
 
+    }
+    @Override
+    public double getAverageValueOfProperty(String entityName, String propertyName){
+        if(!(name2EntitiesDef.get(entityName).getName2propertyDef().get(propertyName).getType() == PropertyType.FLOAT))
+            throw new IllegalArgumentException("Trying to gat average of a non-numerical property: " + propertyName + " of entity: " + entityName);
+
+
+        int size = name2EntInstancesList.get(entityName).size();
+        double total = 0;
+
+        if(size == 0)
+            throw new IllegalArgumentException("Trying to gat average of property with no living entities: " + propertyName + " of entity: " + entityName);
+
+        for(EntityInstance entity:name2EntInstancesList.get(entityName)) {
+            total += Double.parseDouble(entity.getPropertyByName(propertyName).getValue());
+        }
+
+        return total / size;
     }
 }
