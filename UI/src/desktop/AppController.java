@@ -86,16 +86,13 @@ public class AppController {
         resultsComponentController.addItemToSimulationsList(pastSimulationDTO);
     }
 
-    public void addDataToEntitiesTable()
-    {
-        executionComponentController.addDataToEntitiesTable();
-    }
-
-    public void addDataToEnvVarsTable() {
-        executionComponentController.addDataToEnvVarsListView();
-    }
-
     public void clearResultsTab() {
         resultsComponentController.clearExecutionList();
+    }
+
+    public void addDataToExecutionTab() {
+        executionComponentController.addDataToEntitiesTable();
+        executionComponentController.addDataToEnvVarsListView();
+        executionComponentController.setGridSize(systemEngine.getGridSize());
     }
 }

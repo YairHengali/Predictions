@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 public class ContextImpl implements Context, Serializable {
     private final EntityInstance primaryEntityInstance;
-    private final EntityInstance secondaryEntityInstance;//TODO: implement, deal with nulls and so on
+    private final EntityInstance secondaryEntityInstance;
     private final int currentTick;
     private final EntityInstanceManager entityInstanceManager;
     private final ActiveEnvironmentVariables activeEnvironment;
