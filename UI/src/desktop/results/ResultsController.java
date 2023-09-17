@@ -24,10 +24,6 @@ public class ResultsController {
     @FXML
     private ListView<pastSimulationDTO> executionList;
 
-    @FXML
-    private TextArea textResults;
-
-
 
     private AppController mainController;
     Thread dataPullingThread;

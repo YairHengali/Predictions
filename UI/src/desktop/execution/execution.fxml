@@ -12,7 +12,7 @@
 <GridPane fx:id="executionGrid" hgap="5.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.execution.ExecutionController">
   <columnConstraints>
       <ColumnConstraints hgrow="NEVER" minWidth="20.0" prefWidth="20.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" minWidth="10.0" prefWidth="182.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="NEVER" minWidth="20.0" prefWidth="20.0" />
@@ -27,10 +27,10 @@
    <children>
       <Button fx:id="startBTN" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#startButtonActionListener" prefHeight="25.0" prefWidth="49.0" text="Start!" GridPane.columnIndex="3" GridPane.rowIndex="3" />
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <TableView fx:id="entityPopulationTable" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <TableView fx:id="entityPopulationTable" editable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
         <columns>
-          <TableColumn fx:id="entityCol" prefWidth="75.0" text="Entity" />
-          <TableColumn fx:id="populationCol" prefWidth="75.0" text="Population" />
+          <TableColumn fx:id="entityCol" minWidth="90.0" prefWidth="90.0" text="Entity" />
+          <TableColumn fx:id="populationCol" minWidth="90.0" prefWidth="90.0" text="Population" />
         </columns>
       </TableView>
       <Button fx:id="clearBTN" mnemonicParsing="false" onAction="#clrButtonActionListener" text="Clear" GridPane.columnIndex="1" GridPane.rowIndex="3" />

@@ -118,32 +118,38 @@ public class ExecutionController {
         populationCol.setOnEditCommit(event -> {
             // Get the edited item
             EntityDTO oldEntityDTO = event.getRowValue();
-
-            //check For Max Num Of Entities
             int newPopulation = event.getNewValue();
-            int currentTotalPopulation = calculateTotalPopulation();
-            int updatedTotalPopulation = currentTotalPopulation - oldEntityDTO.getPopulation() + newPopulation;
 
-            if (updatedTotalPopulation <= gridSize){
-                // Update the population property of the Entity
-                EntityDTO newEntityDTO = new EntityDTO(oldEntityDTO.getName(), event.getNewValue(), oldEntityDTO.getProperties() );
-
-                // updated value in engine
-                mainController.getSystemEngine().updateEntityDefPopulation(newEntityDTO);
-
-                //update value in table
-                event.getTableView().getItems().set(event.getTablePosition().getRow(), newEntityDTO);
-
-            }
-            else{
-                mainController.showPopUpAlert("Population Error", "Population exceeds the grid size limit.", "The total population cannot exceed the grid size limit:"
-                        + System.lineSeparator() + "Entered total of: " + updatedTotalPopulation + " entities, while the grid size is: " + gridSize);
-
+            if (newPopulation < 0){ //if inserted negative population:
                 // Revert the cell value to the previous state
                 event.getTableView().getItems().set(event.getTablePosition().getRow(), oldEntityDTO);
-            }
-            event.getTableView().getSelectionModel().clearSelection();
 
+            } else {
+
+                //check For Max Num Of Entities
+                int currentTotalPopulation = calculateTotalPopulation();
+                int updatedTotalPopulation = currentTotalPopulation - oldEntityDTO.getPopulation() + newPopulation;
+
+                if (updatedTotalPopulation <= gridSize) {
+                    // Update the population property of the Entity
+                    EntityDTO newEntityDTO = new EntityDTO(oldEntityDTO.getName(), event.getNewValue(), oldEntityDTO.getProperties());
+
+                    // updated value in engine
+                    mainController.getSystemEngine().updateEntityDefPopulation(newEntityDTO);
+
+                    //update value in table
+                    event.getTableView().getItems().set(event.getTablePosition().getRow(), newEntityDTO);
+
+                } else {
+                    mainController.showPopUpAlert("Population Error", "Population exceeds the grid size limit.", "The total population cannot exceed the grid size limit:"
+                            + System.lineSeparator() + "Entered total of: " + updatedTotalPopulation + " entities, while the grid size is: " + gridSize);
+
+                    // Revert the cell value to the previous state
+                    event.getTableView().getItems().set(event.getTablePosition().getRow(), oldEntityDTO);
+                }
+            }
+
+            event.getTableView().getSelectionModel().clearSelection();
         });
 
         envListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
