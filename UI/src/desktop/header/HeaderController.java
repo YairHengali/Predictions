@@ -101,8 +101,8 @@ public class HeaderController {
             }
             mainController.clearResultsTab();
             mainController.addDataToSimulationTreeView();
-            mainController.addDataToEntitiesTable();
-            mainController.addDataToEnvVarsTable();
+            mainController.addDataToExecutionTab();
+
         }
         catch (Exception e) {
             System.out.println(e.getMessage() + System.lineSeparator());

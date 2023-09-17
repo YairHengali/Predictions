@@ -347,6 +347,11 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         return new ThreadpoolDTO(threadExecutor.getQueue().size(), threadExecutor.getActiveCount(), threadExecutor.getCompletedTaskCount());
     }
 
+    @Override
+    public int getGridSize() {
+        return simulationDef.getNumOfColsInGrid() * simulationDef.getNumOfRowsInGrid();
+    }
+
 
     //////////////////////////////////////TRYING PULLING DATA:
     @Override

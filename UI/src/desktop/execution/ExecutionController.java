@@ -49,7 +49,7 @@ public class ExecutionController {
 
     @FXML private HBox currentEnvVarDetailsHBox;
 
-
+    private int gridSize = 0;
     private AppController mainController;
 
     public void setMainController(AppController mainController) {
@@ -57,7 +57,6 @@ public class ExecutionController {
         clearBTN.disableProperty().bind(mainController.isFileLoadedProperty().not());
         startBTN.disableProperty().bind(mainController.isFileLoadedProperty().not());
     }
-
 
     @FXML
     void startButtonActionListener(ActionEvent event) {
@@ -88,6 +87,10 @@ public class ExecutionController {
         addDataToEntitiesTable();
     }
 
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+    }
+
     public void addDataToEntitiesTable()
     {
         Collection<EntityDTO> entityDTOCollection = mainController.getSystemEngine().getEntitiesListDTO();
@@ -114,23 +117,55 @@ public class ExecutionController {
         populationCol.setCellValueFactory(new PropertyValueFactory<>("population"));
         populationCol.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         populationCol.setOnEditCommit(event -> {
-
-            //TODO : checkForMaxNumOfEntities();
-
             // Get the edited item
             EntityDTO oldEntityDTO = event.getRowValue();
 
-            // Update the population property of the City
-            EntityDTO newEntityDTO = new EntityDTO(oldEntityDTO.getName(), event.getNewValue(), oldEntityDTO.getProperties() );
+            //check For Max Num Of Entities
+            int newPopulation = event.getNewValue();
+            int currentTotalPopulation = calculateTotalPopulation();
+            int updatedTotalPopulation = currentTotalPopulation - oldEntityDTO.getPopulation() + newPopulation;
 
-            // Call your function in the engine with the updated value
-            mainController.getSystemEngine().updateEntityDefPopulation(newEntityDTO);
+            if (updatedTotalPopulation <= gridSize){
+                // Update the population property of the Entity
+                EntityDTO newEntityDTO = new EntityDTO(oldEntityDTO.getName(), event.getNewValue(), oldEntityDTO.getProperties() );
+
+                // updated value in engine
+                mainController.getSystemEngine().updateEntityDefPopulation(newEntityDTO);
+
+                //update value in table
+                event.getTableView().getItems().set(event.getTablePosition().getRow(), newEntityDTO);
+
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Population Error");
+                alert.setHeaderText("Population exceeds the grid size limit.");
+                alert.setContentText("The total population cannot exceed the grid size limit:"
+                        + System.lineSeparator() + "entered total of: " + updatedTotalPopulation + " while the grid size is: " + gridSize);
+                alert.showAndWait();
+
+                // Revert the cell value to the previous state
+                event.getTableView().getItems().set(event.getTablePosition().getRow(), oldEntityDTO);
+            }
+            event.getTableView().getSelectionModel().clearSelection();
+
         });
 
         envListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             showEnvVarDetails(newValue);
         });
 
+    }
+
+    private int calculateTotalPopulation() {
+        int totalPopulation = 0;
+
+        // Iterate through the items in the TableView
+        for (EntityDTO entity : entityPopulationTable.getItems()) {
+            totalPopulation += entity.getPopulation();
+        }
+
+        return totalPopulation;
     }
 
     private void showEnvVarDetails(String newValue) {

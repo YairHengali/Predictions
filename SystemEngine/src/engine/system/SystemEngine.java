@@ -47,4 +47,5 @@ public interface SystemEngine {
 
     ThreadpoolDTO getThreadpoolData();
 
+    int getGridSize();
 }
