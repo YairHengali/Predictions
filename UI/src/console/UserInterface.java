@@ -159,7 +159,7 @@ public class UserInterface {
             // summery ang printing histogram
             String entityName = pastSimulationEntitiesDTO.get(chosenEntityIndex).getName();
             String propertyName = pastSimulationEntitiesDTO.get(chosenEntityIndex).getProperties().get(chosenPropertyIndex).getName();
-            System.out.println(systemEngine.getHistogram(desiredPastSimulation.getId(),entityName, propertyName));
+            System.out.println(systemEngine.getHistogramOfPropertyInTerminatedSimulation(desiredPastSimulation.getId(),entityName, propertyName));
         }
     }
     private void buildPastSimulationEntitysPropertiesMenu(EntityDTO entityDTO) {

@@ -4,9 +4,9 @@ import desktop.AppController;
 import ex2.runningSimulationDTO;
 
 public interface simulationControllerAPI {
-    void setDataFromDTO(runningSimulationDTO simulationDTO);
+    void setSimulationID(int simulationID);
 
-    void setCurrentChosenSimulationID(int ID);
+    void setDataFromDTO(runningSimulationDTO simulationDTO);
 
     void setMainController(AppController mainController);
 }

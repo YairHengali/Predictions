@@ -26,7 +26,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -259,8 +258,10 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         return this.isThereLoadedSimulation;
     }
 
+
+    // ~~~~~~~~~~~~~~~~~~~~~~ Terminated Simulations Details ~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
-    public HistogramDTO getHistogram(int simulationID, String entityName, String propertyName){
+    public HistogramDTO getHistogramOfPropertyInTerminatedSimulation(int simulationID, String entityName, String propertyName){
 
         if(!this.id2pastSimulation.containsKey(simulationID))
             throw new RuntimeException("Trying to view simulation with ID:" + simulationID + ", this ID does not exist in the system!");
@@ -278,6 +279,21 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         }
         return new HistogramDTO(simulationID, entityName, propertyName, histogram);
     }
+    @Override
+    public PropertyConsistencyDTO getConsistencyOfPropertyInTerminatedSimulation(int simulationID, String entityName, String propertyName){
+        int lastTick = id2pastSimulation.get(simulationID).getCurrentNumberOfTicks();
+        Double consistency = id2pastSimulation.get(simulationID).getEntityInstanceManager().getAvgOfUnmodifiedTicksOfProperty(entityName,propertyName,lastTick);
+
+        return new PropertyConsistencyDTO(entityName, propertyName, consistency);
+    }
+    @Override
+    public AveragePropertyValueDTO getAverageOfPropertyInTerminatedSimulation(int simulationID, String entityName, String propertyName){
+        Double avg = id2pastSimulation.get(simulationID).getEntityInstanceManager().getAverageValueOfProperty(entityName,propertyName);
+
+        return new AveragePropertyValueDTO(entityName, propertyName, avg);
+    }
+    // ~~~~~~~~~~~~~~~~~~~~~~ ^ Terminated Simulations Details ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
     @Override
     public List<EntityCountDTO> getPastSimulationEntityCount(pastSimulationDTO desiredPastSimulation) {
@@ -306,9 +322,9 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             }
             entitiesDetails.add(new EntityDTO(entityDefinition.getName(), entityDefinition.getPopulation(), propertiesDetails));
         }
-
         return entitiesDetails;
     }
+
     @Override
     public void pauseSimulation(int simulationID){
         WorldInstance simulationToPause = id2pastSimulation.get(simulationID);
