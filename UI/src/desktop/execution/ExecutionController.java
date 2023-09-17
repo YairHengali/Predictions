@@ -1,9 +1,7 @@
 package desktop.execution;
 
 import desktop.execution.envvar.api.EnvVarControllerAPI;
-import desktop.execution.tasks.SimulationTask;
 import engine.property.PropertyType;
-import engineAnswers.EndOfSimulationDTO;
 import engineAnswers.EntityDTO;
 import engineAnswers.PropertyDTO;
 import engineAnswers.pastSimulationDTO;
@@ -85,6 +83,7 @@ public class ExecutionController {
     void clrButtonActionListener(ActionEvent event) {
         mainController.getSystemEngine().setAllPopulationToZero();
         addDataToEntitiesTable();
+        addDataToEnvVarsListView();
     }
 
     public void setGridSize(int gridSize) {
@@ -137,12 +136,8 @@ public class ExecutionController {
 
             }
             else{
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Population Error");
-                alert.setHeaderText("Population exceeds the grid size limit.");
-                alert.setContentText("The total population cannot exceed the grid size limit:"
-                        + System.lineSeparator() + "entered total of: " + updatedTotalPopulation + " while the grid size is: " + gridSize);
-                alert.showAndWait();
+                mainController.showPopUpAlert("Population Error", "Population exceeds the grid size limit.", "The total population cannot exceed the grid size limit:"
+                        + System.lineSeparator() + "Entered total of: " + updatedTotalPopulation + " entities, while the grid size is: " + gridSize);
 
                 // Revert the cell value to the previous state
                 event.getTableView().getItems().set(event.getTablePosition().getRow(), oldEntityDTO);
@@ -206,6 +201,7 @@ public class ExecutionController {
         component = loaderComponent.load();
         envVarController = loaderComponent.getController();
         envVarController.setDataFromDTO(envVarDTO);
+        envVarController.setMainController(this.mainController);
         name2envVarController.put(envVarDTO.getName(), envVarController);
         name2envVarComponent.put(envVarDTO.getName(), component);
 

@@ -1,5 +1,6 @@
 package desktop.execution.envvar.impl;
 
+import desktop.AppController;
 import desktop.execution.envvar.api.EnvVarControllerAPI;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -12,7 +13,7 @@ public class BooleanEnvVarController implements EnvVarControllerAPI {
     @FXML private Label nameLabel;
     @FXML private Label typeLabel;
     @FXML private ComboBox<String> valueComboBox;
-
+    private AppController mainController;
 
     @Override
     public void setDataFromDTO(PropertyDTO envVarDTO) {
@@ -32,5 +33,10 @@ public class BooleanEnvVarController implements EnvVarControllerAPI {
 
         return new PropertyDTO(nameLabel.getText(), typeLabel.getText(), null, null, valueComboBox.getValue().equals("Random"), valueComboBox.getValue().toLowerCase());
 
+    }
+
+    @Override
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
 }

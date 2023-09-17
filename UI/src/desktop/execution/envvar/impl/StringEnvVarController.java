@@ -1,5 +1,6 @@
 package desktop.execution.envvar.impl;
 
+import desktop.AppController;
 import desktop.execution.envvar.api.EnvVarControllerAPI;
 import engineAnswers.PropertyDTO;
 import javafx.fxml.FXML;
@@ -12,8 +13,12 @@ public class StringEnvVarController implements EnvVarControllerAPI {
     private Label nameLabel;
     @FXML private Label typeLabel;
     @FXML private TextField valueTextField;
+    private AppController mainController;
 
-
+    @Override
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
+    }
     @Override
     public void setDataFromDTO(PropertyDTO envVarDTO) {
         nameLabel.setText(envVarDTO.getName());
