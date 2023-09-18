@@ -31,9 +31,9 @@
    <children>
       <TableView fx:id="entityTableView" prefHeight="99.0" prefWidth="300.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
         <columns>
-          <TableColumn fx:id="entityColumn" prefWidth="87.0" resizable="false" text="Entity" />
-          <TableColumn fx:id="entityCountAtBegColumn" prefWidth="75.0" resizable="false" text="Beginning" />
-            <TableColumn fx:id="entityCountAtEndColumn" prefWidth="59.0" resizable="false" text="End" />
+          <TableColumn fx:id="entityColumn" prefWidth="87.0" resizable="false" sortable="false" text="Entity" />
+          <TableColumn fx:id="entityCountAtBegColumn" prefWidth="75.0" resizable="false" sortable="false" text="Beginning" />
+            <TableColumn fx:id="entityCountAtEndColumn" prefWidth="59.0" resizable="false" sortable="false" text="End" />
         </columns>
       </TableView>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -60,14 +60,14 @@
                <children>
                   <Label text="ticks" />
                   <ProgressBar fx:id="ticksProgressBar" prefHeight="18.0" prefWidth="220.0" progress="0.0" />
-                  <Label fx:id="ticksPrecentLBL" text="\%" />
+                  <Label fx:id="ticksPercentLBL" text="\%" />
                </children>
             </HBox>
             <HBox fx:id="timeProgressHBox" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                <children>
                   <Label minWidth="45.0" text="seconds" />
                   <ProgressBar fx:id="timeProgressBar" prefHeight="18.0" prefWidth="220.0" progress="0.0" />
-                  <Label fx:id="timePrecentLBL" minWidth="25.0" text="\%" />
+                  <Label fx:id="timePercentLBL" minWidth="25.0" text="\%" />
                </children>
             </HBox>
          </children>

@@ -47,13 +47,13 @@ public class RunningSimulationController implements simulationControllerAPI {
     private ProgressBar ticksProgressBar;
 
     @FXML
-    private Label ticksPrecentLBL;
+    private Label ticksPercentLBL;
 
     @FXML
     private ProgressBar timeProgressBar;
 
     @FXML
-    private Label timePrecentLBL;
+    private Label timePercentLBL;
 
     @FXML
     private Label errorLBL;
@@ -89,6 +89,7 @@ public class RunningSimulationController implements simulationControllerAPI {
     private SimpleBooleanProperty disablePause = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disableStop = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disableResume = new SimpleBooleanProperty(true);
+
 
     @Override
     public void setSimulationID(int simulationID){
@@ -183,8 +184,8 @@ public class RunningSimulationController implements simulationControllerAPI {
         this.tickLBL.textProperty().bind(currTick.asString());
         this.timeLBL.textProperty().bind(runTime.asString());
         this.statusLBL.textProperty().bind(status);
-        this.ticksPrecentLBL.textProperty().bind(ticksProgress.asString());
-        this.timePrecentLBL.textProperty().bind(timeProgress.asString());
+        this.ticksPercentLBL.textProperty().bind(ticksProgress.asString());
+        this.timePercentLBL.textProperty().bind(timeProgress.asString());
         this.timeProgressHBox.visibleProperty().bind(showingTimeProgress);
         this.ticksProgressHBox.visibleProperty().bind(showingTicksProgress);
 
@@ -195,21 +196,24 @@ public class RunningSimulationController implements simulationControllerAPI {
 
     @FXML
     void pauseButtonPressed(ActionEvent event) {
+//        new Thread(() -> mainController.getSystemEngine().pauseSimulation(simulationID));
         mainController.getSystemEngine().pauseSimulation(simulationID);
     }
+
     @FXML
     void resumeButtonPressed(ActionEvent event) {
+//        new Thread(() -> mainController.getSystemEngine().resumeSimulation(simulationID));
         mainController.getSystemEngine().resumeSimulation(simulationID);
     }
     @FXML
     void stopButtonPressed(ActionEvent event) {
+//        new Thread(() -> mainController.getSystemEngine().stopSimulation(simulationID));
         mainController.getSystemEngine().stopSimulation(simulationID);
     }
     @FXML
     void nextButtonPressed(ActionEvent event) {
         mainController.getSystemEngine().stopSimulation(simulationID);
     }
-
 
 
 }

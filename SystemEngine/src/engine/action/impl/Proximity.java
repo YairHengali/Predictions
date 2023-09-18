@@ -54,8 +54,9 @@ public class Proximity extends AbstractAction {
                         throw new RuntimeException(e);
                     }
                 }
+                break; //found entity and invoked with her - no need to look for more
             }
-            break;
+//            break;
         }
 
     }

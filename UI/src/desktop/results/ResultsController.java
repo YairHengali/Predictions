@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Thread.sleep;
+
 public class ResultsController {
     @FXML
     private ListView<pastSimulationDTO> executionList;
@@ -44,6 +46,7 @@ public class ResultsController {
 //            executionList.getItems().add(pastSimulationDetails);
 //    }
         executionList.getItems().add(pastSimulationDTO);
+        executionList.getSelectionModel().select(pastSimulationDTO);
 
     }
     public void setMainController(AppController mainController) {
@@ -63,6 +66,11 @@ public class ResultsController {
         dataPullingThread = new Thread(() -> {
             while (true) {
                 if (currentChosenSimulationID != -1) { // if there is chosen option
+                    try {
+                        sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
                     // Update UI using Platform.runLater()
                     Platform.runLater(() -> {
@@ -79,11 +87,7 @@ public class ResultsController {
                         }
 
                     });
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
                 }
             }
         });
@@ -106,7 +110,7 @@ public class ResultsController {
             createRunningSimulationComponent(simulationDTO, simulationID);
         }
         else{
-            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
+            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO); //TODO: why is this here?
         }
 
         if(!simulationHBox.getChildren().isEmpty()) {

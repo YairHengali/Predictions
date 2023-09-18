@@ -14,17 +14,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.results.simulations.terminated.TerminatedSimulationController">
   <columnConstraints>
       <ColumnConstraints hgrow="NEVER" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="279.0" minWidth="-Infinity" prefWidth="250.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="224.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="224.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints hgrow="NEVER" maxWidth="49.0" minWidth="22.0" prefWidth="22.0" />
   </columnConstraints>
   <rowConstraints>
-      <RowConstraints maxHeight="30.0" minHeight="18.0" prefHeight="20.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="20.0" minHeight="18.0" prefHeight="20.0" vgrow="NEVER" />
     <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="103.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
@@ -32,14 +31,14 @@
       <RowConstraints maxHeight="30.0" minHeight="17.0" prefHeight="17.0" vgrow="NEVER" />
   </rowConstraints>
    <children>
-      <TableView fx:id="entityTableView" prefHeight="99.0" prefWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <TableView fx:id="entityTableView" prefHeight="99.0" prefWidth="227.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
         <columns>
-          <TableColumn fx:id="entityColumn" prefWidth="87.0" resizable="false" text="Entity" />
+          <TableColumn fx:id="entityColumn" prefWidth="90.0" resizable="false" text="Entity" />
           <TableColumn fx:id="entityCountAtBegColumn" prefWidth="75.0" resizable="false" text="Beginning" />
-            <TableColumn fx:id="entityCountAtEndColumn" prefWidth="59.0" resizable="false" text="End" />
+            <TableColumn fx:id="entityCountAtEndColumn" prefWidth="60.0" resizable="false" text="End" />
         </columns>
          <GridPane.margin>
-            <Insets top="7.0" />
+            <Insets />
          </GridPane.margin>
       </TableView>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -63,7 +62,7 @@
          </children>
       </HBox>
       <Label fx:id="errorLBL" text="Error Lable" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" />
-      <LineChart fx:id="entitiesPopulationLC" title="Entities Population Chart" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="3">
+      <LineChart fx:id="entitiesPopulationLC" legendSide="LEFT" title="Entities Population Chart" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
         <xAxis>
           <NumberAxis fx:id="ticsAxis" label="ticks" side="BOTTOM" />
         </xAxis>
