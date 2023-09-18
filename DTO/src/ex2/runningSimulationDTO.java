@@ -15,8 +15,9 @@ public class runningSimulationDTO {
     private List<EntityCountDTO> entityCountDTOS;
 
     private String terminationReason = null;
+    private String errorMassage;
 
-    public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS, String terminationReason) {
+    public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS, String terminationReason, String errorMassage) {
         this.currentTick = currentTick;
         this.totalTicks = totalTicks;
         this.currentSeconds = currentSeconds;
@@ -25,8 +26,12 @@ public class runningSimulationDTO {
         this.isTerminateByUser = isTerminateByUser;
         this.entityCountDTOS = entityCountDTOS;
         this.terminationReason = terminationReason;
+        this.errorMassage = errorMassage;
     }
 
+    public String getErrorMassage() {
+        return errorMassage;
+    }
 
     public String getTerminationReason() {
         return terminationReason;

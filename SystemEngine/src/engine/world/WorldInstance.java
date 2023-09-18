@@ -38,7 +38,7 @@ public class WorldInstance implements Serializable, Runnable {
     private TerminationReason terminationReason = null;
 
     private int simulationID;
-
+    private String errorMassage = null;
 
 
     public WorldInstance(WorldDefinition worldDef, int id) {
@@ -224,8 +224,10 @@ public class WorldInstance implements Serializable, Runnable {
 
                                     }
                                 } catch (Exception e) {
-                                    throw new RuntimeException(e.getMessage() + "\n" + "Error occurred with main entity: " +
-                                            entityName); //TODO: might not needed because cant get the rule name
+                                    this.status = SimulationStatus.TERMINATED; //TODO: sync??
+                                    this.errorMassage = e.getMessage();
+//                                    throw new RuntimeException(e.getMessage() + "\n" + "Error occurred with main entity: " +
+//                                            entityName); //TODO: might not needed because cant get the rule name
                                 }
                             });
                 });
@@ -250,13 +252,17 @@ public class WorldInstance implements Serializable, Runnable {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.terminationReason = TerminationReason.MAXTICKSREACHED;
             return TerminationReason.MAXTICKSREACHED;
-        }
+        }//TODO: RUNNING TIME INSTEAD OF START?
         else if(this.secondsToTerminate != null && Duration.between(startTime, Instant.now()).getSeconds() >= secondsToTerminate)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.endTime = Instant.now(); //TESTT.. WILL BE BY SIMULATION STATE
             this.terminationReason = TerminationReason.SECONDSREACHED;
             return TerminationReason.SECONDSREACHED;
+        }
+        else if(errorMassage != null){ //ADDED
+            this.terminationReason = TerminationReason.ERROR;
+            return TerminationReason.ERROR;
         }
         else
         {
@@ -352,4 +358,7 @@ public class WorldInstance implements Serializable, Runnable {
         runMainLoopEx2();
     }
 
+    public String getErrorMassage() {
+        return errorMassage;
+    }
 }

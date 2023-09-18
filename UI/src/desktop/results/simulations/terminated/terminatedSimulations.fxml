@@ -16,19 +16,18 @@
 
 <GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.results.simulations.terminated.TerminatedSimulationController">
   <columnConstraints>
-      <ColumnConstraints hgrow="NEVER" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+      <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="279.0" minWidth="-Infinity" prefWidth="250.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-      <ColumnConstraints hgrow="NEVER" maxWidth="49.0" minWidth="22.0" prefWidth="22.0" />
+      <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
   </columnConstraints>
   <rowConstraints>
       <RowConstraints maxHeight="20.0" minHeight="18.0" prefHeight="20.0" vgrow="NEVER" />
     <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="103.0" minHeight="10.0" prefHeight="96.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="78.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="30.0" minHeight="17.0" prefHeight="17.0" vgrow="NEVER" />
+      <RowConstraints maxHeight="20.0" minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
   </rowConstraints>
    <children>
       <TableView fx:id="entityTableView" prefHeight="99.0" prefWidth="227.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -48,7 +47,7 @@
                   <Label text="Status:" />
                   <Label text="Last tick:" />
                   <Label text="Running time:" />
-                  <Label prefHeight="17.0" prefWidth="79.0" text="reson:" />
+                  <Label prefHeight="17.0" prefWidth="79.0" text="Reson:" />
                </children>
             </VBox>
             <VBox prefHeight="83.0" prefWidth="152.0" spacing="5.0">
@@ -56,23 +55,11 @@
                   <Label fx:id="statusLBL" text="Status details" />
                   <Label fx:id="tickLBL" text="Current tick" />
                   <Label fx:id="timeLBL" text="Running time" />
-                  <Label fx:id="reasonLBL" prefHeight="17.0" prefWidth="116.0" text="Term reason" />
                </children>
             </VBox>
          </children>
       </HBox>
       <Label fx:id="errorLBL" text="Error Lable" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" />
-      <LineChart fx:id="entitiesPopulationLC" legendSide="LEFT" title="Entities Population Chart" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
-        <xAxis>
-          <NumberAxis fx:id="ticsAxis" label="ticks" side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis fx:id="countAxis" label="populatiom" side="LEFT" />
-        </yAxis>
-         <GridPane.margin>
-            <Insets left="10.0" />
-         </GridPane.margin>
-      </LineChart>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
             <Separator prefWidth="200.0" />
@@ -84,6 +71,19 @@
       <VBox fx:id="resultVBox" alignment="CENTER" prefHeight="67.0" prefWidth="228.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
             <Label fx:id="resultLBL" text="Label" visible="false" />
+         </children>
+      </VBox>
+      <VBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
+         <children>
+            <Label fx:id="reasonLBL" text="Term reason" />
+            <LineChart fx:id="entitiesPopulationLC" legendSide="LEFT" title="Entities Population Chart">
+              <xAxis>
+                <NumberAxis fx:id="ticsAxis" label="ticks" side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="countAxis" label="populatiom" side="LEFT" />
+              </yAxis>
+            </LineChart>
          </children>
       </VBox>
    </children>

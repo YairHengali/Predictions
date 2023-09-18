@@ -388,6 +388,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
                 
         boolean endSimulationByUser = wantedSimulation.isTerminateByUser();
         String terminationReason = wantedSimulation.getTerminationReason();
+        String errorMassage = wantedSimulation.getErrorMassage();
         return new runningSimulationDTO(currentNumberOfTicks,
                                         wantedSimulation.getMaxNumberOfTicks(),
                                         timeRunning,
@@ -395,7 +396,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
                                         wantedSimulation.getStatusString(),
                                         endSimulationByUser,
                                         entityCountDtos,
-                                        terminationReason);
+                                        terminationReason,
+                                        errorMassage);
     }
 
 //    public void pauseSimulation(int simulationID){

@@ -2,6 +2,7 @@ package desktop.results.simulations.terminated;
 
 import desktop.AppController;
 import desktop.results.simulations.terminated.statistics.HistogramController;
+import engine.world.TerminationReason;
 import engineAnswers.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -14,7 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -202,7 +202,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
         runTime.set(simulationDTO.getCurrentSeconds());
         status.set(simulationDTO.getStatus());
         if(simulationDTO.getTerminationReason() != null)
-            setReasonFromDTO(simulationDTO.getTerminationReason());
+            setReasonFromDTO(simulationDTO);
 
         bindDataToEntityTableView(simulationDTO);
 
@@ -256,17 +256,20 @@ public class TerminatedSimulationController implements simulationControllerAPI
     }
 
 
-    private void setReasonFromDTO(String terminationReason) {
+    private void setReasonFromDTO(runningSimulationDTO simulationDTO) {
         String res = null;
-        switch (terminationReason){
-            case "ENDEDBYUSER":
+        switch (TerminationReason.valueOf(simulationDTO.getTerminationReason())){
+            case ENDEDBYUSER:
                 res = "Terminated by user";
                 break;
-            case "SECONDSREACHED":
+            case SECONDSREACHED:
                 res = "Time out";
                 break;
-            case "MAXTICKSREACHED":
+            case MAXTICKSREACHED:
                 res = "Maximum Ticks reached";
+                break;
+            case ERROR:
+                res = "ERROR: " + simulationDTO.getErrorMassage();
                 break;
             default:
                 res = "";
