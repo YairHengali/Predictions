@@ -134,11 +134,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
         }
         catch (Exception e){
             resultLBL.setVisible(false);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.initOwner(this.entityTableView.getScene().getWindow());
-            alert.showAndWait();
+            mainController.showPopUpAlert("Error", null, e.getMessage());
         }
 
     }
@@ -151,11 +147,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
         }
         catch (Exception e){
             resultLBL.setVisible(false);
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setContentText(e.getMessage());
-            alert.initOwner(this.entityTableView.getScene().getWindow());
-            alert.showAndWait();
+            mainController.showPopUpAlert("Error", null, e.getMessage());
         }
     }
 
@@ -204,7 +196,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
     }
 
     @Override
-    public void setDataFromDTO(runningSimulationDTO simulationDTO) {
+    public void setDataFromDTO(runningSimulationDTO simulationDTO) {//TODO: Validate where we call it unnecessarily
 
         currTick.set(simulationDTO.getCurrentTick());
         runTime.set(simulationDTO.getCurrentSeconds());
@@ -218,10 +210,13 @@ public class TerminatedSimulationController implements simulationControllerAPI
         entityComboBox.getItems().clear();
         mainController.getSystemEngine().getEntitiesListDTO().forEach(entityDTO -> entityComboBox.getItems().add(entityDTO.getName()));
 
-        insertDataTolineChart(mainController.getSystemEngine().getEntitiesPopByTicks(currentChosenSimulationID).getEntitiesPopByTicks());
+//        if (this.entitiesPopulationLC.getData().isEmpty())
+        insertDataTolineChart(mainController.getSystemEngine().getEntitiesPopByTicks(currentChosenSimulationID).getEntitiesPopByTicks(), simulationDTO.getCurrentTick());
     }
 
-    private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks) {
+    private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks, int totalTicks) {
+        int interval = totalTicks / 1000; //TODO: how many intervals we want
+
         // Iterate through the entities and their population data
         for (String entity : entitiesPopByTicks.keySet()) {
             Map<Integer, Integer> data = entitiesPopByTicks.get(entity);
@@ -232,8 +227,28 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
             // Add data points to the series
             for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
-                series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+                if(interval == 0 || entry.getKey() % interval == 0)
+                    series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
+
+//            for (int i = 0; i < totalTicks; i += Math.ceil(totalTicks/ 1000f)) {
+//                series.getData().add(new XYChart.Data<>(i, data.get(i)));
+//            }
+
+
+
+
+//            int remainingTicks = totalTicks % 1000;
+//
+//            for (int i = 0; i < totalTicks; i += interval) {
+//                series.getData().add(new XYChart.Data<>(i, data.get(i)));
+//            }
+//
+//            if (remainingTicks > 0) {
+//                int finalTick = totalTicks - 1;
+//                series.getData().add(new XYChart.Data<>(finalTick, data.get(finalTick)));
+//            }
+
 
             // Add the series to the line chart
             entitiesPopulationLC.getData().add(series);

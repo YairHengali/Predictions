@@ -124,9 +124,9 @@ public class ResultsController {
         if (id2simulationController.get(simulationID) instanceof RunningSimulationController) {
             createTerminatedSimulationComponent(simulationDTO, simulationID);
         }
-        else {
-            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
-        }
+//        else {
+////            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
+//        }
 
         if (!simulationHBox.getChildren().isEmpty()) {
             simulationHBox.getChildren().clear();
@@ -147,8 +147,8 @@ public class ResultsController {
             simulationController.setMainController(this.mainController);
             simulationController.setSimulationID(simulationID);
             simulationController.setDataFromDTO(simulationDTO);
-            id2simulationController.replace(simulationID, simulationController);
-            id2simulationComponent.replace(simulationID, component);
+            id2simulationController.put(simulationID, simulationController);
+            id2simulationComponent.put(simulationID, component);
         }
         catch (IOException e) {
             throw new RuntimeException(e);

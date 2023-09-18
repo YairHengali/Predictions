@@ -54,11 +54,11 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
 
         if (rows < 10 || 100 < rows)
         {
-            throw new RuntimeException("The number of rows in the grid must be between 10 to 100! got: " + rows);
+            throw new RuntimeException("The number of rows in the grid must be between 10 to 100!" + System.lineSeparator() + "Got: " + rows);
         }
         if (columns < 10 || 100 < columns)
         {
-            throw new RuntimeException("The number of columns in the grid must be between 10 to 100! got: " + columns);
+            throw new RuntimeException("The number of columns in the grid must be between 10 to 100!" + System.lineSeparator() + "Got: " + + columns);
         }
 
         currWorkingWorld.setNumOfRowsInGrid(rows);
@@ -228,23 +228,23 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                 }
                 else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getResultProp()))
                 {
-                    throw new IllegalArgumentException("Invalid xml file! property in " + prdAction.getType() + " must be of a numeric type.");
+                    throw new IllegalArgumentException("Property in " + prdAction.getType() + " must be of a numeric type.");
                 }
 
                 if (prdAction.getPRDMultiply() != null) {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDMultiply().getArg2()))) {
-                        throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
+                        throw new IllegalArgumentException("Arguments to " + prdAction.getType() + " action must be numeric.");
                     } else {
                         resAction = new Calculation(prdAction.getEntity(), secondaryEntityDetails, prdAction.getResultProp(), prdAction.getPRDMultiply().getArg1(), prdAction.getPRDMultiply().getArg2(), ClacType.MULTIPLY);
                     }
                 } else if (prdAction.getPRDDivide() != null) {
                     if (!(isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg1()) && isNumericArg(prdAction.getEntity(), prdAction.getPRDDivide().getArg2()))) {
-                        throw new IllegalArgumentException("Invalid xml file! arguments to " + prdAction.getType() + " action must be numeric.");
+                        throw new IllegalArgumentException("Arguments to " + prdAction.getType() + " action must be numeric.");
                     } else {
                         resAction = new Calculation(prdAction.getEntity(), secondaryEntityDetails, prdAction.getResultProp(), prdAction.getPRDDivide().getArg1(), prdAction.getPRDDivide().getArg2(), ClacType.DIVIDE);
                     }
                 } else {
-                    throw new IllegalArgumentException("Invalid xml file! Calculation action supports MULTIPLY or DIVIDE only!");
+                    throw new IllegalArgumentException("Calculation action supports MULTIPLY or DIVIDE only!");
                 }
                 break;
 
@@ -280,9 +280,9 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
                 break;
             case "proximity":
                 if (!isNumericArg(prdAction.getPRDBetween().getSourceEntity(), prdAction.getPRDEnvDepth().getOf())) {
-                    throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+                    throw new IllegalArgumentException("Argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
                 } else if (!isNumericArg(prdAction.getPRDBetween().getTargetEntity(), prdAction.getPRDEnvDepth().getOf())) {
-                    throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+                    throw new IllegalArgumentException("Argument: " + prdAction.getPRDEnvDepth().getOf() + ", to action " + prdAction.getType() + " - expected to be numerical!");
                 }
                 Proximity proximityAction = new Proximity(prdAction.getPRDBetween().getSourceEntity(), secondaryEntityDetails, prdAction.getPRDBetween().getTargetEntity(), prdAction.getPRDEnvDepth().getOf());
 
@@ -366,11 +366,11 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             throw new NotExistingPropertyException(prdAction.getProperty(), prdAction.getType(), prdAction.getEntity());
         }
         else if (!isNumericArg(prdAction.getEntity(), prdAction.getBy())) {
-            throw new IllegalArgumentException("Invalid xml file! argument: " + prdAction.getBy() + ", to action " + prdAction.getType() + " - expected to be numerical!");
+            throw new IllegalArgumentException("Argument: " + prdAction.getBy() + ", to action " + prdAction.getType() + " - expected to be numerical!");
         }
         else if (!isNumericPropertyInEntity(prdAction.getEntity(), prdAction.getProperty()))
         {
-            throw new IllegalArgumentException("Invalid xml file! property: " + prdAction.getProperty() + ", in action " + prdAction.getType() + " - expected to be numerical!");
+            throw new IllegalArgumentException("Property: " + prdAction.getProperty() + ", in action " + prdAction.getType() + " - expected to be numerical!");
         }
     }
 

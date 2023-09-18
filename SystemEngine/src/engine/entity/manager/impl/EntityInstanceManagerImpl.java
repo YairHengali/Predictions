@@ -204,14 +204,14 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     @Override
     public double getAverageValueOfProperty(String entityName, String propertyName){
         if(!(name2EntitiesDef.get(entityName).getName2propertyDef().get(propertyName).getType() == PropertyType.FLOAT))
-            throw new IllegalArgumentException("Trying to gat average of a non-numerical property: " + propertyName + " of entity: " + entityName);
+            throw new IllegalArgumentException("Trying to get average of a non-numerical property: " + propertyName + " of entity: " + entityName);
 
 
         int size = name2EntInstancesList.get(entityName).size();
         double total = 0;
 
         if(size == 0)
-            throw new IllegalArgumentException("Trying to gat average of property with no living entities: " + propertyName + " of entity: " + entityName);
+            throw new IllegalArgumentException("Trying to get average of property with no living entities: " + propertyName + " of entity: " + entityName);
 
         for(EntityInstance entity:name2EntInstancesList.get(entityName)) {
             total += Double.parseDouble(entity.getPropertyByName(propertyName).getValue());

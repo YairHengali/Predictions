@@ -145,7 +145,7 @@ public class WorldInstance implements Serializable, Runnable {
             this.status = SimulationStatus.RUNNING;
         }
         this.startTime = Instant.now();
-        currentNumberOfTicks = 1;
+//        currentNumberOfTicks = 1;
 
 
         while (!isTerminated)
@@ -154,7 +154,7 @@ public class WorldInstance implements Serializable, Runnable {
             isTerminated = isTermination();
             if(!isPaused && !isTerminated){
 //            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
-
+                currentNumberOfTicks++;
                 entityInstanceManager.makeMoveToAllEntities();
 //                if(currentNumberOfTicks % 100 == 0){ //TODO: DECIDE WHICH TICKS
                     entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
@@ -234,7 +234,7 @@ public class WorldInstance implements Serializable, Runnable {
                 this.entityInstanceManager.killEntities();
                 this.entityInstanceManager.createScratchEntities();
                 this.entityInstanceManager.createDerivedEntities();
-                currentNumberOfTicks++;
+
 
             } // if not paused
         }// if not terminate

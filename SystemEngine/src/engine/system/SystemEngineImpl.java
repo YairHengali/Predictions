@@ -339,8 +339,8 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
     @Override
     public void stopSimulation(int simulationID){
-        WorldInstance simulationToResume = id2pastSimulation.get(simulationID);
-        simulationToResume.terminateSimulation();
+        WorldInstance simulationToStop = id2pastSimulation.get(simulationID);
+        simulationToStop.terminateSimulation();
     }
 
     @Override

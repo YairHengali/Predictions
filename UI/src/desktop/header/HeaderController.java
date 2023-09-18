@@ -105,6 +105,7 @@ public class HeaderController {
 
         }
         catch (Exception e) {
+            mainController.showPopUpAlert("Invalid xml file", null, e.getMessage());
             System.out.println(e.getMessage() + System.lineSeparator());
         }
     }
