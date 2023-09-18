@@ -4,6 +4,7 @@ import engine.entity.EntityDefinition;
 import engine.entity.EntityInstance;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public interface EntityInstanceManager {
@@ -39,4 +40,9 @@ public interface EntityInstanceManager {
     double getAvgOfUnmodifiedTicksOfProperty(String entityName, String propertyName, int lastTick);
 
     double getAverageValueOfProperty(String entityName, String propertyName);
+
+    //for entities chart in termination details:
+    void updateEntitiesPopByTicks(int currentTick);
+
+    Map<String, Map<Integer, Integer>> getEntitiesPopByTicks();
 }

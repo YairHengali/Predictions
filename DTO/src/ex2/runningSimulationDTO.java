@@ -3,17 +3,18 @@ package ex2;
 import engineAnswers.EntityCountDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public class runningSimulationDTO {
-    int currentTick;
-    Integer totalTicks;
-    long currentSeconds;
-    Long totalSeconds;
-    String status;
-    boolean isTerminateByUser;
-    List<EntityCountDTO> entityCountDTOS;
+    private int currentTick;
+    private Integer totalTicks;
+    private long currentSeconds;
+    private Long totalSeconds;
+    private String status;
+    private boolean isTerminateByUser;
+    private List<EntityCountDTO> entityCountDTOS;
 
-    String terminationReason = null;
+    private String terminationReason = null;
 
     public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS, String terminationReason) {
         this.currentTick = currentTick;
@@ -25,6 +26,7 @@ public class runningSimulationDTO {
         this.entityCountDTOS = entityCountDTOS;
         this.terminationReason = terminationReason;
     }
+
 
     public String getTerminationReason() {
         return terminationReason;

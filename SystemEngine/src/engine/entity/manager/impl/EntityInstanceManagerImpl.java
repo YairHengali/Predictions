@@ -20,32 +20,31 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
     private int count;
     private final Map<String, List<EntityInstance>> name2EntInstancesList;
     private final Map<String, EntityDefinition> name2EntitiesDef = new HashMap<>();
-
     private final GridManagerAPI gridManager;
-
-@Override
-public Stream<EntityInstance> getAllEntitiesInstances()
-{
-    return name2EntInstancesList.values().stream().flatMap(List::stream); //.flatMap(List::stream).collect(Collectors.toList());
-}
     private final Set<EntityInstance> EntitiesToKill;
-
-
     private final Map<EntityInstance, String> EntityInstance2DerivedName;
     private final Set<String> EntitiesToCreate;
+
+    //for entities chart in termination details:
+    private final Map<String, Map<Integer,Integer>> entitiesPopByTicks;
 
     public EntityInstanceManagerImpl(Collection<EntityDefinition> entityDefinitionCollection) {
         count = 0;
         name2EntInstancesList = new HashMap<>();
         EntitiesToKill = new HashSet<>();
         entityDefinitionCollection.forEach(entityDefinition -> this.name2EntitiesDef.put(entityDefinition.getName(), entityDefinition.clone()));
-
-
         EntityInstance2DerivedName = new HashMap<>();
         EntitiesToCreate = new HashSet<>();
-
         gridManager = new GridManagerImpl();
 
+        entitiesPopByTicks = new HashMap<>();
+        name2EntitiesDef.keySet().forEach(key -> entitiesPopByTicks.put(key, new HashMap<>()));
+    }
+
+    @Override
+    public Stream<EntityInstance> getAllEntitiesInstances()
+    {
+        return name2EntInstancesList.values().stream().flatMap(List::stream); //.flatMap(List::stream).collect(Collectors.toList());
     }
 
     @Override
@@ -133,12 +132,6 @@ public Stream<EntityInstance> getAllEntitiesInstances()
 
         EntityInstance2DerivedName.clear();
     }
-
-    @Override
-    public void makeMoveToAllEntities() {
-        this.gridManager.makeRandomMoveToAllEntities(this.name2EntInstancesList);
-    }
-
     private void createDerivedEntityInstance(EntityInstance entityInstance, String derivedEntityName){
         EntityInstance derivedEntity = new EntityInstance(name2EntitiesDef.get(derivedEntityName), entityInstance.getId());
         //count++; setted the Id of the replaced one
@@ -162,7 +155,7 @@ public Stream<EntityInstance> getAllEntitiesInstances()
                     case FLOAT:
                         if (propertyAtDerived instanceof FloatProperty) {
                             ((FloatProperty) propertyAtDerived).setValue(Float.parseFloat(propertyInstance.getValue()), null);
-                    }
+                        }
                         break;
                     case STRING:
                         if (propertyAtDerived instanceof StringProperty) {
@@ -177,11 +170,18 @@ public Stream<EntityInstance> getAllEntitiesInstances()
     }
 
 
+    @Override
+    public void makeMoveToAllEntities() {
+        this.gridManager.makeRandomMoveToAllEntities(this.name2EntInstancesList);
+    }
+
+
     /////FOR PROXIMITY:
     @Override
     public boolean isEnt1NearEnt2(EntityInstance entityInstance1, EntityInstance entityInstance2, int depth){
         return gridManager.isEnt1NearEnt2(entityInstance1, entityInstance2, depth);
     }
+
 
     // ~~~~~~~~~~~~~~~ Terminated Simulations Extra Details ~~~~~~~~~~~~~
     @Override
@@ -218,5 +218,19 @@ public Stream<EntityInstance> getAllEntitiesInstances()
         }
 
         return total / size;
+    }
+
+
+    //for entities chart in termination details:
+    @Override
+    public void updateEntitiesPopByTicks(int currentTick){
+        for (Map.Entry<String, List<EntityInstance>> entry : name2EntInstancesList.entrySet()) {
+            this.entitiesPopByTicks.get(entry.getKey()).put(currentTick, entry.getValue().size());
+        }
+    }
+
+    @Override
+    public Map<String, Map<Integer, Integer>> getEntitiesPopByTicks() {
+        return entitiesPopByTicks;
     }
 }

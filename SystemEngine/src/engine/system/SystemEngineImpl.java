@@ -15,6 +15,7 @@ import engine.world.WorldInstance;
 import engine.world.factory.WorldDefFactory;
 import engine.world.factory.WorldDefFactoryImpl;
 import engineAnswers.*;
+import ex2.EntitiesPopulationDTO;
 import ex2.ThreadpoolDTO;
 import ex2.actions.*;
 import ex2.runningSimulationDTO;
@@ -352,6 +353,21 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         return simulationDef.getNumOfColsInGrid() * simulationDef.getNumOfRowsInGrid();
     }
 
+    @Override
+    public EntitiesPopulationDTO getEntitiesPopByTicks(int simulationID) {
+        Map<String, Map<Integer, Integer>> originalMap = id2pastSimulation.get(simulationID).getEntityInstanceManager().getEntitiesPopByTicks();
+        Map<String, Map<Integer,Integer>> entitiesPopByTicks = new HashMap<>();
+
+        for (Map.Entry<String, Map<Integer, Integer>> entry : originalMap.entrySet()) {
+            String key = entry.getKey();
+            Map<Integer, Integer> innerMap = entry.getValue();
+            Map<Integer, Integer> copiedInnerMap = new HashMap<>(innerMap); // Create a copy of the inner map
+            entitiesPopByTicks.put(key, copiedInnerMap);
+        }
+
+        return new EntitiesPopulationDTO(entitiesPopByTicks);
+    }
+
 
     //////////////////////////////////////TRYING PULLING DATA:
     @Override
@@ -369,6 +385,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             int endCount = wantedSimulation.getEntityInstanceManager().getInstancesListByName(entityDefinition.getName()).size(); //MIGHT BE PROBLEM DURING SIMULATION
             entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
         }
+                
         boolean endSimulationByUser = wantedSimulation.isTerminateByUser();
         String terminationReason = wantedSimulation.getTerminationReason();
         return new runningSimulationDTO(currentNumberOfTicks,

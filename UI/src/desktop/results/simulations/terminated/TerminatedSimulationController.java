@@ -14,7 +14,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import desktop.results.simulations.simulationControllerAPI;
 import ex2.runningSimulationDTO;
@@ -67,8 +70,14 @@ public class TerminatedSimulationController implements simulationControllerAPI
     @FXML
     private Label resultLBL;
 
+    // ~~~~~~~~ Line Chart ~~~~~~~~
     @FXML
-    private NumberAxis lineChart;
+    private NumberAxis ticsAxis;
+    @FXML
+    private NumberAxis countAxis;
+    @FXML
+    private LineChart<Number, Number> entitiesPopulationLC;
+    // ~~~~~~~~ ^ Line Chart ^ ~~~~~~~~
 
     @FXML
     private ComboBox<String> entityComboBox = new ComboBox<>();
@@ -89,7 +98,6 @@ public class TerminatedSimulationController implements simulationControllerAPI
     private AppController mainController;
 
     Map<String, Node> name2ExtraDetailsComponent = new HashMap<>();
-
 
 
     private SimpleIntegerProperty currTick = new SimpleIntegerProperty(0);
@@ -206,9 +214,32 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
         bindDataToEntityTableView(simulationDTO);
 
+
         entityComboBox.getItems().clear();
         mainController.getSystemEngine().getEntitiesListDTO().forEach(entityDTO -> entityComboBox.getItems().add(entityDTO.getName()));
+
+        insertDataTolineChart(mainController.getSystemEngine().getEntitiesPopByTicks(currentChosenSimulationID).getEntitiesPopByTicks());
     }
+
+    private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks) {
+        // Iterate through the entities and their population data
+        for (String entity : entitiesPopByTicks.keySet()) {
+            Map<Integer, Integer> data = entitiesPopByTicks.get(entity);
+
+            // Create a data series for the entity
+            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+            series.setName(entity);
+
+            // Add data points to the series
+            for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
+                series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            }
+
+            // Add the series to the line chart
+            entitiesPopulationLC.getData().add(series);
+        }
+    }
+
 
     private void setReasonFromDTO(String terminationReason) {
         String res = null;

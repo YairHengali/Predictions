@@ -78,16 +78,13 @@ public class WorldInstance implements Serializable, Runnable {
         entityInstanceManager = new EntityInstanceManagerImpl(simulationDef.getEntitiesDefinitions());
         entityInstanceManager.createEntitiesInstancesAndLocate(simulationDef.getNumOfRowsInGrid(), simulationDef.getNumOfColsInGrid());
 
-
-
-
         activeEnvironmentVariables = new ActiveEnvironmentVariablesImpl();
         for(PropertyDefinition envVarDef : simulationDef.getEnvironmentVariablesDefinitions())
         {
             activeEnvironmentVariables.createEvnVariableFromDef(envVarDef);
         }
 
-
+        entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
     }
 
     public void pauseSimulation(){
@@ -140,7 +137,6 @@ public class WorldInstance implements Serializable, Runnable {
 //    }
 
     public TerminationReason runMainLoopEx2(){ //TICK 1 and up...;
-//        this.startTime = System.currentTimeMillis(); replaced >
         boolean isTerminated = false;
         boolean isPaused = false;
 
@@ -160,6 +156,9 @@ public class WorldInstance implements Serializable, Runnable {
 //            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
 
                 entityInstanceManager.makeMoveToAllEntities();
+//                if(currentNumberOfTicks % 100 == 0){ //TODO: DECIDE WHICH TICKS
+                    entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
+//                }
 
                 List<Action> actionList = rules.stream()
                         .filter(rule -> rule.isActive(this.currentNumberOfTicks))

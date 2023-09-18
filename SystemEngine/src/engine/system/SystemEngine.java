@@ -1,6 +1,7 @@
 package engine.system;
 
 import engineAnswers.*;
+import ex2.EntitiesPopulationDTO;
 import ex2.ThreadpoolDTO;
 import ex2.runningSimulationDTO;
 
@@ -48,4 +49,6 @@ public interface SystemEngine {
     ThreadpoolDTO getThreadpoolData();
 
     int getGridSize();
+
+    EntitiesPopulationDTO getEntitiesPopByTicks(int simulationID);
 }
