@@ -13,7 +13,9 @@ public class runningSimulationDTO {
     boolean isTerminateByUser;
     List<EntityCountDTO> entityCountDTOS;
 
-    public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS) {
+    String terminationReason = null;
+
+    public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS, String terminationReason) {
         this.currentTick = currentTick;
         this.totalTicks = totalTicks;
         this.currentSeconds = currentSeconds;
@@ -21,6 +23,11 @@ public class runningSimulationDTO {
         this.status = status;
         this.isTerminateByUser = isTerminateByUser;
         this.entityCountDTOS = entityCountDTOS;
+        this.terminationReason = terminationReason;
+    }
+
+    public String getTerminationReason() {
+        return terminationReason;
     }
 
     public boolean isTerminateByUser() {

@@ -18,7 +18,7 @@
 <GridPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.results.simulations.terminated.TerminatedSimulationController">
   <columnConstraints>
       <ColumnConstraints hgrow="NEVER" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="279.0" minWidth="-Infinity" prefWidth="220.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="279.0" minWidth="-Infinity" prefWidth="250.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="224.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="224.0" />
       <ColumnConstraints hgrow="NEVER" maxWidth="49.0" minWidth="22.0" prefWidth="22.0" />
@@ -52,31 +52,34 @@
                   <Label prefHeight="17.0" prefWidth="79.0" text="reson:" />
                </children>
             </VBox>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+            <VBox prefHeight="83.0" prefWidth="152.0" spacing="5.0">
                <children>
                   <Label fx:id="statusLBL" text="Status details" />
                   <Label fx:id="tickLBL" text="Current tick" />
                   <Label fx:id="timeLBL" text="Running time" />
-                  <Label fx:id="reasonLBL" text="Term reason" />
+                  <Label fx:id="reasonLBL" prefHeight="17.0" prefWidth="116.0" text="Term reason" />
                </children>
             </VBox>
          </children>
       </HBox>
       <Label fx:id="errorLBL" text="Error Lable" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" />
-      <LineChart GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.rowSpan="2">
+      <LineChart GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.rowSpan="2">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
           <NumberAxis fx:id="lineChart" side="LEFT" />
         </yAxis>
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
       </LineChart>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="7.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
             <Separator prefWidth="200.0" />
-            <ComboBox fx:id="entityComboBox" prefWidth="150.0" promptText="Entity" />
-            <ComboBox fx:id="propertyComboBox" prefWidth="150.0" promptText="Property" />
-            <ComboBox fx:id="functionComboBox" onAction="#showExtraDetailsSelected" prefWidth="150.0" promptText="Extra Details" />
+            <ComboBox fx:id="entityComboBox" onAction="#entitySelected" prefWidth="150.0" promptText="Entity" />
+            <ComboBox fx:id="propertyComboBox" onAction="#propertySelected" prefWidth="150.0" promptText="Property" />
+            <ComboBox fx:id="functionComboBox" onAction="#ExtraDetailsSelected" prefWidth="150.0" promptText="Extra Details" />
          </children>
       </VBox>
       <VBox fx:id="resultVBox" alignment="CENTER" prefHeight="67.0" prefWidth="228.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">

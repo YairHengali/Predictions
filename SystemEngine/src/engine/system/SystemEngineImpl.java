@@ -370,13 +370,15 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
             entityCountDtos.add(new EntityCountDTO(entityDefinition.getName(),startCount, endCount));
         }
         boolean endSimulationByUser = wantedSimulation.isTerminateByUser();
+        String terminationReason = wantedSimulation.getTerminationReason();
         return new runningSimulationDTO(currentNumberOfTicks,
                                         wantedSimulation.getMaxNumberOfTicks(),
                                         timeRunning,
                                         wantedSimulation.getSecondsToTerminate(),
                                         wantedSimulation.getStatusString(),
                                         endSimulationByUser,
-                                        entityCountDtos);
+                                        entityCountDtos,
+                                        terminationReason);
     }
 
 //    public void pauseSimulation(int simulationID){

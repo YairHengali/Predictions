@@ -80,6 +80,8 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
     @FXML
     private ComboBox<String> functionComboBox;
+    private String selectedFunction = null;
+
 
     @FXML
     private VBox resultVBox;
@@ -92,8 +94,8 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
     private SimpleIntegerProperty currTick = new SimpleIntegerProperty(0);
     private SimpleLongProperty runTime = new SimpleLongProperty(0);
-    private SimpleStringProperty status = new SimpleStringProperty();
-    private SimpleStringProperty reason = new SimpleStringProperty();
+    private SimpleStringProperty status = new SimpleStringProperty("");
+    private SimpleStringProperty reason = new SimpleStringProperty("");
 
     private Stage HistogramStage;
     @FXML
@@ -114,35 +116,6 @@ public class TerminatedSimulationController implements simulationControllerAPI
         functionComboBox.getItems().add("1. Histogram");
         functionComboBox.getItems().add("2. Consistency");
         functionComboBox.getItems().add("3. Average");
-
-        entityComboBox.setOnAction(event -> {
-            selectedEntity = entityComboBox.getSelectionModel().getSelectedItem();
-            if (selectedEntity != null) {
-                propertyComboBox.getItems().clear();
-                propertyComboBox.setDisable(false);
-                propertyComboBox.setPromptText("Property");
-                functionComboBox.setDisable(true);
-                functionComboBox.setPromptText("Extra Details");
-                resultLBL.setVisible(false);
-
-
-
-                for(EntityDTO entity : mainController.getSystemEngine().getEntitiesListDTO() ){
-                    if(entity.getName().equals(selectedEntity))
-                        entity.getProperties().forEach(property -> propertyComboBox.getItems().add(property.getName()));
-                }
-            }
-        });
-
-        propertyComboBox.setOnAction(event -> {
-            selectedProperty = propertyComboBox.getSelectionModel().getSelectedItem();
-            functionComboBox.setPromptText("Extra Details");
-            functionComboBox.setDisable(false);
-            resultLBL.setVisible(false);
-
-
-        });
-
     }
 
     private void showAverage(){
@@ -228,11 +201,31 @@ public class TerminatedSimulationController implements simulationControllerAPI
         currTick.set(simulationDTO.getCurrentTick());
         runTime.set(simulationDTO.getCurrentSeconds());
         status.set(simulationDTO.getStatus());
+        if(simulationDTO.getTerminationReason() != null)
+            setReasonFromDTO(simulationDTO.getTerminationReason());
 
         bindDataToEntityTableView(simulationDTO);
 
         entityComboBox.getItems().clear();
         mainController.getSystemEngine().getEntitiesListDTO().forEach(entityDTO -> entityComboBox.getItems().add(entityDTO.getName()));
+    }
+
+    private void setReasonFromDTO(String terminationReason) {
+        String res = null;
+        switch (terminationReason){
+            case "ENDEDBYUSER":
+                res = "Terminated by user";
+                break;
+            case "SECONDSREACHED":
+                res = "Time out";
+                break;
+            case "MAXTICKSREACHED":
+                res = "Maximum Ticks reached";
+                break;
+            default:
+                res = "";
+        }
+        this.reason.set(res);
     }
 
     @Override
@@ -246,16 +239,47 @@ public class TerminatedSimulationController implements simulationControllerAPI
     }
 
     @FXML
-    public void showExtraDetailsSelected(ActionEvent event) {
-        String selectedFunction = functionComboBox.getSelectionModel().getSelectedItem();
-        if(selectedFunction.startsWith("1")){
-            showHistogram();
+    public void ExtraDetailsSelected(ActionEvent event) {
+        selectedFunction = functionComboBox.getSelectionModel().getSelectedItem();
+        decodeAnaliticsFunction();
+    }
+    @FXML
+    void entitySelected(ActionEvent event) {
+        selectedEntity = entityComboBox.getSelectionModel().getSelectedItem();
+        selectedProperty = selectedFunction = null;
+        if (selectedEntity != null) {
+            propertyComboBox.getItems().clear();
+            propertyComboBox.setDisable(false);
+            propertyComboBox.setPromptText("Property");
+            functionComboBox.setPromptText("Extra Details");
+            functionComboBox.setDisable(true);
+            resultLBL.setVisible(false);
+
+
+
+            for(EntityDTO entity : mainController.getSystemEngine().getEntitiesListDTO() ){
+                if(entity.getName().equals(selectedEntity))
+                    entity.getProperties().forEach(property -> propertyComboBox.getItems().add(property.getName()));
+            }
         }
-        else if (selectedFunction.startsWith("2")) {
-            showConsistency();
-        }
-        else if (selectedFunction.startsWith("3")) {
-            showAverage();
+    }
+
+    @FXML
+    void propertySelected(ActionEvent event) {
+        selectedProperty = propertyComboBox.getSelectionModel().getSelectedItem();
+        functionComboBox.setDisable(false);
+        decodeAnaliticsFunction();
+    }
+
+    private void decodeAnaliticsFunction(){
+        if(selectedFunction != null && selectedProperty != null && selectedEntity != null) {
+            if (selectedFunction.startsWith("1")) {
+                showHistogram();
+            } else if (selectedFunction.startsWith("2")) {
+                showConsistency();
+            } else if (selectedFunction.startsWith("3")) {
+                showAverage();
+            }
         }
     }
     private void bindDataToEntityTableView(runningSimulationDTO simulationDTO){

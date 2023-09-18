@@ -35,6 +35,8 @@ public class WorldInstance implements Serializable, Runnable {
     private SimulationStatus status;
     private final Object statusLock = new Object();
 
+    private TerminationReason terminationReason = null;
+
     private int simulationID;
 
 
@@ -247,21 +249,29 @@ public class WorldInstance implements Serializable, Runnable {
         if(this.maxNumberOfTicks != null && currentNumberOfTicks >= this.maxNumberOfTicks)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+            this.terminationReason = TerminationReason.MAXTICKSREACHED;
             return TerminationReason.MAXTICKSREACHED;
         }
         else if(this.secondsToTerminate != null && Duration.between(startTime, Instant.now()).getSeconds() >= secondsToTerminate)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.endTime = Instant.now(); //TESTT.. WILL BE BY SIMULATION STATE
+            this.terminationReason = TerminationReason.SECONDSREACHED;
             return TerminationReason.SECONDSREACHED;
         }
         else
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+            this.terminationReason = TerminationReason.ENDEDBYUSER;
             return TerminationReason.ENDEDBYUSER;
         }
     }
 
+    public String getTerminationReason(){
+        if(this.terminationReason == null)
+            return null;
+        return this.terminationReason.toString();
+    }
     private boolean checkIfPaused(){
         synchronized (statusLock) {
             return this.status == SimulationStatus.PAUSED;
