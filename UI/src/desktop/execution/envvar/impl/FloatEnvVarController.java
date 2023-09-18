@@ -1,5 +1,6 @@
 package desktop.execution.envvar.impl;
 
+import desktop.AppController;
 import desktop.execution.envvar.api.EnvVarControllerAPI;
 import engineAnswers.PropertyDTO;
 import javafx.fxml.FXML;
@@ -13,10 +14,15 @@ public class FloatEnvVarController implements EnvVarControllerAPI {
     @FXML private Label typeLabel;
     @FXML private Label rangeLabel;
     @FXML private TextField valueTextField;
-
+    private AppController mainController;
     private Float from;
     private Float to;
+    private String oldTextValue;
 
+    @Override
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
+    }
     @Override
     public void setDataFromDTO(PropertyDTO envVarDTO) {
         nameLabel.setText(envVarDTO.getName());
@@ -29,16 +35,48 @@ public class FloatEnvVarController implements EnvVarControllerAPI {
 
     @FXML
     private void initialize(){
-        // Add a listener to restrict input to only floating-point numbers
         valueTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("-?\\d*\\.?\\d*")) {
-                valueTextField.setText(newValue.replaceAll("[^-?\\d*\\.?\\d*]", ""));
+            try {
+                Float.parseFloat(newValue);
+                valueTextField.setText(newValue);
+            }
+            catch (NumberFormatException ex) {
+                if (!newValue.equals("")){
+                    valueTextField.setText(oldValue);
+                }
             }
         });
 
-
+        valueTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && !isValidInput()) { // Focus lost (user finished editing) and the value invalid
+//                Alert alert = new Alert(Alert.AlertType.ERROR); //TODO: might have another way without assigning main in them
+//                alert.setTitle("Value Out Of Range");
+//                alert.setHeaderText("The value: " + valueTextField.getText() + " is not in the range: " + this.from + " to " + this.to);
+//                alert.setContentText("going back to the previous value");
+////                alert.initOwner(this.valueTextField.getScene().getWindow()); //PROBLEMATIC
+//                alert.showAndWait();
+                mainController.showPopUpAlert("Value Out Of Range", "In environment variable " +  nameLabel.getText(),  "The value: " + valueTextField.getText() + " is not in the range: " + this.from + " to " + this.to + System.lineSeparator() + "going back to the previous value");
+                valueTextField.setText(this.oldTextValue);
+            }
+            else{
+                this.oldTextValue = valueTextField.getText();
+            }
+        });
     }
 
+    private boolean isValidInput() {
+        try {
+            float enteredValue = Float.parseFloat(valueTextField.getText());
+            if (enteredValue < this.from || enteredValue > this.to) {
+                return false;
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            return valueTextField.getText().equals("");
+        }
+    }
     @Override
     public PropertyDTO createEnvVarDTO(){
 

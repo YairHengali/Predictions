@@ -95,4 +95,13 @@ public class AppController {
         executionComponentController.addDataToEnvVarsListView();
         executionComponentController.setGridSize(systemEngine.getGridSize());
     }
+
+    public void showPopUpAlert(String title, String HeaderText, String setContentText){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(HeaderText);
+        alert.setContentText(setContentText);
+        alert.initOwner(this.headerComponent.getScene().getWindow());
+        alert.showAndWait();
+    }
 }

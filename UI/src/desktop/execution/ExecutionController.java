@@ -1,9 +1,7 @@
 package desktop.execution;
 
 import desktop.execution.envvar.api.EnvVarControllerAPI;
-import desktop.execution.tasks.SimulationTask;
 import engine.property.PropertyType;
-import engineAnswers.EndOfSimulationDTO;
 import engineAnswers.EntityDTO;
 import engineAnswers.PropertyDTO;
 import engineAnswers.pastSimulationDTO;
@@ -85,6 +83,7 @@ public class ExecutionController {
     void clrButtonActionListener(ActionEvent event) {
         mainController.getSystemEngine().setAllPopulationToZero();
         addDataToEntitiesTable();
+        addDataToEnvVarsListView();
     }
 
     public void setGridSize(int gridSize) {
@@ -119,36 +118,38 @@ public class ExecutionController {
         populationCol.setOnEditCommit(event -> {
             // Get the edited item
             EntityDTO oldEntityDTO = event.getRowValue();
-
-            //check For Max Num Of Entities
             int newPopulation = event.getNewValue();
-            int currentTotalPopulation = calculateTotalPopulation();
-            int updatedTotalPopulation = currentTotalPopulation - oldEntityDTO.getPopulation() + newPopulation;
 
-            if (updatedTotalPopulation <= gridSize){
-                // Update the population property of the Entity
-                EntityDTO newEntityDTO = new EntityDTO(oldEntityDTO.getName(), event.getNewValue(), oldEntityDTO.getProperties() );
-
-                // updated value in engine
-                mainController.getSystemEngine().updateEntityDefPopulation(newEntityDTO);
-
-                //update value in table
-                event.getTableView().getItems().set(event.getTablePosition().getRow(), newEntityDTO);
-
-            }
-            else{
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Population Error");
-                alert.setHeaderText("Population exceeds the grid size limit.");
-                alert.setContentText("The total population cannot exceed the grid size limit:"
-                        + System.lineSeparator() + "entered total of: " + updatedTotalPopulation + " while the grid size is: " + gridSize);
-                alert.showAndWait();
-
+            if (newPopulation < 0){ //if inserted negative population:
                 // Revert the cell value to the previous state
                 event.getTableView().getItems().set(event.getTablePosition().getRow(), oldEntityDTO);
-            }
-            event.getTableView().getSelectionModel().clearSelection();
 
+            } else {
+
+                //check For Max Num Of Entities
+                int currentTotalPopulation = calculateTotalPopulation();
+                int updatedTotalPopulation = currentTotalPopulation - oldEntityDTO.getPopulation() + newPopulation;
+
+                if (updatedTotalPopulation <= gridSize) {
+                    // Update the population property of the Entity
+                    EntityDTO newEntityDTO = new EntityDTO(oldEntityDTO.getName(), event.getNewValue(), oldEntityDTO.getProperties());
+
+                    // updated value in engine
+                    mainController.getSystemEngine().updateEntityDefPopulation(newEntityDTO);
+
+                    //update value in table
+                    event.getTableView().getItems().set(event.getTablePosition().getRow(), newEntityDTO);
+
+                } else {
+                    mainController.showPopUpAlert("Population Error", "Population exceeds the grid size limit.", "The total population cannot exceed the grid size limit:"
+                            + System.lineSeparator() + "Entered total of: " + updatedTotalPopulation + " entities, while the grid size is: " + gridSize);
+
+                    // Revert the cell value to the previous state
+                    event.getTableView().getItems().set(event.getTablePosition().getRow(), oldEntityDTO);
+                }
+            }
+
+            event.getTableView().getSelectionModel().clearSelection();
         });
 
         envListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -206,6 +207,7 @@ public class ExecutionController {
         component = loaderComponent.load();
         envVarController = loaderComponent.getController();
         envVarController.setDataFromDTO(envVarDTO);
+        envVarController.setMainController(this.mainController);
         name2envVarController.put(envVarDTO.getName(), envVarController);
         name2envVarComponent.put(envVarDTO.getName(), component);
 
