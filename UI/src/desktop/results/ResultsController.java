@@ -59,6 +59,7 @@ public class ResultsController {
 
 
         executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
             setChosenID(newValue);
 //            if(this.id2simulationController.containsKey(newValue.getId())){
 //                this.id2simulationController.get(newValue.getId()).setCurrentChosenSimulationID(newValue.getId());
@@ -95,6 +96,7 @@ public class ResultsController {
 //        });
     }
     private void setChosenID(pastSimulationDTO newValue) {
+
         if(newValue == null){
             currentChosenSimulationID = -1;
         }
@@ -112,21 +114,21 @@ public class ResultsController {
                                 e.printStackTrace();
                             }
                             if(!stopRequested) {
-                                runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
-                                // Update UI using Platform.runLater()
-                                Platform.runLater(() -> {
-                                    // Update UI with the collected data:
-                                    if (testINFO.getStatus().equals("TERMINATED")) {
-                                        if (!terminatedIsOn) {
+                                if (!terminatedIsOn) {
+                                    runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
+                                    // Update UI using Platform.runLater()
+                                    Platform.runLater(() -> {
+                                        // Update UI with the collected data:
+                                        if (testINFO.getStatus().equals("TERMINATED")) {
                                             showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
                                             terminatedIsOn = true;
+                                        } else {
+                                            showRunningSimulationDetails(testINFO, currentChosenSimulationID);
+                                            terminatedIsOn = false;
                                         }
-                                    } else {
-                                        showRunningSimulationDetails(testINFO, currentChosenSimulationID);
-                                        terminatedIsOn = false;
-                                    }
 
-                                });
+                                    });
+                                }
                             }
                         }
                     }
@@ -143,11 +145,12 @@ public class ResultsController {
                 id2simulationController.get(simulationID).setDataFromDTO(simulationDTO); //TODO: why is this here?
             }
 
-            if (!simulationHBox.getChildren().isEmpty()) {
-                simulationHBox.getChildren().clear();
+            if(!simulationHBox.getChildren().contains(id2simulationComponent.get(simulationID))) {
+                if (!simulationHBox.getChildren().isEmpty()) {
+                    simulationHBox.getChildren().clear();
+                }
+                simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
             }
-
-            simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
         }
 
     }
@@ -159,9 +162,6 @@ public class ResultsController {
         if (id2simulationController.get(simulationID) instanceof RunningSimulationController) {
             createTerminatedSimulationComponent(simulationDTO, simulationID);
         }
-//        else {
-////            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
-//        }
 
         if (!simulationHBox.getChildren().isEmpty()) {
             simulationHBox.getChildren().clear();
