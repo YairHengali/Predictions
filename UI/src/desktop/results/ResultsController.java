@@ -42,14 +42,9 @@ public class ResultsController {
     private volatile boolean stopRequested = false;
 
     public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
-//        executionList.getItems().clear();
-//        List<pastSimulationDTO> pastSimulationsDetails = mainController.getSystemEngine().getPastSimulationsDetails();
-//        for (pastSimulationDTO pastSimulationDetails : pastSimulationsDetails) {
-//            executionList.getItems().add(pastSimulationDetails);
-//    }
         executionList.getItems().add(pastSimulationDTO);
         executionList.getSelectionModel().select(pastSimulationDTO);
-        stopRequested = false; //TODO: maybe in another place( in setChosenID ?)
+        stopRequested = false;
     }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
@@ -142,7 +137,7 @@ public class ResultsController {
             if (!id2simulationComponent.containsKey(simulationID)) {
                 createRunningSimulationComponent(simulationDTO, simulationID);
             } else {
-                id2simulationController.get(simulationID).setDataFromDTO(simulationDTO); //TODO: why is this here?
+                id2simulationController.get(simulationID).setDataFromDTO(simulationDTO);
             }
 
             if(!simulationHBox.getChildren().contains(id2simulationComponent.get(simulationID))) {

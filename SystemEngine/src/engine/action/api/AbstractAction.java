@@ -30,11 +30,11 @@ public abstract class AbstractAction implements Action, Serializable {
 
     protected EntityInstance getMainEntityInstance(Context context){
         if (mainEntityName.equals(context.getPrimaryEntityInstance().getName()))
-            return context.getPrimaryEntityInstance(); //TODO: EX2 - HOW TO DECIDE WHICH IS THE PRIMARY?
+            return context.getPrimaryEntityInstance();
         else if (context.getSecondaryEntityInstance() != null && mainEntityName.equals(context.getSecondaryEntityInstance().getName()))
             return context.getSecondaryEntityInstance();
         else {
-            throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action, in action: " + actionType);//TODO: Exception?(only if its not supposed to be in the context) or NEED TO: ignore the action(if all of the secondary filtered by the condition) - probably the second option and hope he will not bring 3rd one.
+            throw new RuntimeException("The entity: " + mainEntityName + " is not in the context of the action, in action: " + actionType);
         }
     }
 }

@@ -55,12 +55,6 @@ public class FloatEnvVarController implements EnvVarControllerAPI {
 
         valueTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue && !isValidInput()) { // Focus lost (user finished editing) and the value invalid
-//                Alert alert = new Alert(Alert.AlertType.ERROR); //TODO: might have another way without assigning main in them
-//                alert.setTitle("Value Out Of Range");
-//                alert.setHeaderText("The value: " + valueTextField.getText() + " is not in the range: " + this.from + " to " + this.to);
-//                alert.setContentText("going back to the previous value");
-////                alert.initOwner(this.valueTextField.getScene().getWindow()); //PROBLEMATIC
-//                alert.showAndWait();
                 mainController.showPopUpAlert("Value Out Of Range", "In environment variable " +  nameLabel.getText(),  "The value: " + valueTextField.getText() + " is not in the range: " + this.from + " to " + this.to + System.lineSeparator() + "going back to the previous value");
                 valueTextField.setText(this.oldTextValue);
             }

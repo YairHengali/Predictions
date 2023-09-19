@@ -91,7 +91,7 @@ public class HeaderController {
 
             if(mainController.getIsFileLoaded()){ //already had working one
                 mainController.clearResultsTab();
-                mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
+                mainController.getSystemEngine().clearPastSimulations();
             }
 
             if (!ThreadpoolDataPullingThread.isAlive()){
@@ -105,11 +105,7 @@ public class HeaderController {
 
 
             System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
-//            mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
-//            if (!ThreadpoolDataPullingThread.isAlive()){
-//                ThreadpoolDataPullingThread.start();
-//            }
-//            mainController.clearResultsTab();
+
             mainController.addDataToSimulationTreeView();
             mainController.addDataToExecutionTab();
             mainController.moveToDetailsTab();

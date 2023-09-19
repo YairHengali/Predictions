@@ -95,7 +95,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
         for (Rule rule: simulationDef.getRules()) {
             List<ActionDTO> actionsDetails = new ArrayList<>();
             for (Action action: rule.getActions()){
-                String secondaryEntityName = action.getSecondaryEntityDetails() == null ? null : action.getSecondaryEntityDetails().getName();// TODO: TYPE OF SECONDARY?? what does he meant
+                String secondaryEntityName = action.getSecondaryEntityDetails() == null ? null : action.getSecondaryEntityDetails().getName();
                 String actionType = action.getActionType().toString();
 
                 switch (action.getActionType()) {
@@ -358,7 +358,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
-    public ThreadpoolDTO getThreadpoolData() {//COMPLETED CAN ALSO BE BY THE SIZE OF MAP, TODO: NEED TO SYNCHRONIZE THREADPOOL!!
+    public ThreadpoolDTO getThreadpoolData() {
         return new ThreadpoolDTO(threadExecutor.getQueue().size(), threadExecutor.getActiveCount(), threadExecutor.getCompletedTaskCount());
     }
 

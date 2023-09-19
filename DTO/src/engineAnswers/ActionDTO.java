@@ -3,7 +3,7 @@ package engineAnswers;
 public class ActionDTO {
     private final String type;
     private final String mainEntityName;
-    private final String secondaryEntityName; //TODO: more details?
+    private final String secondaryEntityName;
 
     public ActionDTO(String type, String mainEntityName, String secondaryEntityName) {
         this.type = type;

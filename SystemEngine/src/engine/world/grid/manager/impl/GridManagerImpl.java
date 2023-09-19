@@ -42,7 +42,12 @@ public class GridManagerImpl implements GridManagerAPI {
 
     @Override
     public void initEntityLocationRandomly(EntityInstance entity){
-        GridLocation randomLocation = nonOccupiedLocations.get(getRandomEmptyLocationIndexInList());//TODO:need to check if index = -1
+        int randomIndex = getRandomEmptyLocationIndexInList();
+
+        if(randomIndex == -1)
+            throw new RuntimeException("No more available locations when initiating location to entity: " + entity.getName());
+
+        GridLocation randomLocation = nonOccupiedLocations.get(randomIndex);
         grid.set(entity, randomLocation);
         entity.setGridLocation(randomLocation);
 
@@ -149,7 +154,7 @@ public class GridManagerImpl implements GridManagerAPI {
     }
 
     @Override
-    public boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth){ //TODO:(THERE ARE COPIES OF LOCATIONS IN THE SET IF ITS MATTER..)
+    public boolean isEnt1NearEnt2(EntityInstance ent1, EntityInstance ent2, int depth){
         int row = ent1.getGridLocation().getRow();
         int col = ent1.getGridLocation().getCol();
 

@@ -64,14 +64,7 @@ public class ExecutionController {
                 mainController.getSystemEngine().setEnvVarDefFromDto(envVarDTO);
             }
 
-
-
-            /*                      NEED TO FIGURE OUT HOW TASKS WORKING
-            SimulationTask simulationTask = new SimulationTask(mainController.getSystemEngine());
-            this.bindTaskToUIComponents();
-            mainController.getSystemEngine().addTaskToThreadPool(simulationTask);*/
-
-            pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();//TODO: stopped here!
+            pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();
             mainController.moveToResultsTab(pastSimulationDTO);
 
         }catch (Exception e) {

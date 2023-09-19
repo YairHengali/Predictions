@@ -18,7 +18,6 @@ public interface EntityInstanceManager {
 
     List<EntityInstance> getInstancesListByName(String entityName);
 
-    void createAnInstance(String name); //TODO!!!
 
     EntityDefinition getEntityDefByName(String entityName);
 

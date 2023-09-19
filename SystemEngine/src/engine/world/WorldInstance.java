@@ -165,7 +165,7 @@ public class WorldInstance implements Serializable, Runnable {
                 if(currentNumberOfTicks < 100) {
                     entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
                 }
-                else if(currentNumberOfTicks % 100 == 0) //TODO: DECIDE WHICH TICKS
+                else if(currentNumberOfTicks % 100 == 0)
                     entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
 
 //                // Check if the threshold is exceeded
@@ -237,6 +237,7 @@ public class WorldInstance implements Serializable, Runnable {
 
                                                 for (int i = 0; i < maxCount && i < secEntSize; i++) {
                                                     EntityInstance randChosenSecEnt = secondaryEntitiesAfterCondition.get(random.nextInt(secEntSize));
+
                                                     action.Run(new ContextImpl(entityInstance, randChosenSecEnt, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
                                                 }
                                             }
@@ -247,9 +248,7 @@ public class WorldInstance implements Serializable, Runnable {
                                     synchronized (statusLock) {
                                         this.status = SimulationStatus.TERMINATED;
                                     }
-                                    this.errorMassage = e.getMessage();
-//                                    throw new RuntimeException(e.getMessage() + "\n" + "Error occurred with main entity: " +
-//                                            entityName); //TODO: might not needed because cant get the rule name
+                                    this.errorMassage = e.getMessage() + " in action: " + action.getActionType();
                                 }
                             });
                 });

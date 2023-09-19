@@ -178,28 +178,28 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
     private Action createActionFromPrd(PRDAction prdAction)
     {
         Action resAction = null;
-        if (prdAction.getType().equals("proximity"))//IN PROXIMITY, THE ENTITIES ARE: SOURCE AND TARGET
-        {
-            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getSourceEntity()) == null) {
-                throw new NotExistingEntityException(prdAction.getPRDBetween().getSourceEntity(), prdAction.getType());
+
+            if (prdAction.getType().equals("proximity"))//IN PROXIMITY, THE ENTITIES ARE: SOURCE AND TARGET
+            {
+                if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getSourceEntity()) == null) {
+                    throw new NotExistingEntityException(prdAction.getPRDBetween().getSourceEntity(), prdAction.getType());
+                }
+                if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getTargetEntity()) == null) {
+                    throw new NotExistingEntityException(prdAction.getPRDBetween().getTargetEntity(), prdAction.getType());
+                }
+            } else if (prdAction.getType().equals("replace")) { //IN REPLACE, THE ENTITIES ARE: KILL AND CREATE
+                if (currWorkingWorld.getEntityDefinitionByName(prdAction.getKill()) == null) {
+                    throw new NotExistingEntityException(prdAction.getKill(), prdAction.getType());
+                }
+                if (currWorkingWorld.getEntityDefinitionByName(prdAction.getCreate()) == null) {
+                    throw new NotExistingEntityException(prdAction.getCreate(), prdAction.getType());
+                }
+            } else {
+                if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
+                    throw new NotExistingEntityException(prdAction.getEntity(), prdAction.getType());
+                }
             }
-            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getPRDBetween().getTargetEntity()) == null) {
-                throw new NotExistingEntityException(prdAction.getPRDBetween().getTargetEntity(), prdAction.getType());
-            }
-        }
-        else if (prdAction.getType().equals("replace")){ //IN REPLACE, THE ENTITIES ARE: KILL AND CREATE
-            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getKill()) == null) {
-                throw new NotExistingEntityException(prdAction.getKill(), prdAction.getType());
-            }
-            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getCreate()) == null) {
-                throw new NotExistingEntityException(prdAction.getCreate(), prdAction.getType());
-            }
-        }
-        else {
-            if (currWorkingWorld.getEntityDefinitionByName(prdAction.getEntity()) == null) {
-                throw new NotExistingEntityException(prdAction.getEntity(), prdAction.getType());
-            }
-        }
+
 
         SecondaryEntityDetails secondaryEntityDetails;
         try {
@@ -394,16 +394,16 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
             String entityName = innerArgument.substring(0, innerArgument.indexOf('.'));
             String propertyName = innerArgument.substring(innerArgument.indexOf('.') + 1);
 
-//            if (currWorkingWorld.getEntityDefinitionByName(entityName) == null) { TODO: NEED TO? AND HOW TO DEAL WITH IT (ALSO NEED TO CHECK IN OTHER PLACES??) ALSO, HOW CAN I VALIDATE THAT IS NUMERIC PROPERTY, AND ON THE OTHER HAND, THROW NOT EXISTING PROPERTY ONLY DURING RUNTIME?
-//                throw new NotExistingEntityException(entityName, null);
-//            }
-//
+
+            if(this.currWorkingWorld.getEntityDefinitionByName(entityName) == null){
+                throw new NotExistingEntityException(mainEntityName, "evaluate expression");
+            }
             return isExistingPropertyInEntity(entityName, propertyName) && isNumericPropertyInEntity(entityName, propertyName);
         }
         else if(arg.startsWith("random") || arg.startsWith("percent") || arg.startsWith("ticks")){
             return true;
         }
-        else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg)) //TODO, NEED TO CHECK FOR SECONDARY ALSO??
+        else if(isExistingPropertyInEntity(mainEntityName, arg) && isNumericPropertyInEntity(mainEntityName, arg))
         {
             return true;
         }

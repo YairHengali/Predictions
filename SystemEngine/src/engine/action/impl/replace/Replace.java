@@ -28,13 +28,11 @@ public class Replace extends AbstractAction {
         EntityInstance entityToKill = getMainEntityInstance(context);
 
         switch (creationMode) {
-            case SCRATCH: //TODO: SCREATCH NEED TO BE ON SAME LOCATION ALSO. so what if 2 entities create from same kill? what will be the location + problems this creates
+            case SCRATCH:
                 context.getEntityInstanceManager().createScratchEntity(entityToCreateName);
-//                context.getEntityInstanceManager().killEntity(context.getPrimaryEntityInstance());
                 context.getEntityInstanceManager().killEntity(entityToKill);
                 break;
             case DERIVED:
-//                context.getEntityInstanceManager().createDerivedEntity(context.getPrimaryEntityInstance(), entityToCreateName);
                 context.getEntityInstanceManager().createDerivedEntity(entityToKill, entityToCreateName);
                 break;
         }

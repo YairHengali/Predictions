@@ -198,7 +198,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
     }
 
     @Override
-    public void setDataFromDTO(runningSimulationDTO simulationDTO) {//TODO: Validate where we call it unnecessarily
+    public void setDataFromDTO(runningSimulationDTO simulationDTO) {
 
         currTick.set(simulationDTO.getCurrentTick());
         runTime.set(simulationDTO.getCurrentSeconds());
@@ -218,7 +218,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
 //    INSERT IN INTERVALS:
     private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks, int totalTicks) {
-        int interval = totalTicks / 1000; //TODO: how many intervals we want
+        int interval = totalTicks / 1000;
 
         // Iterate through the entities and their population data
         for (String entity : entitiesPopByTicks.keySet()) {

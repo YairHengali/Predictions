@@ -20,7 +20,7 @@ import javafx.scene.control.Label;
 
         @FXML private Label arg2Label;
 
-        public CalculationController(){ //TODO, where do i get the details from? JAXB? CREATE ANOTHER DTOs ??
+        public CalculationController(){
 
     }
 

@@ -85,10 +85,6 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
         return name2EntInstancesList.get(entityName);
     }
 
-    @Override
-    public void createAnInstance(String name) {
-
-    }
 
     @Override
     public EntityDefinition getEntityDefByName(String entityName) {
@@ -146,7 +142,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
 
             PropertyInstance propertyAtDerived = derivedEntity.getPropertyByName(propertyName);
             if (propertyAtDerived != null && propertyAtDerived.getType() == propertyType){
-                switch (propertyType) { //TODO: LOOKS UGLY AND MIGHT BE BETTER TO IMPLEMENT SET VALUE IN PROPERTY INSTANCE..
+                switch (propertyType) {
                     case BOOLEAN:
                         if (propertyAtDerived instanceof BooleanProperty) {
                             ((BooleanProperty) propertyAtDerived).setValue( Boolean.valueOf(propertyInstance.getValue()) , null);

@@ -33,7 +33,7 @@ public class DetailsController {
         );
     }
 
-    private void showDetails(TreeItem<String> selectedNode) { //TODO: can change in simulationDetailsDTO to maps but for now tried like that
+    private void showDetails(TreeItem<String> selectedNode) {
         SimulationDetailsDTO simulationDetailsDTO = mainController.getSystemEngine().getSimulationDetails();
         detailsVBox.getChildren().clear();
 
@@ -82,7 +82,7 @@ public class DetailsController {
                         String selectedNodeEntityName = selectedNode.getParent().getParent().getValue();
                         for (EntityDTO entityDTO : simulationDetailsDTO.getEntities()) {
                             if (entityDTO.getName().equals(selectedNodeEntityName)) {
-                                for (PropertyDTO propertyDTO : entityDTO.getProperties())//TODO: better change in entityDTO to maps but for now tried like that
+                                for (PropertyDTO propertyDTO : entityDTO.getProperties())
                                 {
                                     if (propertyDTO.getName().equals(selectedNodeValue)) {
                                         detailsVBox.getChildren().add(createPropertyComponent(propertyDTO, false));

@@ -73,13 +73,13 @@ public class Expression {
             String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
             String propertyName = value.substring(value.indexOf('.') + 1);
 
-            if (value.startsWith(mainEntityName + ".")){ //TODO: EXCEPTIONS?
+            if (value.startsWith(mainEntityName + ".")){
                 if (context.getPrimaryEntityInstance().getPropertyByName(propertyName) != null){
                     return context.getPrimaryEntityInstance().getPropertyByName(propertyName).getValue();
                 } else{
                     throw new IllegalArgumentException("In evaluate function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }
-            } else if (value.startsWith(secondaryEntityName + ".")){ //TODO: EXCEPTIONS?
+            } else if (value.startsWith(secondaryEntityName + ".")){
                 if(context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null){
                     return context.getSecondaryEntityInstance().getPropertyByName(propertyName).getValue();
                 } else{
@@ -91,15 +91,23 @@ public class Expression {
             }
 
         }
-        else if(rawExpression.startsWith("percent")){ // TODO: EXCEPTIONS?
+        else if(rawExpression.startsWith("percent")){
             Expression innerExp1 = new Expression(rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(',')), context);
             Expression innerExp2 = new Expression(rawExpression.substring(rawExpression.indexOf(',') + 1, rawExpression.lastIndexOf(')')), context);
 
             String innerValue1 = innerExp1.praseExpressionToValueString(PropertyType.FLOAT);
             String innerValue2 = innerExp2.praseExpressionToValueString(PropertyType.FLOAT);
 
-            float numericExp1 = Float.parseFloat(innerValue1);
-            float numericExp2 = Float.parseFloat(innerValue2);
+            float numericExp1;
+            float numericExp2;
+
+            try {
+                numericExp1 = Float.parseFloat(innerValue1);
+                numericExp2 = Float.parseFloat(innerValue2);
+            }
+            catch(NumberFormatException e){
+                throw new IllegalArgumentException("Percent got non numeric argument: " + e.getMessage());
+            }
 
             return String.valueOf(numericExp1 * (numericExp2 / 100));
         }
@@ -109,7 +117,7 @@ public class Expression {
 
             String propertyName = value.substring(value.indexOf('.') + 1);
 
-            if (value.startsWith(mainEntityName + ".")) { //TODO: EXCEPTIONS?
+            if (value.startsWith(mainEntityName + ".")) {
                 if (context.getPrimaryEntityInstance().getPropertyByName(propertyName) != null) {
                     int lastTickThePropertyModified = context.getPrimaryEntityInstance().getPropertyByName(propertyName).getLastTickModified();
                     return String.valueOf(context.getCurrentTick() - lastTickThePropertyModified);
@@ -117,7 +125,7 @@ public class Expression {
                     throw new IllegalArgumentException("In ticks function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }
             }
-            else if (value.startsWith(secondaryEntityName + ".")) { //TODO: EXCEPTIONS?
+            else if (value.startsWith(secondaryEntityName + ".")) {
                 if (context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null) {
                     int lastTickThePropertyModified = context.getSecondaryEntityInstance().getPropertyByName(propertyName).getLastTickModified();
                     return String.valueOf(context.getCurrentTick() - lastTickThePropertyModified);
@@ -148,13 +156,13 @@ public class Expression {
             String value = rawExpression.substring(rawExpression.indexOf('(') + 1, rawExpression.indexOf(')'));
             String propertyName = value.substring(value.indexOf('.') + 1);
 
-            if (value.startsWith(mainEntityName + ".")){ //TODO: EXCEPTIONS?
+            if (value.startsWith(mainEntityName + ".")){
                 if (context.getPrimaryEntityInstance().getPropertyByName(propertyName) != null){
                     return context.getPrimaryEntityInstance().getPropertyByName(propertyName).getType();
                 } else{
                     throw new IllegalArgumentException("In evaluate function, the entity: " + mainEntityName + " does not have the property: " + propertyName);
                 }
-            } else if (rawExpression.startsWith(secondaryEntityName + ".")){ //TODO: EXCEPTIONS?
+            } else if (rawExpression.startsWith(secondaryEntityName + ".")){
                 if(context.getSecondaryEntityInstance().getPropertyByName(propertyName) != null){
                     return context.getSecondaryEntityInstance().getPropertyByName(propertyName).getType();
                 } else{

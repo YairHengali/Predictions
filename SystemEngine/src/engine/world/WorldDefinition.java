@@ -5,6 +5,7 @@ import engine.environment.manager.EnvironmentVariablesDefManager;
 import engine.environment.manager.EnvironmentVariablesDefManagerImpl;
 import engine.property.PropertyDefinition;
 import engine.rule.Rule;
+import exceptions.xml.NotExistingEntityException;
 
 import java.io.Serializable;
 import java.util.*;
