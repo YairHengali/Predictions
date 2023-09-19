@@ -30,7 +30,6 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated2";
@@ -194,7 +193,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     public void clearPastSimulations()
     {
         id2pastSimulation.values().forEach(WorldInstance::terminateSimulation);
-        List<Runnable> canceledTasks  = threadExecutor.shutdownNow();
+        threadExecutor.shutdownNow();
 //        threadExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(this.numOfThreads);
 
 //        threadExecutor.shutdown();
@@ -216,16 +215,12 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public pastSimulationDTO runSimulation() {
         WorldInstance currSimulation = this.createNewSimulation();
-
         id2pastSimulation.put(currentSimulationID, currSimulation);
-        threadExecutor.execute(currSimulation);
-//        TerminationReason terminationReason = simulation.runMainLoop();
-//        currentSimulationID++;
 
-//        return new EndOfSimulationDTO(currentSimulationID, terminationReason.toString());
+        threadExecutor.execute(currSimulation);
         currentSimulationID++;
+
         return new pastSimulationDTO(currSimulation.getDateOfRun(), currentSimulationID - 1);
-//        return null;
     }
 
     @Override
@@ -383,7 +378,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
 
-    //////////////////////////////////////TRYING PULLING DATA:
+    //////////////////////////////////////PULLING DATA:
     @Override
     public runningSimulationDTO pullData(int simulationID){
         WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
@@ -407,7 +402,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
                                         wantedSimulation.getMaxNumberOfTicks(),
                                         timeRunning,
                                         wantedSimulation.getSecondsToTerminate(),
-                                        wantedSimulation.getStatusString(),
+                                        wantedSimulation.getStatus().toString(),
                                         endSimulationByUser,
                                         entityCountDtos,
                                         terminationReason,

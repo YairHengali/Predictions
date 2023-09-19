@@ -36,6 +36,10 @@ public class Proximity extends AbstractAction {
         return thenActions.size();
     }
 
+    public void addActionToThen(Action actionToAdd) {
+        this.thenActions.add(actionToAdd);
+    }
+
     @Override
     public void Run(Context context) {
         Expression ofAsExpression = new Expression(ofExpression, context);
@@ -56,13 +60,9 @@ public class Proximity extends AbstractAction {
                 }
                 break; //found entity and invoked with her - no need to look for more
             }
-//            break;
         }
-
     }
 
-    public void addActionToThen(Action actionToAdd) {
-        this.thenActions.add(actionToAdd);
-    }
+
 
 }

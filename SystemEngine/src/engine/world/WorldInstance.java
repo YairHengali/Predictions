@@ -49,8 +49,8 @@ public class WorldInstance implements Serializable, Runnable {
         this.simulationID = id;
         this.status = SimulationStatus.CREATED;
     }
-    public String getStatusString(){
-        return this.status.toString();
+    public SimulationStatus getStatus(){
+        return this.status;
     }
 
     public boolean isTerminateByUser(){
@@ -109,33 +109,6 @@ public class WorldInstance implements Serializable, Runnable {
         }
     }
 
-//    public TerminationReason runMainLoop(){ //TICK 1 and up...;
-//        this.startTime = System.currentTimeMillis();
-//        currentNumberOfTicks = 1;
-//
-//        while (!isTermination())
-//        {
-//            for (Rule rule: rules) {
-//                if (rule.isActive(this.currentNumberOfTicks))
-//                {
-//                    rule.runRule(this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks);
-//                }
-//            }
-//            currentNumberOfTicks++;
-//            entityInstanceManager.makeMoveToAllEntities();
-//        }
-//        if(currentNumberOfTicks >= maxNumberOfTicks)
-//        {
-//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
-//            return TerminationReason.MAXTICKSREACHED;
-//        }
-//        else
-//        {
-//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
-//            return TerminationReason.SECONDSREACHED;
-//        }
-//    }
-
     public TerminationReason runMainLoopEx2(){ //TICK 1 and up...;
         boolean isTerminated = false;
         boolean isPaused = false;
@@ -146,19 +119,12 @@ public class WorldInstance implements Serializable, Runnable {
                 this.status = SimulationStatus.RUNNING;
         }
         this.startTime = Instant.now();
-//        currentNumberOfTicks = 1;
-
-
-//        int tickGap = 1;  // Initial tick gap
-//        int threshold = 1000;  // Threshold value for increasing the gap
-
 
         while (!isTerminated)
         {
             isPaused = checkIfPaused();
             isTerminated = isTermination();
             if(!isPaused && !isTerminated){
-//            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
                 currentNumberOfTicks++;
                 entityInstanceManager.makeMoveToAllEntities();
 
@@ -167,17 +133,6 @@ public class WorldInstance implements Serializable, Runnable {
                 }
                 else if(currentNumberOfTicks % 100 == 0)
                     entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
-
-//                // Check if the threshold is exceeded
-//                if (currentNumberOfTicks >= threshold) {
-//                    // Increase the tick gap
-//                    tickGap *= 2;  // You can adjust this as needed
-//                    threshold *= 2;  // Optionally, double the threshold for the next adjustment
-//                }
-//
-//                if (currentNumberOfTicks % tickGap == 0) {
-//                    entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
-//                }
 
 
                 List<Action> actionList = rules.stream()
@@ -199,7 +154,6 @@ public class WorldInstance implements Serializable, Runnable {
                                         action.Run(new ContextImpl(entityInstance, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
                                     } else {
                                         List<EntityInstance> secondaryEntities = entityInstanceManager.getInstancesListByName(secondaryEntityDetails.getName());
-//                                        .stream();
 
                                         if (secondaryEntityDetails.getMaxCount() == null) { // count = "all"
                                             if (secondaryEntityDetails.getCondition() == null) { // no condition
@@ -248,7 +202,7 @@ public class WorldInstance implements Serializable, Runnable {
                                     synchronized (statusLock) {
                                         this.status = SimulationStatus.TERMINATED;
                                     }
-                                    this.errorMassage = e.getMessage() + " in action: " + action.getActionType();
+                                    this.errorMassage = e.getMessage();
                                 }
                             });
                 });
@@ -277,11 +231,11 @@ public class WorldInstance implements Serializable, Runnable {
         else if(this.secondsToTerminate != null && runningTime >= secondsToTerminate)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
-            this.endTime = Instant.now(); //TESTT.. WILL BE BY SIMULATION STATE
+            this.endTime = Instant.now();
             this.terminationReason = TerminationReason.SECONDSREACHED;
             return TerminationReason.SECONDSREACHED;
         }
-        else if(errorMassage != null){ //ADDED
+        else if(errorMassage != null){
             this.terminationReason = TerminationReason.ERROR;
             return TerminationReason.ERROR;
         }
@@ -317,15 +271,12 @@ public class WorldInstance implements Serializable, Runnable {
 
         if (this.secondsToTerminate != null && this.maxNumberOfTicks != null)
         {
-//            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate) ||
-//                    (this.currentNumberOfTicks >= this.maxNumberOfTicks);
             return (timeSimulationRunning >= this.secondsToTerminate) ||
                     (this.currentNumberOfTicks >= this.maxNumberOfTicks);
 
         }
         else if (this.secondsToTerminate != null)
         {
-//            return ((System.currentTimeMillis()-this.startTime)/1000 >= this.secondsToTerminate);
             return (timeSimulationRunning >= this.secondsToTerminate);
         }
         else // this.maxNumberOfTicks != null
@@ -375,7 +326,6 @@ public class WorldInstance implements Serializable, Runnable {
 
     @Override
     public void run() {
-//        runMainLoop();
         runMainLoopEx2();
     }
 

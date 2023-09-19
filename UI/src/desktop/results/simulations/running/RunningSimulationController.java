@@ -2,6 +2,7 @@ package desktop.results.simulations.running;
 
 import desktop.AppController;
 import desktop.results.simulations.simulationControllerAPI;
+import engine.world.SimulationStatus;
 import engineAnswers.ActiveEnvVarDTO;
 import engineAnswers.EntityCountDTO;
 import ex2.runningSimulationDTO;
@@ -99,7 +100,7 @@ public class RunningSimulationController implements simulationControllerAPI {
     private SimpleDoubleProperty ticksProgress = new SimpleDoubleProperty(0);
     private SimpleDoubleProperty timeProgress = new SimpleDoubleProperty(0);
     private AppController mainController = null;
-    boolean isCurrSimulationTerminatesByUser = false;
+    boolean isCurrSimulationTerminatesByUser = false; //TODO: need this now?
     private SimpleBooleanProperty disablePause = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disableStop = new SimpleBooleanProperty(true);
     private SimpleBooleanProperty disableResume = new SimpleBooleanProperty(true);
@@ -169,28 +170,28 @@ public class RunningSimulationController implements simulationControllerAPI {
     }
 
     private void calcDisableValueToAllBTNs(String status){
-        switch (status) {
-            case "TERMINATED":
-            case "CREATED":
+        switch (SimulationStatus.valueOf(status)) {
+            case TERMINATED:
+            case CREATED:
                 disablePause.set(true);
                 disableStop.set(true);
                 disableResume.set(true);
                 break;
-            case "PAUSED":
+            case PAUSED:
                 disablePause.set(true);
                 disableStop.set(false);
                 disableResume.set(false);
                 break;
-            case "RUNNING":
+            case RUNNING:
                 disablePause.set(false);
                 disableStop.set(false);
                 disableResume.set(true);
                 break;
         }
 
-        if(!this.isCurrSimulationTerminatesByUser){
-            disableStop.set(true);
-        }
+//        if(!this.isCurrSimulationTerminatesByUser){ //TODO: validate with Ofir that only place needed so buttons will appear when not in user mode (need inside simulation also)?
+//            disableStop.set(true);
+//        }
     }
     @FXML
     public void initialize() {
@@ -217,18 +218,15 @@ public class RunningSimulationController implements simulationControllerAPI {
 
     @FXML
     void pauseButtonPressed(ActionEvent event) {
-//        new Thread(() -> mainController.getSystemEngine().pauseSimulation(simulationID));
         mainController.getSystemEngine().pauseSimulation(simulationID);
     }
 
     @FXML
     void resumeButtonPressed(ActionEvent event) {
-//        new Thread(() -> mainController.getSystemEngine().resumeSimulation(simulationID));
         mainController.getSystemEngine().resumeSimulation(simulationID);
     }
     @FXML
     void stopButtonPressed(ActionEvent event) {
-//        new Thread(() -> mainController.getSystemEngine().stopSimulation(simulationID));
         mainController.getSystemEngine().stopSimulation(simulationID);
     }
     @FXML
