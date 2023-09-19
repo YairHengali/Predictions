@@ -22,6 +22,7 @@ public class BooleanEnvVarController implements EnvVarControllerAPI {
     }
 
 
+
     @FXML
     private void initialize(){
         valueComboBox.getItems().addAll("Random", "True", "False");
@@ -38,5 +39,10 @@ public class BooleanEnvVarController implements EnvVarControllerAPI {
     @Override
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
+    }
+
+    @Override
+    public void setValue(String value) {
+        valueComboBox.setValue(value);
     }
 }

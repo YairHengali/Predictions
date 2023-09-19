@@ -1,10 +1,10 @@
 package desktop.execution;
 
 import desktop.execution.envvar.api.EnvVarControllerAPI;
+import desktop.results.simulations.running.RunningSimulationController;
 import engine.property.PropertyType;
-import engineAnswers.EntityDTO;
-import engineAnswers.PropertyDTO;
-import engineAnswers.pastSimulationDTO;
+import engineAnswers.*;
+import ex2.runningSimulationDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -215,5 +215,26 @@ public class ExecutionController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setDetailsToReRun(int simulationID){
+        Collection<EntityDTO> entityDTOCollection = new ArrayList<>();
+        Collection<EntityCountDTO> entityCountDTOCollection = mainController.getSystemEngine().getPastSimulationEntityCount(new pastSimulationDTO(null,simulationID));
+        entityCountDTOCollection.forEach(entityCountDTO -> entityDTOCollection.add(new EntityDTO(entityCountDTO.getName(), entityCountDTO.getPopulationAtStart(), null)));
+
+        ObservableList<EntityDTO> data = FXCollections.observableArrayList();
+        data.addAll(entityDTOCollection);
+
+        entityPopulationTable.setItems(data);
+
+        List<ActiveEnvVarDTO> activeEnvVarList= mainController.getSystemEngine().getActiveEnvVarsDto(simulationID);
+        activeEnvVarList.forEach(envVar -> {
+                showEnvVarDetails(envVar.getName());
+                name2envVarController.get(envVar.getName()).setValue(envVar.getValue());
+        });
+        currentEnvVarDetailsHBox.getChildren().clear();
+        envListView.getSelectionModel().clearSelection();
+
+
     }
 }

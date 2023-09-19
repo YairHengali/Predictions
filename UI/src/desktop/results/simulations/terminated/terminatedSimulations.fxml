@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -68,9 +69,10 @@
             <ComboBox fx:id="functionComboBox" onAction="#ExtraDetailsSelected" prefWidth="150.0" promptText="Extra Details" />
          </children>
       </VBox>
-      <VBox fx:id="resultVBox" alignment="CENTER" prefHeight="67.0" prefWidth="228.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
+      <VBox fx:id="resultVBox" alignment="CENTER" prefHeight="67.0" prefWidth="228.0" spacing="10.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
             <Label fx:id="resultLBL" text="Label" visible="false" />
+            <Button fx:id="rerunBTN" mnemonicParsing="false" onAction="#reRunButtonPressed" text="reRun" />
          </children>
       </VBox>
       <VBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">

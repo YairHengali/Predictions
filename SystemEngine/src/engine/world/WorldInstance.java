@@ -142,14 +142,15 @@ public class WorldInstance implements Serializable, Runnable {
 
 
         synchronized (this){
-            this.status = SimulationStatus.RUNNING;
+            if(this.status == SimulationStatus.CREATED)
+                this.status = SimulationStatus.RUNNING;
         }
         this.startTime = Instant.now();
 //        currentNumberOfTicks = 1;
 
 
-        int tickGap = 1;  // Initial tick gap
-        int threshold = 1000;  // Threshold value for increasing the gap
+//        int tickGap = 1;  // Initial tick gap
+//        int threshold = 1000;  // Threshold value for increasing the gap
 
 
         while (!isTerminated)

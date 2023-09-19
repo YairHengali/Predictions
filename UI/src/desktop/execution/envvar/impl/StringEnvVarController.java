@@ -19,6 +19,12 @@ public class StringEnvVarController implements EnvVarControllerAPI {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+
+    @Override
+    public void setValue(String value) {
+        valueTextField.setText(value);
+    }
+
     @Override
     public void setDataFromDTO(PropertyDTO envVarDTO) {
         nameLabel.setText(envVarDTO.getName());

@@ -91,6 +91,8 @@ public class TerminatedSimulationController implements simulationControllerAPI
     private ComboBox<String> functionComboBox;
     private String selectedFunction = null;
 
+    @FXML
+    private Button rerunBTN;
 
     @FXML
     private VBox resultVBox;
@@ -351,6 +353,11 @@ public class TerminatedSimulationController implements simulationControllerAPI
         data.clear();
         data.addAll(entityCountDTOCollection);
         entityTableView.setItems(data);
+    }
+
+    @FXML
+    void reRunButtonPressed(ActionEvent event) {
+        mainController.reRunSimulation(this.currentChosenSimulationID);
     }
 
 }

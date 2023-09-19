@@ -7,4 +7,5 @@ public interface EnvVarControllerAPI {
     void setDataFromDTO(PropertyDTO envVarDTO);
     PropertyDTO createEnvVarDTO();
     void setMainController(AppController mainController);
+    void setValue(String value);
 }
