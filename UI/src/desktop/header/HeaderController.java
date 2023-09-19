@@ -153,7 +153,4 @@ public class HeaderController {
         ft.play();
 
     }
-
-
-//TODO: כשטוענים קובץ  אחד אחרי השני הוא לא מראה את הסימולציה רצה
 }
