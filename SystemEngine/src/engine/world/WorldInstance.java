@@ -161,9 +161,12 @@ public class WorldInstance implements Serializable, Runnable {
 //            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
                 currentNumberOfTicks++;
                 entityInstanceManager.makeMoveToAllEntities();
-                if(currentNumberOfTicks % 100 == 0){ //TODO: DECIDE WHICH TICKS
+
+                if(currentNumberOfTicks < 100) {
                     entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
                 }
+                else if(currentNumberOfTicks % 100 == 0) //TODO: DECIDE WHICH TICKS
+                    entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
 
 //                // Check if the threshold is exceeded
 //                if (currentNumberOfTicks >= threshold) {
