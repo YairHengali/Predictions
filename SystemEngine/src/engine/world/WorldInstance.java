@@ -224,7 +224,9 @@ public class WorldInstance implements Serializable, Runnable {
 
                                     }
                                 } catch (Exception e) {
-                                    this.status = SimulationStatus.TERMINATED; //TODO: sync??
+                                    synchronized (statusLock) {
+                                        this.status = SimulationStatus.TERMINATED; //TODO: sync??
+                                    }
                                     this.errorMassage = e.getMessage();
 //                                    throw new RuntimeException(e.getMessage() + "\n" + "Error occurred with main entity: " +
 //                                            entityName); //TODO: might not needed because cant get the rule name
@@ -338,7 +340,7 @@ public class WorldInstance implements Serializable, Runnable {
                 if(this.status == SimulationStatus.RUNNING){
                     this.runningTime += Duration.between(startTime, Instant.now()).getSeconds();
                 }
-                System.out.println("Thread: "+Thread.currentThread()+" is terminating the simulation");
+                System.out.println("Thread: " + Thread.currentThread().getName() + " is terminating the simulation");
                 this.status = SimulationStatus.TERMINATED;
             }
         }

@@ -193,7 +193,7 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public void clearPastSimulations()
     {
-        id2pastSimulation.values().forEach(simulation -> simulation.terminateSimulation());
+        id2pastSimulation.values().forEach(WorldInstance::terminateSimulation);
         List<Runnable> canceledTasks  = threadExecutor.shutdownNow();
 //        threadExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(this.numOfThreads);
 
