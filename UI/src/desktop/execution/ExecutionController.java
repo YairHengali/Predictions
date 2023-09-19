@@ -216,4 +216,8 @@ public class ExecutionController {
             throw new RuntimeException(e);
         }
     }
+
+    public void setDetailsToReRun(){
+
+    }
 }
