@@ -222,6 +222,7 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
 
 
     //for entities chart in termination details:
+    //ALL TICKS:
     @Override
     public void updateEntitiesPopByTicks(int currentTick){
         for (Map.Entry<String, List<EntityInstance>> entry : name2EntInstancesList.entrySet()) {
@@ -229,6 +230,16 @@ public class EntityInstanceManagerImpl implements EntityInstanceManager, Seriali
         }
     }
 
+    //LAST 10K TICKS:
+//    @Override
+//    public void updateEntitiesPopByTicks(int currentTick){
+//        for (Map.Entry<String, List<EntityInstance>> entry : name2EntInstancesList.entrySet()) {
+//            if(currentTick >= 1000){
+//                this.entitiesPopByTicks.get(entry.getKey()).remove(currentTick - 10000);
+//            }
+//            this.entitiesPopByTicks.get(entry.getKey()).put(currentTick, entry.getValue().size());
+//        }
+//    }
     @Override
     public Map<String, Map<Integer, Integer>> getEntitiesPopByTicks() {
         return entitiesPopByTicks;

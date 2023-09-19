@@ -214,6 +214,7 @@ public class TerminatedSimulationController implements simulationControllerAPI
         insertDataTolineChart(mainController.getSystemEngine().getEntitiesPopByTicks(currentChosenSimulationID).getEntitiesPopByTicks(), simulationDTO.getCurrentTick());
     }
 
+//    INSERT IN INTERVALS:
     private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks, int totalTicks) {
         int interval = totalTicks / 1000; //TODO: how many intervals we want
 
@@ -231,29 +232,42 @@ public class TerminatedSimulationController implements simulationControllerAPI
                     series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
 
-//            for (int i = 0; i < totalTicks; i += Math.ceil(totalTicks/ 1000f)) {
-//                series.getData().add(new XYChart.Data<>(i, data.get(i)));
-//            }
-
-
-
-
-//            int remainingTicks = totalTicks % 1000;
-//
-//            for (int i = 0; i < totalTicks; i += interval) {
-//                series.getData().add(new XYChart.Data<>(i, data.get(i)));
-//            }
-//
-//            if (remainingTicks > 0) {
-//                int finalTick = totalTicks - 1;
-//                series.getData().add(new XYChart.Data<>(finalTick, data.get(finalTick)));
-//            }
-
-
             // Add the series to the line chart
             entitiesPopulationLC.getData().add(series);
         }
     }
+
+
+    //INSERT ALL (when we only have the last 10k ticks:
+//    private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks, int totalTicks) {
+//        // Find the minimum X-value
+//        double minXValue = Double.POSITIVE_INFINITY;
+//
+//        // Iterate through the entities and their population data
+//        for (String entity : entitiesPopByTicks.keySet()) {
+//            Map<Integer, Integer> data = entitiesPopByTicks.get(entity);
+//
+//            // Find the minimum X-value within this entity's data
+//            for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
+//                double xValue = entry.getKey();
+//                minXValue = Math.min(minXValue, xValue);
+//            }
+//
+//            // Create a data series for the entity
+//            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+//            series.setName(entity);
+//
+//            // Add data points to the series
+//            for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
+//                    series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+//            }
+//
+//            // Add the series to the line chart
+//            entitiesPopulationLC.getData().add(series);
+//
+//        }
+//        ticsAxis.setLowerBound(minXValue);
+//    }
 
 
     private void setReasonFromDTO(runningSimulationDTO simulationDTO) {

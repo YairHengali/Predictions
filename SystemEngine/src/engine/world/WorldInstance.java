@@ -148,6 +148,10 @@ public class WorldInstance implements Serializable, Runnable {
 //        currentNumberOfTicks = 1;
 
 
+        int tickGap = 1;  // Initial tick gap
+        int threshold = 1000;  // Threshold value for increasing the gap
+
+
         while (!isTerminated)
         {
             isPaused = checkIfPaused();
@@ -156,9 +160,21 @@ public class WorldInstance implements Serializable, Runnable {
 //            System.out.println("Thread: " + Thread.currentThread().getId() + ": I am running in tick number: " + this.currentNumberOfTicks + " | Sick count: " + entityInstanceManager.getInstancesListByName("Sick").size() + " | Healthy count: " + entityInstanceManager.getInstancesListByName("Healthy").size());
                 currentNumberOfTicks++;
                 entityInstanceManager.makeMoveToAllEntities();
-//                if(currentNumberOfTicks % 100 == 0){ //TODO: DECIDE WHICH TICKS
+                if(currentNumberOfTicks % 100 == 0){ //TODO: DECIDE WHICH TICKS
                     entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
+                }
+
+//                // Check if the threshold is exceeded
+//                if (currentNumberOfTicks >= threshold) {
+//                    // Increase the tick gap
+//                    tickGap *= 2;  // You can adjust this as needed
+//                    threshold *= 2;  // Optionally, double the threshold for the next adjustment
 //                }
+//
+//                if (currentNumberOfTicks % tickGap == 0) {
+//                    entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
+//                }
+
 
                 List<Action> actionList = rules.stream()
                         .filter(rule -> rule.isActive(this.currentNumberOfTicks))
@@ -225,7 +241,7 @@ public class WorldInstance implements Serializable, Runnable {
                                     }
                                 } catch (Exception e) {
                                     synchronized (statusLock) {
-                                        this.status = SimulationStatus.TERMINATED; //TODO: sync??
+                                        this.status = SimulationStatus.TERMINATED;
                                     }
                                     this.errorMassage = e.getMessage();
 //                                    throw new RuntimeException(e.getMessage() + "\n" + "Error occurred with main entity: " +
@@ -254,8 +270,8 @@ public class WorldInstance implements Serializable, Runnable {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.terminationReason = TerminationReason.MAXTICKSREACHED;
             return TerminationReason.MAXTICKSREACHED;
-        }//TODO: RUNNING TIME INSTEAD OF START?
-        else if(this.secondsToTerminate != null && Duration.between(startTime, Instant.now()).getSeconds() >= secondsToTerminate)
+        }
+        else if(this.secondsToTerminate != null && runningTime >= secondsToTerminate)
         {
             System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.endTime = Instant.now(); //TESTT.. WILL BE BY SIMULATION STATE
