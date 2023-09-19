@@ -30,6 +30,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class SystemEngineImpl implements SystemEngine, Serializable {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "jaxb.generated2";
@@ -192,7 +193,20 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     @Override
     public void clearPastSimulations()
     {
-        threadExecutor.shutdownNow();
+        id2pastSimulation.values().forEach(simulation -> simulation.terminateSimulation());
+        List<Runnable> canceledTasks  = threadExecutor.shutdownNow();
+//        threadExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(this.numOfThreads);
+
+//        threadExecutor.shutdown();
+//        try {
+//            if (!threadExecutor.awaitTermination(10, TimeUnit.SECONDS)) {
+//                // If not terminated within 10 seconds, force shutdown
+//                threadExecutor.shutdownNow();
+//            }
+//        } catch (InterruptedException e) {
+//            // Handle InterruptedException
+//            Thread.currentThread().interrupt();
+//        }
         threadExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(this.numOfThreads);
 
         id2pastSimulation.clear();

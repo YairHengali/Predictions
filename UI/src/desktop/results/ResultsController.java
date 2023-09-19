@@ -39,6 +39,8 @@ public class ResultsController {
 
     boolean terminatedIsOn = false; // true if the terminated component is on the screen
 
+    private volatile boolean stopRequested = false;
+
     public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
 //        executionList.getItems().clear();
 //        List<pastSimulationDTO> pastSimulationsDetails = mainController.getSystemEngine().getPastSimulationsDetails();
@@ -47,7 +49,7 @@ public class ResultsController {
 //    }
         executionList.getItems().add(pastSimulationDTO);
         executionList.getSelectionModel().select(pastSimulationDTO);
-
+        stopRequested = false; //TODO: maybe in another place( in setChosenID ?)
     }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
@@ -63,34 +65,34 @@ public class ResultsController {
 //            }
         });
 
-        dataPullingThread = new Thread(() -> {
-            while (true) {
-                if (currentChosenSimulationID != -1) { // if there is chosen option
-                    try {
-                        sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
-                    // Update UI using Platform.runLater()
-                    Platform.runLater(() -> {
-                        // Update UI with the collected data:
-                        if(testINFO.getStatus().equals("TERMINATED")){
-                            if(!terminatedIsOn) {
-                                showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
-                                terminatedIsOn = true;
-                            }
-                        }
-                        else {
-                            showRunningSimulationDetails(testINFO, currentChosenSimulationID);
-                            terminatedIsOn = false;
-                        }
-
-                    });
-
-                }
-            }
-        });
+//        dataPullingThread = new Thread(() -> {        //WORKED LIKE THAT ONLY IN DEBUG! DONT KNOW WHY NOT IN REAL....
+//            while (true) {
+//                if (currentChosenSimulationID != -1) { // if there is chosen option
+//                    try {
+//                        sleep(300);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if(!stopRequested) {
+//                        runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
+//                        // Update UI using Platform.runLater()
+//                        Platform.runLater(() -> {
+//                            // Update UI with the collected data:
+//                            if (testINFO.getStatus().equals("TERMINATED")) {
+//                                if (!terminatedIsOn) {
+//                                    showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
+//                                    terminatedIsOn = true;
+//                                }
+//                            } else {
+//                                showRunningSimulationDetails(testINFO, currentChosenSimulationID);
+//                                terminatedIsOn = false;
+//                            }
+//
+//                        });
+//                    }
+//                }
+//            }
+//        });
     }
     private void setChosenID(pastSimulationDTO newValue) {
         if(newValue == null){
@@ -100,7 +102,35 @@ public class ResultsController {
             if(currentChosenSimulationID != newValue.getId())
                 terminatedIsOn = false;
             this.currentChosenSimulationID = newValue.getId();
-            if (!dataPullingThread.isAlive()){
+            if (dataPullingThread == null || !dataPullingThread.isAlive()){
+                dataPullingThread = new Thread(() -> {
+                    while (!stopRequested) {
+                        if (currentChosenSimulationID != -1) { // if there is chosen option
+                            try {
+                                sleep(300);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if(!stopRequested) {
+                                runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
+                                // Update UI using Platform.runLater()
+                                Platform.runLater(() -> {
+                                    // Update UI with the collected data:
+                                    if (testINFO.getStatus().equals("TERMINATED")) {
+                                        if (!terminatedIsOn) {
+                                            showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
+                                            terminatedIsOn = true;
+                                        }
+                                    } else {
+                                        showRunningSimulationDetails(testINFO, currentChosenSimulationID);
+                                        terminatedIsOn = false;
+                                    }
+
+                                });
+                            }
+                        }
+                    }
+                });
                 dataPullingThread.start();
             }
         }
@@ -179,6 +209,15 @@ public class ResultsController {
         }
     }
     public void clearExecutionList() {
+        stopRequested = true;
+//        dataPullingThread.interrupt();// added at last, not sure if needed
         executionList.getItems().clear();
+        if (!simulationHBox.getChildren().isEmpty()) {
+            simulationHBox.getChildren().clear();
+        }
+        id2simulationController.clear();
+        id2simulationComponent.clear();
+        currentChosenSimulationID = -1;
+
     }
 }

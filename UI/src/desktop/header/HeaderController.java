@@ -88,6 +88,16 @@ public class HeaderController {
 
             // Load the selected file using the systemEngine
             mainController.getSystemEngine().loadSimulation(selectedFile.getAbsolutePath());
+
+            if(mainController.getIsFileLoaded()){ //already had working one
+                mainController.clearResultsTab();
+                mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
+            }
+
+            if (!ThreadpoolDataPullingThread.isAlive()){
+                ThreadpoolDataPullingThread.start();
+            }
+
             mainController.setIsFileLoaded(true);
 
             // Update the text field with the selected file path
@@ -95,11 +105,11 @@ public class HeaderController {
 
 
             System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
-            mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
-            if (!ThreadpoolDataPullingThread.isAlive()){
-                ThreadpoolDataPullingThread.start();
-            }
-            mainController.clearResultsTab();
+//            mainController.getSystemEngine().clearPastSimulations(); //TODO: validate that working
+//            if (!ThreadpoolDataPullingThread.isAlive()){
+//                ThreadpoolDataPullingThread.start();
+//            }
+//            mainController.clearResultsTab();
             mainController.addDataToSimulationTreeView();
             mainController.addDataToExecutionTab();
 
