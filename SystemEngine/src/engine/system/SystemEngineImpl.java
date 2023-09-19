@@ -229,10 +229,10 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     }
 
     @Override
-    public List<ActiveEnvVarDTO> getActiveEnvVarsDto() {
+    public List<ActiveEnvVarDTO> getActiveEnvVarsDto(int simulationID) {
         List<ActiveEnvVarDTO> activeEnvVarDtos = new ArrayList<>();
 
-        for (PropertyInstance activeEnvVar : simulation.getActiveEnvironmentVariables()) {
+        for (PropertyInstance activeEnvVar : id2pastSimulation.get(simulationID).getActiveEnvironmentVariables()) {
             activeEnvVarDtos.add(new ActiveEnvVarDTO(activeEnvVar.getName(), activeEnvVar.getValue()));
         }
         return activeEnvVarDtos;

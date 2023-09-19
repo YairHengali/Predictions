@@ -15,7 +15,7 @@ public interface SystemEngine {
     List<pastSimulationDTO> getPastSimulationsDetails();
     Boolean isThereLoadedSimulation();
     List<PropertyDTO> getEnvVarsDefinitionDto();
-    List<ActiveEnvVarDTO> getActiveEnvVarsDto();
+    List<ActiveEnvVarDTO> getActiveEnvVarsDto(int simulationID);
     //void setEnvVarsFromDto(List<PropertyDTO> envVarsDto);
     void setEnvVarDefFromDto(PropertyDTO envVarDto);
     HistogramDTO getHistogramOfPropertyInTerminatedSimulation(int simulationID, String entityName, String propertyName);

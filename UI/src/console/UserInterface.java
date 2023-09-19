@@ -94,7 +94,7 @@ public class UserInterface {
                         letUserChooseEnvVarsValues(envVarDtos);
 
                         //systemEngine.createNewSimulation();
-                        List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto();
+                        List<ActiveEnvVarDTO> activeEnvVarDtos = systemEngine.getActiveEnvVarsDto(-1); // was without params in ex1 -> changed in Ex2
                         printActiveEnvVars(activeEnvVarDtos);
 //                        EndOfSimulationDTO endOfSimulationDTO = systemEngine.runSimulation();
 //                        printEndOfSimulationDetails(endOfSimulationDTO);

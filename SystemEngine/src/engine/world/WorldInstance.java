@@ -158,7 +158,7 @@ public class WorldInstance implements Serializable, Runnable {
                 currentNumberOfTicks++;
                 entityInstanceManager.makeMoveToAllEntities();
 //                if(currentNumberOfTicks % 100 == 0){ //TODO: DECIDE WHICH TICKS
-                    entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
+                    //entityInstanceManager.updateEntitiesPopByTicks(currentNumberOfTicks);
 //                }
 
                 List<Action> actionList = rules.stream()
@@ -226,7 +226,7 @@ public class WorldInstance implements Serializable, Runnable {
                                     }
                                 } catch (Exception e) {
                                     synchronized (statusLock) {
-                                        this.status = SimulationStatus.TERMINATED; //TODO: sync??
+                                        this.status = SimulationStatus.TERMINATED;
                                     }
                                     this.errorMassage = e.getMessage();
 //                                    throw new RuntimeException(e.getMessage() + "\n" + "Error occurred with main entity: " +

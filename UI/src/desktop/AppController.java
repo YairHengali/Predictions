@@ -7,6 +7,7 @@ import desktop.results.ResultsController;
 import engine.system.SystemEngine;
 import engine.system.SystemEngineImpl;
 import engineAnswers.pastSimulationDTO;
+import ex2.runningSimulationDTO;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -107,5 +108,10 @@ public class AppController {
         alert.setContentText(setContentText);
         alert.initOwner(this.headerComponent.getScene().getWindow());
         alert.showAndWait();
+    }
+
+    public void reRunSimulation(int simulationID){
+        executionComponentController.setDetailsToReRun(simulationID);
+        tabPane.getSelectionModel().select(newExecutionTab);
     }
 }
