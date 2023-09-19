@@ -112,6 +112,7 @@ public class HeaderController {
 //            mainController.clearResultsTab();
             mainController.addDataToSimulationTreeView();
             mainController.addDataToExecutionTab();
+            mainController.moveToDetailsTab();
 
         }
         catch (Exception e) {

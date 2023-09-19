@@ -86,6 +86,9 @@ public class AppController {
         resultsComponentController.addItemToSimulationsList(pastSimulationDTO);
         tabPane.getSelectionModel().select(resultsTab);
     }
+    public void moveToDetailsTab(){
+        tabPane.getSelectionModel().select(detailsTab);
+    }
 
     public void clearResultsTab() {
         resultsComponentController.clearExecutionList();

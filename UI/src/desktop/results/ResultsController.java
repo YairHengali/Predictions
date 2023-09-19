@@ -136,18 +136,19 @@ public class ResultsController {
         }
     }
     private void showRunningSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
-        if (!id2simulationComponent.containsKey(simulationID)) {
-            createRunningSimulationComponent(simulationDTO, simulationID);
-        }
-        else{
-            id2simulationController.get(simulationID).setDataFromDTO(simulationDTO); //TODO: why is this here?
-        }
+        if(simulationID != -1) {
+            if (!id2simulationComponent.containsKey(simulationID)) {
+                createRunningSimulationComponent(simulationDTO, simulationID);
+            } else {
+                id2simulationController.get(simulationID).setDataFromDTO(simulationDTO); //TODO: why is this here?
+            }
 
-        if(!simulationHBox.getChildren().isEmpty()) {
-            simulationHBox.getChildren().clear();
-        }
+            if (!simulationHBox.getChildren().isEmpty()) {
+                simulationHBox.getChildren().clear();
+            }
 
-        simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
+            simulationHBox.getChildren().add(id2simulationComponent.get(simulationID));
+        }
 
     }
     private void showTerminatedSimulationDetails(runningSimulationDTO simulationDTO, int simulationID) {
