@@ -142,7 +142,7 @@ public class WorldInstance implements Serializable, Runnable {
 
 
         synchronized (this){
-            if(this.status == SimulationStatus.CREATED)
+            if(this.status != SimulationStatus.TERMINATED)
                 this.status = SimulationStatus.RUNNING;
         }
         this.startTime = Instant.now();

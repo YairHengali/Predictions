@@ -202,6 +202,7 @@ public class ResultsController {
             simulationController.setMainController(this.mainController);
             simulationController.setSimulationID(simulationID);
             simulationController.setDataFromDTO(simulationDTO);
+            simulationController.setExtraDetails();
             id2simulationController.put(simulationID, simulationController);
             id2simulationComponent.put(simulationID, component);
 

@@ -2,6 +2,7 @@ package desktop.results.simulations.running;
 
 import desktop.AppController;
 import desktop.results.simulations.simulationControllerAPI;
+import engineAnswers.ActiveEnvVarDTO;
 import engineAnswers.EntityCountDTO;
 import ex2.runningSimulationDTO;
 import javafx.beans.property.*;
@@ -19,7 +20,7 @@ import java.util.Collection;
 
 public class RunningSimulationController implements simulationControllerAPI {
 
-    // ~~~~~~~~ Table view ~~~~~~~~
+    // ~~~~~~~~ Entity Table view ~~~~~~~~
     @FXML
     private TableView<EntityCountDTO> entityTableView;
 
@@ -32,7 +33,20 @@ public class RunningSimulationController implements simulationControllerAPI {
     @FXML
     private TableColumn<EntityCountDTO, Integer> entityCountAtEndColumn;
 
-    // ~~~~~~~~ ^ Table view ^ ~~~~~~~~
+    // ~~~~~~~~ ^ Entity Table view ^ ~~~~~~~~
+
+    // ~~~~~~~~ Env Var Table view ~~~~~~~~
+
+    @FXML
+    private TableView<ActiveEnvVarDTO> envVarsTableView;
+
+    @FXML
+    private TableColumn<ActiveEnvVarDTO, String> envVarNameCol;
+
+    @FXML
+    private TableColumn<ActiveEnvVarDTO, String> envVarValueCol;
+
+    // ~~~~~~~~ ^ Env Var Table view ^ ~~~~~~~~
 
     @FXML
     private Label statusLBL;
@@ -129,6 +143,11 @@ public class RunningSimulationController implements simulationControllerAPI {
         this.mainController = mainController;
     }
 
+    @Override
+    public void setExtraDetails() {
+        setEnvVarsTable();
+    }
+
     private void setTicksProgressBar(int currTick, int totalTicks){
         double progress = (double) currTick /totalTicks;
         ticksProgressBar.setProgress(progress);
@@ -192,6 +211,8 @@ public class RunningSimulationController implements simulationControllerAPI {
         this.pauseBTN.disableProperty().bind(disablePause);
         this.resumeBTN.disableProperty().bind(disableResume);
         this.stopBTN.disableProperty().bind(disableStop);
+
+
     }
 
     @FXML
@@ -215,5 +236,15 @@ public class RunningSimulationController implements simulationControllerAPI {
         mainController.getSystemEngine().stopSimulation(simulationID);
     }
 
+    public void setEnvVarsTable(){
+        envVarNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        envVarValueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
 
+        Collection<ActiveEnvVarDTO> envVarCollection = mainController.getSystemEngine().getActiveEnvVarsDto(simulationID);
+
+        ObservableList<ActiveEnvVarDTO> data = FXCollections.observableArrayList();
+        data.clear();
+        data.addAll(envVarCollection);
+        envVarsTableView.setItems(data);
+    }
 }

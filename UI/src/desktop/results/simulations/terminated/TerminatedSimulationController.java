@@ -292,17 +292,20 @@ public class TerminatedSimulationController implements simulationControllerAPI
         }
         this.reason.set(res);
     }
-
     @Override
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
 
     @Override
+    public void setExtraDetails() {
+
+    }
+
+    @Override
     public void setSimulationID(int simulationID ){
         this.currentChosenSimulationID = simulationID;
     }
-
     @FXML
     public void ExtraDetailsSelected(ActionEvent event) {
         selectedFunction = functionComboBox.getSelectionModel().getSelectedItem();
@@ -315,8 +318,10 @@ public class TerminatedSimulationController implements simulationControllerAPI
         if (selectedEntity != null) {
             propertyComboBox.getItems().clear();
             propertyComboBox.setDisable(false);
-            propertyComboBox.setPromptText("Property");
-            functionComboBox.setPromptText("Extra Details");
+            propertyComboBox.getSelectionModel().clearSelection();
+            //propertyComboBox.setPromptText("Property");
+            functionComboBox.getSelectionModel().clearSelection();
+            //functionComboBox.setPromptText("Extra Details");
             functionComboBox.setDisable(true);
             resultLBL.setVisible(false);
 
@@ -328,14 +333,12 @@ public class TerminatedSimulationController implements simulationControllerAPI
             }
         }
     }
-
     @FXML
     void propertySelected(ActionEvent event) {
         selectedProperty = propertyComboBox.getSelectionModel().getSelectedItem();
         functionComboBox.setDisable(false);
         decodeAnaliticsFunction();
     }
-
     private void decodeAnaliticsFunction(){
         if(selectedFunction != null && selectedProperty != null && selectedEntity != null) {
             if (selectedFunction.startsWith("1")) {
@@ -354,10 +357,12 @@ public class TerminatedSimulationController implements simulationControllerAPI
         data.addAll(entityCountDTOCollection);
         entityTableView.setItems(data);
     }
-
     @FXML
     void reRunButtonPressed(ActionEvent event) {
         mainController.reRunSimulation(this.currentChosenSimulationID);
     }
 
+    @FXML
+    void extraDetailsClicked(ActionEvent event) {
+    }
 }

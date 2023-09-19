@@ -9,4 +9,6 @@ public interface simulationControllerAPI {
     void setDataFromDTO(runningSimulationDTO simulationDTO);
 
     void setMainController(AppController mainController);
+
+    void setExtraDetails();
 }

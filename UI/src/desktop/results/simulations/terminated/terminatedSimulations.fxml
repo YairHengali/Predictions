@@ -66,7 +66,7 @@
             <Separator prefWidth="200.0" />
             <ComboBox fx:id="entityComboBox" onAction="#entitySelected" prefWidth="150.0" promptText="Entity" />
             <ComboBox fx:id="propertyComboBox" onAction="#propertySelected" prefWidth="150.0" promptText="Property" />
-            <ComboBox fx:id="functionComboBox" onAction="#ExtraDetailsSelected" prefWidth="150.0" promptText="Extra Details" />
+            <ComboBox fx:id="functionComboBox" onAction="#ExtraDetailsSelected" onMouseClicked="#extraDetailsClicked" prefWidth="150.0" promptText="Extra Details" />
          </children>
       </VBox>
       <VBox fx:id="resultVBox" alignment="CENTER" prefHeight="67.0" prefWidth="228.0" spacing="10.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
