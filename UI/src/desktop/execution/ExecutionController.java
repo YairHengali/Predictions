@@ -58,6 +58,9 @@ public class ExecutionController {
 
     @FXML
     void startButtonActionListener(ActionEvent event) {
+        if(mainController.isAnimation()){
+            mainController.startRectangleAnimation();
+        }
         try {
             for (EnvVarControllerAPI controller : name2envVarController.values()) {
                 PropertyDTO envVarDTO = controller.createEnvVarDTO();
