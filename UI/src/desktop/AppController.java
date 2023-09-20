@@ -85,7 +85,8 @@ public class AppController {
         scrollPane.getStylesheets().clear();
         if (skinName != null) {
             if (!skinName.equals("default")) {
-                skinPath = getClass().getResource("./stylesheets/" + skinName + ".css").toExternalForm();
+//                skinPath = getClass().getResource("./stylesheets/" + skinName + ".css").toExternalForm();
+                skinPath = getClass().getResource("/desktop/stylesheets/" + skinName + ".css").toExternalForm();
                 scrollPane.getStylesheets().add(skinPath);
             }
         }
