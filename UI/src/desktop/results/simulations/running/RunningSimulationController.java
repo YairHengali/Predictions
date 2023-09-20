@@ -189,9 +189,6 @@ public class RunningSimulationController implements simulationControllerAPI {
                 break;
         }
 
-//        if(!this.isCurrSimulationTerminatesByUser){ //TODO: validate with Ofir that only place needed so buttons will appear when not in user mode (need inside simulation also)?
-//            disableStop.set(true);
-//        }
     }
     @FXML
     public void initialize() {

@@ -90,7 +90,7 @@ public class WorldInstance implements Serializable, Runnable {
     public void pauseSimulation(){
         synchronized (statusLock) {
             if (this.status == SimulationStatus.RUNNING) {
-                System.out.println("Thread: "+Thread.currentThread()+" is pausing the simulation");
+//                System.out.println("Thread: "+Thread.currentThread()+" is pausing the simulation");
                 this.status = SimulationStatus.PAUSED;
                 runningTime += Duration.between(startTime , Instant.now()).getSeconds();
             }
@@ -101,7 +101,7 @@ public class WorldInstance implements Serializable, Runnable {
     public void resumeSimulation(){
         synchronized (statusLock) {
             if (this.status == SimulationStatus.PAUSED) {
-                System.out.println("Thread: "+Thread.currentThread()+" is resuming the simulation");
+//                System.out.println("Thread: "+Thread.currentThread()+" is resuming the simulation");
 
                 this.status = SimulationStatus.RUNNING;
                 startTime = Instant.now();
@@ -142,13 +142,12 @@ public class WorldInstance implements Serializable, Runnable {
 
 
                 Stream<EntityInstance> allEntitiesInstances = entityInstanceManager.getAllEntitiesInstances();
-
-                allEntitiesInstances.forEach(entityInstance -> {
-                    String entityName = entityInstance.getName();
-                    actionList.stream()
-                            .filter(action -> action.getMainEntityName().equals(entityName))
-                            .forEach(action -> {
-                                try {
+                try {
+                    allEntitiesInstances.forEach(entityInstance -> {
+                        String entityName = entityInstance.getName();
+                        actionList.stream()
+                                .filter(action -> action.getMainEntityName().equals(entityName))
+                                .forEach(action -> {
                                     SecondaryEntityDetails secondaryEntityDetails = action.getSecondaryEntityDetails();
                                     if (secondaryEntityDetails == null) { //no secondary entity
                                         action.Run(new ContextImpl(entityInstance, null, this.entityInstanceManager, this.activeEnvironmentVariables, this.currentNumberOfTicks));
@@ -198,21 +197,21 @@ public class WorldInstance implements Serializable, Runnable {
                                         }
 
                                     }
-                                } catch (Exception e) {
-                                    synchronized (statusLock) {
-                                        this.status = SimulationStatus.TERMINATED;
-                                    }
-                                    this.errorMassage = e.getMessage();
-                                }
-                            });
-                });
 
+                                });
+                    });
 
-                this.entityInstanceManager.killEntities();
-                this.entityInstanceManager.createScratchEntities();
-                this.entityInstanceManager.createDerivedEntities();
+                    this.entityInstanceManager.killEntities();
+                    this.entityInstanceManager.createScratchEntities();
+                    this.entityInstanceManager.createDerivedEntities();
 
-
+                } catch (Exception e) {
+                    synchronized (statusLock) {
+                        this.status = SimulationStatus.TERMINATED;
+                        this.terminationReason = TerminationReason.ERROR;
+                    }
+                    this.errorMassage = e.getMessage();
+                }
             } // if not paused
         }// if not terminate
 
@@ -224,13 +223,13 @@ public class WorldInstance implements Serializable, Runnable {
 
         if(this.maxNumberOfTicks != null && currentNumberOfTicks >= this.maxNumberOfTicks)
         {
-            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.terminationReason = TerminationReason.MAXTICKSREACHED;
             return TerminationReason.MAXTICKSREACHED;
         }
         else if(this.secondsToTerminate != null && runningTime >= secondsToTerminate)
         {
-            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.endTime = Instant.now();
             this.terminationReason = TerminationReason.SECONDSREACHED;
             return TerminationReason.SECONDSREACHED;
@@ -241,7 +240,7 @@ public class WorldInstance implements Serializable, Runnable {
         }
         else
         {
-            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
+//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.terminationReason = TerminationReason.ENDEDBYUSER;
             return TerminationReason.ENDEDBYUSER;
         }
@@ -310,7 +309,7 @@ public class WorldInstance implements Serializable, Runnable {
                 if(this.status == SimulationStatus.RUNNING){
                     this.runningTime += Duration.between(startTime, Instant.now()).getSeconds();
                 }
-                System.out.println("Thread: " + Thread.currentThread().getName() + " is terminating the simulation");
+//                System.out.println("Thread: " + Thread.currentThread().getName() + " is terminating the simulation");
                 this.status = SimulationStatus.TERMINATED;
             }
         }

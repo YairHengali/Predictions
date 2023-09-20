@@ -36,10 +36,11 @@ public class Grid {
 //                System.out.println("Matrix cell at row " + targetRow + ", col " + targetCol + " set to " + newEntity.getName());
                 newEntity.setGridLocation(location);
             }
-        } else {
-            System.out.println("Invalid cell coordinates.");
-//            throw new InValidCellCoordinatesException(targetRow, targetCol, this.rows, this.cols);
         }
+//        else {
+//            System.out.println("Invalid cell coordinates.");
+////            throw new InValidCellCoordinatesException(targetRow, targetCol, this.rows, this.cols);
+//        }
     }
 
     public EntityInstance get(GridLocation location){

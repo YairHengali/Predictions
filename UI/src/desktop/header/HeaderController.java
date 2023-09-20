@@ -1,6 +1,7 @@
 package desktop.header;
 
 import desktop.AppController;
+import desktop.results.simulations.running.grid.GridController;
 import ex2.ThreadpoolDTO;
 import javafx.animation.FillTransition;
 import javafx.animation.RotateTransition;
@@ -10,6 +11,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -19,9 +24,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 
 public class HeaderController {
 
@@ -160,7 +167,7 @@ public class HeaderController {
             selectedFileProperty.set(selectedFile.getAbsolutePath());
 
 
-            System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
+//            System.out.println("The xml file has loaded successfully!" + System.lineSeparator());
 
             if (animation.get()){
                 startCircleAnimation();
@@ -173,7 +180,6 @@ public class HeaderController {
         }
         catch (Exception e) {
             mainController.showPopUpAlert("Invalid xml file", null, e.getMessage());
-            System.out.println(e.getMessage() + System.lineSeparator());
         }
     }
 

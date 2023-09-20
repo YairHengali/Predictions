@@ -61,18 +61,13 @@ public class ExecutionController {
         if(mainController.isAnimation()){
             mainController.startRectangleAnimation();
         }
-        try {
-            for (EnvVarControllerAPI controller : name2envVarController.values()) {
-                PropertyDTO envVarDTO = controller.createEnvVarDTO();
-                mainController.getSystemEngine().setEnvVarDefFromDto(envVarDTO);
-            }
-
-            pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();
-            mainController.moveToResultsTab(pastSimulationDTO);
-
-        }catch (Exception e) {
-            System.out.println("Error: " + e.getMessage() + " try again!");
+        for (EnvVarControllerAPI controller : name2envVarController.values()) {
+            PropertyDTO envVarDTO = controller.createEnvVarDTO();
+            mainController.getSystemEngine().setEnvVarDefFromDto(envVarDTO);
         }
+
+        pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();
+        mainController.moveToResultsTab(pastSimulationDTO);
     }
 
     @FXML
