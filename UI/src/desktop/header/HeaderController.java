@@ -15,10 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -37,6 +34,11 @@ public class HeaderController {
     @FXML
     private Label waitingLabel;
 
+    @FXML
+    private HBox animationSymbolsHB;
+
+    @FXML
+    private ComboBox<String> skinsCB;
     @FXML
     private Label runningLabel;
 
@@ -106,16 +108,16 @@ public class HeaderController {
         animation.bind(animationsCB.selectedProperty());
         animation.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                headerHBox.getChildren().add(circle);
+                animationSymbolsHB.getChildren().add(circle);
                 circle.setVisible(false);
-                headerHBox.getChildren().add(rect);
+                animationSymbolsHB.getChildren().add(rect);
                 rect.setVisible(false);
             } else {
-                if (headerHBox.getChildren().contains(circle)) {
-                    headerHBox.getChildren().remove(circle);
+                if (animationSymbolsHB.getChildren().contains(circle)) {
+                    animationSymbolsHB.getChildren().remove(circle);
                 }
-                if (headerHBox.getChildren().contains(rect)) {
-                    headerHBox.getChildren().remove(rect);
+                if (animationSymbolsHB.getChildren().contains(rect)) {
+                    animationSymbolsHB.getChildren().remove(rect);
                 }
             }
 

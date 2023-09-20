@@ -93,3 +93,7 @@
     -fx-background-color: rgba(167, 167, 173, 0.85);
     -fx-text-fill: white
 }
+
+#animationsCB{
+    -fx-text-fill: white;
+}
