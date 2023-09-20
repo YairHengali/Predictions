@@ -242,38 +242,6 @@ public class TerminatedSimulationController implements simulationControllerAPI
     }
 
 
-    //INSERT ALL (when we only have the last 10k ticks:
-//    private void insertDataTolineChart(Map<String, Map<Integer, Integer>> entitiesPopByTicks, int totalTicks) {
-//        // Find the minimum X-value
-//        double minXValue = Double.POSITIVE_INFINITY;
-//
-//        // Iterate through the entities and their population data
-//        for (String entity : entitiesPopByTicks.keySet()) {
-//            Map<Integer, Integer> data = entitiesPopByTicks.get(entity);
-//
-//            // Find the minimum X-value within this entity's data
-//            for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
-//                double xValue = entry.getKey();
-//                minXValue = Math.min(minXValue, xValue);
-//            }
-//
-//            // Create a data series for the entity
-//            XYChart.Series<Number, Number> series = new XYChart.Series<>();
-//            series.setName(entity);
-//
-//            // Add data points to the series
-//            for (Map.Entry<Integer, Integer> entry : data.entrySet()) {
-//                    series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
-//            }
-//
-//            // Add the series to the line chart
-//            entitiesPopulationLC.getData().add(series);
-//
-//        }
-//        ticsAxis.setLowerBound(minXValue);
-//    }
-
-
     private void setReasonFromDTO(runningSimulationDTO simulationDTO) {
         String res = null;
         switch (TerminationReason.valueOf(simulationDTO.getTerminationReason())){

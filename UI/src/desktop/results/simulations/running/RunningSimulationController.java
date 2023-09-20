@@ -226,10 +226,6 @@ public class RunningSimulationController implements simulationControllerAPI {
     void stopButtonPressed(ActionEvent event) {
         mainController.getSystemEngine().stopSimulation(simulationID);
     }
-    @FXML
-    void nextButtonPressed(ActionEvent event) {
-        mainController.getSystemEngine().stopSimulation(simulationID);
-    }
 
     public void setEnvVarsTable(){
         envVarNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));

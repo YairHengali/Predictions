@@ -39,7 +39,7 @@
                   <HBox fx:id="animationSymbolsHB" spacing="10.0" />
                </children>
             </VBox>
-            <ComboBox fx:id="skinsCB" promptText="Skins" />
+            <ComboBox fx:id="skinsCB" onAction="#skinSelected" promptText="Skins" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

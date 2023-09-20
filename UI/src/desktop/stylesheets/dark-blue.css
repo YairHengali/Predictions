@@ -76,10 +76,6 @@
     -fx-font-size: 14px; /* Set the font size for axis labels, etc. */
 }
 
-#pauseBTN{
-    -fx-background-image: url("./images/pause.png");
-}
-
 .back{
     -fx-background-color: rgba(38, 60, 82, 0.85);
 }
