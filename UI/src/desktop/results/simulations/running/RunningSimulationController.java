@@ -204,8 +204,8 @@ public class RunningSimulationController implements simulationControllerAPI {
         this.tickLBL.textProperty().bind(currTick.asString());
         this.timeLBL.textProperty().bind(runTime.asString());
         this.statusLBL.textProperty().bind(status);
-        this.ticksPercentLBL.textProperty().bind(ticksProgress.asString());
-        this.timePercentLBL.textProperty().bind(timeProgress.asString());
+        this.ticksPercentLBL.textProperty().bind(ticksProgress.asString("%.2f").concat(" %"));
+        this.timePercentLBL.textProperty().bind(timeProgress.asString("%.2f").concat(" %"));
         this.timeProgressHBox.visibleProperty().bind(showingTimeProgress);
         this.ticksProgressHBox.visibleProperty().bind(showingTicksProgress);
 

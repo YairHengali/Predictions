@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane hgap="2.0" prefHeight="350.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.results.simulations.running.RunningSimulationController">
+<GridPane hgap="4.0" prefHeight="350.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.results.simulations.running.RunningSimulationController">
   <columnConstraints>
       <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="160.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.0" minWidth="222.0" prefWidth="222.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="223.0" minWidth="223.0" prefWidth="223.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="182.0" prefWidth="182.0" />
     <ColumnConstraints hgrow="NEVER" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
   </columnConstraints>
@@ -86,8 +86,8 @@
       </ButtonBar>
       <TableView fx:id="envVarsTableView" minWidth="182.0" prefHeight="200.0" prefWidth="182.0" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.rowSpan="2">
         <columns>
-          <TableColumn fx:id="envVarNameCol" maxWidth="90.0" prefWidth="90.0" text="Name" />
-          <TableColumn fx:id="envVarValueCol" maxWidth="90.0" prefWidth="90.0" text="value" />
+          <TableColumn fx:id="envVarNameCol" minWidth="90.0" prefWidth="90.0" text="Name" />
+          <TableColumn fx:id="envVarValueCol" minWidth="90.0" prefWidth="90.0" text="value" />
         </columns>
       </TableView>
       <Label text="Enviriment Variables:" GridPane.columnIndex="3" />
