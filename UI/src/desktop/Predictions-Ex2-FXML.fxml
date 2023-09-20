@@ -6,22 +6,22 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<ScrollPane fitToHeight="true" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.AppController">
+<ScrollPane fitToHeight="true" prefHeight="600.0" prefWidth="800.0" styleClass="back" stylesheets="@stylesheets/style1.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.AppController">
    <content>
-      <BorderPane prefHeight="598.0" prefWidth="798.0">
+      <BorderPane prefHeight="598.0" prefWidth="798.0" styleClass="back">
          <center>
             <TabPane fx:id="tabPane" prefHeight="510.0" prefWidth="773.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab fx:id="detailsTab" text="Details">
+                <Tab fx:id="detailsTab" styleClass="tabButton" text="Details">
                      <content>
                         <fx:include fx:id="detailsComponent" source="details/details.fxml" />
                      </content>
                   </Tab>
-                <Tab fx:id="newExecutionTab" text="New Execution">
+                <Tab fx:id="newExecutionTab" styleClass="tabButton" text="New Execution">
                      <content>
                         <fx:include fx:id="executionComponent" source="execution/execution.fxml" />
                      </content></Tab>
-                  <Tab fx:id="resultsTab" text="Results">
+                  <Tab fx:id="resultsTab" styleClass="tabButton" text="Results">
                      <content>
                         <fx:include fx:id="resultsComponent" source="results/results.fxml" />
                      </content>

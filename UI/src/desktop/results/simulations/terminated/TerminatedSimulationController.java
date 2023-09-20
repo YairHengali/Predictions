@@ -164,7 +164,12 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
         HistogramStage = new Stage();
         HistogramStage.setTitle("Histogram Preview");
-        HistogramStage.setScene(new Scene((Parent) name2ExtraDetailsComponent.get("Histogram"),600,600));
+        name2ExtraDetailsComponent.get("Histogram").getStyleClass().add("Back");
+        name2ExtraDetailsComponent.get("Histogram").getStyleClass().add("bar-chart");
+        Scene scene = new Scene((Parent) name2ExtraDetailsComponent.get("Histogram"),600,600);
+
+        HistogramStage.setScene(scene);
+
         HistogramStage.show();
         //setExtraDetailsComponent(name2ExtraDetailsComponent.get("Histogram"));
 

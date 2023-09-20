@@ -10,7 +10,7 @@
    <center>
       <ScrollPane BorderPane.alignment="CENTER">
          <content>
-            <BarChart fx:id="barChart" title="Entities Histogram">
+            <BarChart fx:id="barChart" styleClass="bar-chart" title="Entities Histogram">
               <xAxis>
                 <CategoryAxis label="Property Value" side="BOTTOM" fx:id="xAxis" />
               </xAxis>

@@ -72,13 +72,13 @@
       <VBox fx:id="resultVBox" alignment="CENTER" prefHeight="67.0" prefWidth="228.0" spacing="10.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4">
          <children>
             <Label fx:id="resultLBL" text="Label" visible="false" />
-            <Button fx:id="rerunBTN" mnemonicParsing="false" onAction="#reRunButtonPressed" text="reRun" />
+            <Button id="rerunBTN" fx:id="rerunBTN" mnemonicParsing="false" onAction="#reRunButtonPressed" text="reRun" />
          </children>
       </VBox>
       <VBox GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="2" GridPane.rowSpan="2">
          <children>
             <Label fx:id="reasonLBL" text="Term reason" />
-            <LineChart fx:id="entitiesPopulationLC" legendSide="LEFT" title="Entities Population Chart">
+            <LineChart fx:id="entitiesPopulationLC" legendSide="LEFT" styleClass="line-chart" title="Entities Population Chart">
               <xAxis>
                 <NumberAxis fx:id="ticsAxis" label="ticks" side="BOTTOM" />
               </xAxis>

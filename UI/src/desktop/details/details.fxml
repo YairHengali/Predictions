@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane hgap="10.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.details.DetailsController">
+<GridPane hgap="10.0" styleClass="back" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="desktop.details.DetailsController">
    <columnConstraints>
       <ColumnConstraints hgrow="NEVER" minWidth="20.0" prefWidth="20.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" prefWidth="200.0" />
@@ -24,10 +24,10 @@
       <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="NEVER" />
    </rowConstraints>
    <children>
-      <TreeView fx:id="simulationTV" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="3" />
-      <ScrollPane GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3">
+      <TreeView fx:id="simulationTV" styleClass="componentBack" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.rowSpan="3" />
+      <ScrollPane styleClass="componentBack" GridPane.columnIndex="2" GridPane.rowIndex="2" GridPane.rowSpan="3">
          <content>
-            <VBox fx:id="detailsVBox">
+            <VBox fx:id="detailsVBox" styleClass="componentBack">
                <padding>
                   <Insets left="10.0" />
                </padding>

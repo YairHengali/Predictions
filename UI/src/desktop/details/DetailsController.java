@@ -197,6 +197,7 @@ public class DetailsController {
             }
 
             component = loaderComponent.load();
+//            component.getStyleClass().add("back");
             actionController = loaderComponent.getController();
             actionController.setDataFromDTO(actionDTO);
             return component;
