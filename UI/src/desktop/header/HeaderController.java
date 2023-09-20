@@ -23,9 +23,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.nio.file.Path;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HeaderController {
 
@@ -89,16 +94,24 @@ public class HeaderController {
                     }
                 }
             });
+        createAnimationShapes();
+        insertSkinNamesToComboBox();
 
+
+
+    }
+
+    private void insertSkinNamesToComboBox() {
+        skinsCB.getItems().add("default");
+        skinsCB.getItems().add("dark-blue");
+        skinsCB.getItems().add("light-red");
+    }
+
+    private void createAnimationShapes() {
         circle = new Circle(100, 100, 10);
         circle.setVisible(false);
 
-//        halfCircle = new Arc(150, 150, 10, 10, 0, 180);
-//        halfCircle.setType(ArcType.OPEN);
-//        halfCircle.setFill(Color.TRANSPARENT);
-//        halfCircle.setStroke(Color.BLACK);
-//        halfCircle.setStrokeWidth(2);
-//        halfCircle.setVisible(false);
+
         rect = new Rectangle(100, 100, 20, 20);
         rect.setFill(Color.BLUE);
         rect.setArcWidth(5);
@@ -122,7 +135,6 @@ public class HeaderController {
             }
 
         });
-
     }
 
     public HeaderController(){
@@ -199,5 +211,11 @@ public class HeaderController {
         rect.setVisible(true);
         rt.play();
 
+    }
+
+    @FXML
+    void skinSelected(ActionEvent event) {
+        String skinName = skinsCB.getSelectionModel().getSelectedItem();
+        mainController.changeSkin(skinName);
     }
 }

@@ -19,6 +19,9 @@ public class AppController {
 
     @FXML
     private VBox headerComponent;
+
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private HeaderController headerComponentController;
     @FXML
@@ -75,6 +78,19 @@ public class AppController {
             executionComponentController.setMainController(this);
             resultsComponentController.setMainController(this);
         }
+    }
+
+    public void changeSkin(String skinName) {
+        String skinPath = null ;
+        scrollPane.getStylesheets().clear();
+        if (skinName != null) {
+            if (!skinName.equals("default")) {
+//                skinPath = getClass().getResource("./stylesheets/" + skinName + ".css").toExternalForm();
+                skinPath = getClass().getResource("/desktop/stylesheets/" + skinName + ".css").toExternalForm();
+                scrollPane.getStylesheets().add(skinPath);
+            }
+        }
+
     }
 
     public AppController(){

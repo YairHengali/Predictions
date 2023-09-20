@@ -5,10 +5,8 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -40,7 +38,7 @@
       </TableView>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
+            <VBox prefHeight="200.0" prefWidth="110.0" spacing="5.0">
                <children>
                   <Label text="Status:" />
                   <Label text="Current tick:" />
@@ -82,7 +80,6 @@
         <buttons>
           <Button fx:id="pauseBTN" mnemonicParsing="false" onAction="#pauseButtonPressed" text="pause" />
             <Button fx:id="resumeBTN" mnemonicParsing="false" onAction="#resumeButtonPressed" text="resume" />
-            <Button fx:id="nextBTN" mnemonicParsing="false" onAction="#nextButtonPressed" text="next" />
             <Button fx:id="stopBTN" mnemonicParsing="false" onAction="#stopButtonPressed" text="stop" />
         </buttons>
       </ButtonBar>
