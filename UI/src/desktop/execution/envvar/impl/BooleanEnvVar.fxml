@@ -14,9 +14,9 @@
             <Label text="value" />
          </children>
       </VBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox>
          <children>
-            <Label fx:id="nameLabel" text="כל השיט הזה" />
+            <Label fx:id="nameLabel" text="name" />
             <Label fx:id="typeLabel" text="Label" />
             <ComboBox fx:id="valueComboBox" prefWidth="150.0" promptText="Random" />
          </children>

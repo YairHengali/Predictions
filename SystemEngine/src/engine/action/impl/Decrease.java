@@ -31,7 +31,7 @@ public class Decrease extends AbstractAction {
     @Override
     public void Run(Context context) {
         Expression byAsExpression = new Expression(byExpression, context);
-        //USING PROTECTED METHOD:
+
         EntityInstance mainEntity = getMainEntityInstance(context);
 
         PropertyInstance mainEntityPropertyInstance = mainEntity.getPropertyByName(propertyName);

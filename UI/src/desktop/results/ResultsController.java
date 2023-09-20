@@ -43,8 +43,8 @@ public class ResultsController {
 
     public void addItemToSimulationsList(pastSimulationDTO pastSimulationDTO) { //TO RUN WHEN CLICK RUN
         executionList.getItems().add(pastSimulationDTO);
-        executionList.getSelectionModel().select(pastSimulationDTO);
         stopRequested = false;
+        executionList.getSelectionModel().select(pastSimulationDTO);
     }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;

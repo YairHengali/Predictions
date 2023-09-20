@@ -120,11 +120,6 @@ public class GridManagerImpl implements GridManagerAPI {
 
                     nonOccupiedLocations.add(oldLocation);
                 }
-                else {
-                    System.out.println("No available moves to: " + entity.getName() + " at location: (" + entity.getGridLocation().getRow() + ","+ entity.getGridLocation().getCol() + ")");
-                }
-
-
             });
         });
 
@@ -141,9 +136,6 @@ public class GridManagerImpl implements GridManagerAPI {
     public void replaceEntitiesInLocation(EntityInstance outEntity, EntityInstance inEntity, GridLocation location) {
         if(this.grid.get(location) != null && this.grid.get(location).getId() == outEntity.getId()){
             this.grid.set(inEntity, location);
-        }
-        else{
-            System.out.println("Entity: " + outEntity.getName() + " is not in location (" + location.getRow() + location.getCol() +")");
         }
     }
 

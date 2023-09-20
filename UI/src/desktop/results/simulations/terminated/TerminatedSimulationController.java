@@ -65,9 +65,6 @@ public class TerminatedSimulationController implements simulationControllerAPI
     private Label reasonLBL;
 
     @FXML
-    private Label errorLBL;
-
-    @FXML
     private Label resultLBL;
 
     // ~~~~~~~~ Line Chart ~~~~~~~~
@@ -365,9 +362,5 @@ public class TerminatedSimulationController implements simulationControllerAPI
     @FXML
     void reRunButtonPressed(ActionEvent event) {
         mainController.reRunSimulation(this.currentChosenSimulationID);
-    }
-
-    @FXML
-    void extraDetailsClicked(ActionEvent event) {
     }
 }

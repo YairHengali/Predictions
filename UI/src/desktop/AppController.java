@@ -51,6 +51,14 @@ public class AppController {
         return isFileLoaded.get();
     }
 
+    public boolean isAnimation() {
+        return headerComponentController.isAnimation();
+    }
+
+    public void startRectangleAnimation(){
+        headerComponentController.startRectangleAnimation();
+    }
+
     public SimpleBooleanProperty isFileLoadedProperty() {
         return isFileLoaded;
     }

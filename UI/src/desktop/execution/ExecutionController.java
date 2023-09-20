@@ -58,18 +58,16 @@ public class ExecutionController {
 
     @FXML
     void startButtonActionListener(ActionEvent event) {
-        try {
-            for (EnvVarControllerAPI controller : name2envVarController.values()) {
-                PropertyDTO envVarDTO = controller.createEnvVarDTO();
-                mainController.getSystemEngine().setEnvVarDefFromDto(envVarDTO);
-            }
-
-            pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();
-            mainController.moveToResultsTab(pastSimulationDTO);
-
-        }catch (Exception e) {
-            System.out.println("Error: " + e.getMessage() + " try again!");
+        if(mainController.isAnimation()){
+            mainController.startRectangleAnimation();
         }
+        for (EnvVarControllerAPI controller : name2envVarController.values()) {
+            PropertyDTO envVarDTO = controller.createEnvVarDTO();
+            mainController.getSystemEngine().setEnvVarDefFromDto(envVarDTO);
+        }
+
+        pastSimulationDTO pastSimulationDTO = mainController.getSystemEngine().runSimulation();
+        mainController.moveToResultsTab(pastSimulationDTO);
     }
 
     @FXML
