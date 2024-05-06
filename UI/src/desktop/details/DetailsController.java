@@ -138,9 +138,6 @@ public class DetailsController {
             TreeItem<String> ruleItem = new TreeItem<>(ruleDTO.getName());
 
             TreeItem<String> actionsItem = new TreeItem<>("Actions");
-//            for (ActionDTO actionDTO: ruleDTO.getActions()) { //ADD INNER ACTIONS TO TREE:
-//                actionsItem.getChildren().add(new TreeItem<>(actionDTO.getType()));
-//            };
 
             ruleItem.getChildren().add(actionsItem);
             ruleItem.getChildren().add(new TreeItem<>("Activation"));

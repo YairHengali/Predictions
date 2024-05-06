@@ -23,7 +23,6 @@ import exceptions.xml.NotUniqueEnvVarException;
 import exceptions.xml.NotUniquePropertyException;
 import jaxb.generated2.*;
 
-import java.awt.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -58,7 +57,7 @@ public class WorldDefFactoryImpl implements WorldDefFactory, Serializable {
         }
         if (columns < 10 || 100 < columns)
         {
-            throw new RuntimeException("The number of columns in the grid must be between 10 to 100!" + System.lineSeparator() + "Got: " + + columns);
+            throw new RuntimeException("The number of columns in the grid must be between 10 to 100!" + System.lineSeparator() + "Got: " + columns);
         }
 
         currWorkingWorld.setNumOfRowsInGrid(rows);

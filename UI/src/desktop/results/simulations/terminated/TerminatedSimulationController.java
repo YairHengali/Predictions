@@ -201,7 +201,6 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
     @Override
     public void setDataFromDTO(runningSimulationDTO simulationDTO) {
-
         currTick.set(simulationDTO.getCurrentTick());
         runTime.set(simulationDTO.getCurrentSeconds());
         status.set(simulationDTO.getStatus());
@@ -210,11 +209,9 @@ public class TerminatedSimulationController implements simulationControllerAPI
 
         bindDataToEntityTableView(simulationDTO);
 
-
         entityComboBox.getItems().clear();
         mainController.getSystemEngine().getEntitiesListDTO().forEach(entityDTO -> entityComboBox.getItems().add(entityDTO.getName()));
 
-//        if (this.entitiesPopulationLC.getData().isEmpty())
         insertDataTolineChart(mainController.getSystemEngine().getEntitiesPopByTicks(currentChosenSimulationID).getEntitiesPopByTicks(), simulationDTO.getCurrentTick());
     }
 

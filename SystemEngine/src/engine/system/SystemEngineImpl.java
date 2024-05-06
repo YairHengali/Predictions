@@ -194,18 +194,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     {
         id2pastSimulation.values().forEach(WorldInstance::terminateSimulation);
         threadExecutor.shutdownNow();
-//        threadExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(this.numOfThreads);
-
-//        threadExecutor.shutdown();
-//        try {
-//            if (!threadExecutor.awaitTermination(10, TimeUnit.SECONDS)) {
-//                // If not terminated within 10 seconds, force shutdown
-//                threadExecutor.shutdownNow();
-//            }
-//        } catch (InterruptedException e) {
-//            // Handle InterruptedException
-//            Thread.currentThread().interrupt();
-//        }
         threadExecutor = (ThreadPoolExecutor)Executors.newFixedThreadPool(this.numOfThreads);
 
         id2pastSimulation.clear();
@@ -344,7 +332,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     public void resumeSimulation(int simulationID){
         WorldInstance simulationToResume = id2pastSimulation.get(simulationID);
         simulationToResume.resumeSimulation();
-//        threadExecutor.notifyAll();
     }
     @Override
     public void stopSimulation(int simulationID){
@@ -383,8 +370,6 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
     public runningSimulationDTO pullData(int simulationID){
         WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
         int currentNumberOfTicks = wantedSimulation.getCurrentNumberOfTicks();
-//        long timeRunning = wantedSimulation.getStartTime() == null ? 0 : Duration.between(wantedSimulation.getStartTime(), Instant.now()).getSeconds();
-
         long timeRunning = wantedSimulation.getRunningTime();
 
         List<EntityCountDTO> entityCountDtos = new ArrayList<>();
@@ -408,22 +393,4 @@ public class SystemEngineImpl implements SystemEngine, Serializable {
                                         terminationReason,
                                         errorMassage);
     }
-
-//    public void pauseSimulation(int simulationID){
-//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
-//        wantedSimulation.setState(PAUSED);
-//    }
-
-//    public void resumeSimulation(int simulationID){
-//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
-//        wantedSimulation.setState(RUNNING);
-//    }
-
-//    public void stopSimulation(int simulationID){
-//        WorldInstance wantedSimulation = id2pastSimulation.get(simulationID);
-////        wantedSimulation.endSimualation()
-////                free the thread
-////                wantedSimulation.setState(ENDED);
-//    }
-
 }

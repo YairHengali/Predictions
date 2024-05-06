@@ -37,7 +37,7 @@ public class WorldInstance implements Serializable, Runnable {
 
     private TerminationReason terminationReason = null;
 
-    private int simulationID;
+    private final int simulationID;
     private String errorMassage = null;
 
 
@@ -109,7 +109,7 @@ public class WorldInstance implements Serializable, Runnable {
         }
     }
 
-    public TerminationReason runMainLoopEx2(){ //TICK 1 and up...;
+    public void runMainLoopEx2(){ //TICK 1 and up...;
         boolean isTerminated = false;
         boolean isPaused = false;
 
@@ -223,26 +223,19 @@ public class WorldInstance implements Serializable, Runnable {
 
         if(this.maxNumberOfTicks != null && currentNumberOfTicks >= this.maxNumberOfTicks)
         {
-//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.terminationReason = TerminationReason.MAXTICKSREACHED;
-            return TerminationReason.MAXTICKSREACHED;
         }
         else if(this.secondsToTerminate != null && runningTime >= secondsToTerminate)
         {
-//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.endTime = Instant.now();
             this.terminationReason = TerminationReason.SECONDSREACHED;
-            return TerminationReason.SECONDSREACHED;
         }
         else if(errorMassage != null){
             this.terminationReason = TerminationReason.ERROR;
-            return TerminationReason.ERROR;
         }
         else
         {
-//            System.out.println("Simulation ended by thread: " + Thread.currentThread().getId());
             this.terminationReason = TerminationReason.ENDEDBYUSER;
-            return TerminationReason.ENDEDBYUSER;
         }
     }
 
@@ -308,8 +301,8 @@ public class WorldInstance implements Serializable, Runnable {
             if(this.status != SimulationStatus.TERMINATED) {
                 if(this.status == SimulationStatus.RUNNING){
                     this.runningTime += Duration.between(startTime, Instant.now()).getSeconds();
+                    this.terminationReason = TerminationReason.ENDEDBYUSER;
                 }
-//                System.out.println("Thread: " + Thread.currentThread().getName() + " is terminating the simulation");
                 this.status = SimulationStatus.TERMINATED;
             }
         }

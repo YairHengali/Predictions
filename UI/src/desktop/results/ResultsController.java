@@ -51,47 +51,12 @@ public class ResultsController {
     }
     @FXML
     public void initialize(){
-
-
         executionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
             setChosenID(newValue);
-//            if(this.id2simulationController.containsKey(newValue.getId())){
-//                this.id2simulationController.get(newValue.getId()).setCurrentChosenSimulationID(newValue.getId());
-//            }
         });
 
-//        dataPullingThread = new Thread(() -> {        //WORKED LIKE THAT ONLY IN DEBUG! DONT KNOW WHY NOT IN REAL....
-//            while (true) {
-//                if (currentChosenSimulationID != -1) { // if there is chosen option
-//                    try {
-//                        sleep(300);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if(!stopRequested) {
-//                        runningSimulationDTO testINFO = mainController.getSystemEngine().pullData(currentChosenSimulationID);
-//                        // Update UI using Platform.runLater()
-//                        Platform.runLater(() -> {
-//                            // Update UI with the collected data:
-//                            if (testINFO.getStatus().equals("TERMINATED")) {
-//                                if (!terminatedIsOn) {
-//                                    showTerminatedSimulationDetails(testINFO, currentChosenSimulationID);
-//                                    terminatedIsOn = true;
-//                                }
-//                            } else {
-//                                showRunningSimulationDetails(testINFO, currentChosenSimulationID);
-//                                terminatedIsOn = false;
-//                            }
-//
-//                        });
-//                    }
-//                }
-//            }
-//        });
     }
     private void setChosenID(pastSimulationDTO newValue) {
-
         if(newValue == null){
             currentChosenSimulationID = -1;
         }

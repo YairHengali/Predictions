@@ -1,7 +1,7 @@
 package desktop.header;
 
 import desktop.AppController;
-import desktop.results.simulations.running.grid.GridController;
+//import desktop.results.simulations.running.grid.GridController;
 import ex2.ThreadpoolDTO;
 import javafx.animation.FillTransition;
 import javafx.animation.RotateTransition;

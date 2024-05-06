@@ -85,7 +85,6 @@ public class AppController {
         scrollPane.getStylesheets().clear();
         if (skinName != null) {
             if (!skinName.equals("default")) {
-//                skinPath = getClass().getResource("./stylesheets/" + skinName + ".css").toExternalForm();
                 skinPath = getClass().getResource("/desktop/stylesheets/" + skinName + ".css").toExternalForm();
                 scrollPane.getStylesheets().add(skinPath);
             }
@@ -107,7 +106,6 @@ public class AppController {
     }
 
     public void moveToResultsTab(pastSimulationDTO pastSimulationDTO){
-//        tabPane.getSelectionModel().select(resultsTab);
         resultsComponentController.addItemToSimulationsList(pastSimulationDTO);
         tabPane.getSelectionModel().select(resultsTab);
     }

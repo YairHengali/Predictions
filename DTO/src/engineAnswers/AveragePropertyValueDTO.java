@@ -1,9 +1,9 @@
 package engineAnswers;
 
 public class AveragePropertyValueDTO {
-    String entityName;
-    String propertyName;
-    Double value;
+    final String entityName;
+    final String propertyName;
+    final Double value;
 
     public AveragePropertyValueDTO(String entityName, String propertyName, Double value) {
         this.entityName = entityName;

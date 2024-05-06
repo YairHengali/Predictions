@@ -33,14 +33,9 @@ public class Grid {
         if (targetRow >= 0 && targetRow < rows && targetCol >= 0 && targetCol < cols) {
             grid.get(targetRow).set(targetCol, newEntity);
             if(newEntity != null){
-//                System.out.println("Matrix cell at row " + targetRow + ", col " + targetCol + " set to " + newEntity.getName());
                 newEntity.setGridLocation(location);
             }
         }
-//        else {
-//            System.out.println("Invalid cell coordinates.");
-////            throw new InValidCellCoordinatesException(targetRow, targetCol, this.rows, this.cols);
-//        }
     }
 
     public EntityInstance get(GridLocation location){

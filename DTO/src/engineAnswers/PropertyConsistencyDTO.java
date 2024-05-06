@@ -1,9 +1,9 @@
 package engineAnswers;
 
 public class PropertyConsistencyDTO {
-    String entityName;
-    String propertyName;
-    Double value;
+    final String entityName;
+    final String propertyName;
+    final Double value;
 
     public PropertyConsistencyDTO(String entityName, String propertyName, Double value) {
         this.entityName = entityName;

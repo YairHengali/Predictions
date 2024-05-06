@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 public class runningSimulationDTO {
-    private int currentTick;
-    private Integer totalTicks;
-    private long currentSeconds;
-    private Long totalSeconds;
-    private String status;
-    private boolean isTerminateByUser;
-    private List<EntityCountDTO> entityCountDTOS;
+    private final int currentTick;
+    private final Integer totalTicks;
+    private final long currentSeconds;
+    private final Long totalSeconds;
+    private final String status;
+    private final boolean isTerminateByUser;
+    private final List<EntityCountDTO> entityCountDTOS;
 
     private String terminationReason = null;
-    private String errorMassage;
+    private final String errorMassage;
 
     public runningSimulationDTO(int currentTick, Integer totalTicks, long currentSeconds, Long totalSeconds, String status, boolean isTerminateByUser, List<EntityCountDTO> entityCountDTOS, String terminationReason, String errorMassage) {
         this.currentTick = currentTick;

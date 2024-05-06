@@ -12,7 +12,7 @@ public class SimulationTask extends Task<Boolean> {
     }
 
     @Override
-    protected Boolean call() throws Exception {
+    protected Boolean call() {
 
         this.engine.runSimulation();
 
